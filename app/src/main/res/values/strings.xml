@@ -17,4 +17,10 @@
     <string name="forgot_password">Şifremi Unuttum?</string>
     <string name="create_new_account">Yeni Hesap Aç</string>
     <string name="title_activity_forgot_password">ForgotPasswordActivity</string>
+    <string name="title_activity_main">MainActivity</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
 </resources>
