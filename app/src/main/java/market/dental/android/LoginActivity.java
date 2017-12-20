@@ -3,6 +3,7 @@ package market.dental.android;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
@@ -92,6 +93,19 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
+
+        // FORGOT PASSWORD EVENTS
+        TextView forgot_password = (TextView)findViewById(R.id.forgot_password);
+        forgot_password.setOnClickListener(new TextView.OnClickListener(){
+            public void onClick(View v){
+                goToForgotPasswordActivity();
+            }
+        });
+    }
+
+    private void goToForgotPasswordActivity(){
+        Intent i = new Intent(this,ForgotPasswordActivity.class);
+        startActivity(i);
     }
 
     private void populateAutoComplete() {

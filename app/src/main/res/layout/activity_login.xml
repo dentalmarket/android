@@ -93,14 +93,14 @@
 
 
                 <TextView
-                    android:id="@+id/forgotPassword"
+                    android:id="@+id/forgot_password"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:clickable="true"
                     android:text="@string/forgot_password" />
 
                 <TextView
-                    android:id="@+id/createNewAccount"
+                    android:id="@+id/create_new_account"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="right"
