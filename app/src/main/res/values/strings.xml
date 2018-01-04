@@ -23,4 +23,11 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="action_settings">Settings</string>
+
+    <!-- DRAWER MENU -->
+    <string name="drawer_menu_dinamik_el_aksesuarlari">Dinamik El Aletleri Aks.</string>
+    <string name="drawer_menu_beyazlatma">Beyazlatma</string>
+    <string name="drawer_menu_dental_egitim">Dental Eğitim</string>
+    <string name="drawer_menu_dinamik_el_aletleri">Dinamik El Aletleri</string>
+
 </resources>
