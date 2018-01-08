@@ -1,8 +1,12 @@
 package market.dental.android;
 
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.view.menu.MenuView;
 import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -13,7 +17,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -21,6 +24,8 @@ import market.dental.util.Result;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    private Menu menu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +52,10 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+
+        SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.sp_dental_market), Context.MODE_PRIVATE);
+        sharedPreferences.edit().clear().commit();
+
     }
 
     @Override
@@ -62,6 +71,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
+        this.menu = menu;
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
@@ -72,10 +82,17 @@ public class MainActivity extends AppCompatActivity
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        switch (id){
+            case R.id.right_menu_login:
+                Intent intent = new Intent(this,LoginActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.right_menu_profile:
+                Log.i("DENTALMARKET" , "Settings >> profile");
+                break;
+            case R.id.right_menu_logout:
+                Log.i("DENTALMARKET" , "Settings >> logout");
+                break;
         }
 
         return super.onOptionsItemSelected(item);
@@ -104,5 +121,29 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        setSettingMenuItem();
+    }
+
+
+    public void setSettingMenuItem(){
+        SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.sp_dental_market), Context.MODE_PRIVATE);
+        String userSessionID = sharedPreferences.getString(getString(R.string.sp_user_id) , null);
+
+        if(menu!=null){
+            if(userSessionID != null){
+                menu.findItem(R.id.right_menu_login).setVisible(false);
+                menu.findItem(R.id.right_menu_profile).setVisible(true);
+                menu.findItem(R.id.right_menu_logout).setVisible(true);
+            }else{
+                menu.findItem(R.id.right_menu_login).setVisible(true);
+                menu.findItem(R.id.right_menu_profile).setVisible(false);
+                menu.findItem(R.id.right_menu_logout).setVisible(false);
+            }
+        }
     }
 }

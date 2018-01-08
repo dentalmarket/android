@@ -22,12 +22,21 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
+    <!-- RIGHT-TOP MENU -->
     <string name="action_settings">Settings</string>
+    <string name="right_menu_login">Giriş</string>
+    <string name="right_menu_profile">Profil</string>
+    <string name="right_menu_logout">Çıkış</string>
+
 
     <!-- DRAWER MENU -->
     <string name="drawer_menu_dinamik_el_aksesuarlari">Dinamik El Aletleri Aks.</string>
     <string name="drawer_menu_beyazlatma">Beyazlatma</string>
     <string name="drawer_menu_dental_egitim">Dental Eğitim</string>
     <string name="drawer_menu_dinamik_el_aletleri">Dinamik El Aletleri</string>
+
+    <!-- SHAREDPREFERENCES KEYS -->
+    <string name="sp_dental_market">sp_dental_market</string>
+    <string name="sp_user_id">userId</string>
 
 </resources>

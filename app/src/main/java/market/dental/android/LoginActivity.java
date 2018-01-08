@@ -3,7 +3,10 @@ package market.dental.android;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
@@ -20,6 +23,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -56,6 +60,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      * Keep track of the login task to ensure we can cancel it if requested.
      */
     private UserLoginTask mAuthTask = null;
+    private SharedPreferences sharedPref = null;
 
     // UI references.
     private AutoCompleteTextView mEmailView;
@@ -101,6 +106,10 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 goToForgotPasswordActivity();
             }
         });
+
+
+        // INITIALIZATION
+        sharedPref = getSharedPreferences(getString(R.string.sp_dental_market), Context.MODE_PRIVATE);
     }
 
     private void goToForgotPasswordActivity(){
@@ -345,8 +354,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         protected void onPostExecute(final Boolean success) {
             mAuthTask = null;
             showProgress(false);
-
             if (success) {
+                setUserSession();
                 finish();
             } else {
                 mPasswordView.setError(getString(R.string.error_incorrect_password));
@@ -358,6 +367,15 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         protected void onCancelled() {
             mAuthTask = null;
             showProgress(false);
+        }
+
+        /**
+         * sp_user_id key değerine user session değeri yazılır
+         */
+        protected void setUserSession(){
+            SharedPreferences.Editor editor = sharedPref.edit();
+            editor.putString(getString(R.string.sp_user_id), "sessionId-12345678-dentalmarket");
+            editor.commit();
         }
     }
 }
