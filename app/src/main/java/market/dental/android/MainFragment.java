@@ -1,14 +1,18 @@
 package market.dental.android;
 
 import android.content.Context;
+import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -35,6 +39,7 @@ public class MainFragment extends Fragment {
     private String mParam2;
     ViewPager viewPager;
     ViewPagerAdapter viewPagerAdapter;
+    private ImageView[] dots;
     private String[] images = {
             "http://dental.market/assets/slider/phptkMH7l.jpg",
             "http://dental.market/assets/slider/phpZu2e98.jpg",
@@ -85,6 +90,48 @@ public class MainFragment extends Fragment {
         viewPagerAdapter = new ViewPagerAdapter(getActivity() , images);
         viewPager.setAdapter(viewPagerAdapter);
 
+        LinearLayout sliderDotsPanel = (LinearLayout)view.findViewById(R.id.viewpage_dots_layout);
+        dots = new ImageView[viewPagerAdapter.getCount()];
+        for(int i=0; i<viewPagerAdapter.getCount(); i++){
+            dots[i] = new ImageView(getActivity());
+
+            if(i==0){
+                dots[i].setImageDrawable(ContextCompat.getDrawable(getActivity().getApplicationContext() , R.drawable.active_dot));
+            }else{
+                dots[i].setImageDrawable(ContextCompat.getDrawable(getActivity().getApplicationContext() , R.drawable.nonactive_dot));
+            }
+
+
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT , LinearLayout.LayoutParams.WRAP_CONTENT);
+            params.setMargins(8,0,8,0);
+            sliderDotsPanel.addView(dots[i],params);
+        }
+
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener(){
+
+
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                for(int i=0; i<viewPagerAdapter.getCount(); i++){
+                    if(i==position){
+                        dots[i].setImageDrawable(ContextCompat.getDrawable(getActivity().getApplicationContext() , R.drawable.active_dot));
+                    }else{
+                        dots[i].setImageDrawable(ContextCompat.getDrawable(getActivity().getApplicationContext() , R.drawable.nonactive_dot));
+                    }
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+
         Timer timer = new Timer();
         timer.scheduleAtFixedRate(new MyTimerTask() , 2000 , 4000);
 
@@ -130,7 +177,7 @@ public class MainFragment extends Fragment {
         void onFragmentInteraction(Uri uri);
     }
 
-    
+
     /**
      * Bu TimerTask class ile image slider otomatik değiştirmesi sağlanıyor
      */
