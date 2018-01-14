@@ -36,7 +36,8 @@ public class Result <T> implements Serializable{
     public static Result LOG_TAG_INFO;
 
     static{
-        initializeStaticObjects(ResourceBundle.getBundle("market.dental.resources.resultProp", Locale.ENGLISH));
+        //initializeStaticObjects(ResourceBundle.getBundle("market.dental.resources.resultProp", Locale.ENGLISH));
+        initializeStaticObjects();
     }
 
     @Expose
@@ -150,6 +151,31 @@ public class Result <T> implements Serializable{
         FAILURE_PROCESS_CONTENTTYPE = new Result("GUPPY.611", rs.getString("result.guppy.611"));
         FAILURE_CHECKER_DATE        = new Result("GUPPY.740", rs.getString("result.guppy.740"));
         LOG_TAG_INFO                = new Result("TAG.001", rs.getString("result.tag.001"));
+    }
+
+    private static void initializeStaticObjects(){
+        SUCCESS                     = new Result("GUPPY.001", "SUCCESS");
+        SUCCESS_EMPTY               = new Result("GUPPY.010", "SUCCESS_EMPTY");
+        SUCCESS_LOGOUT              = new Result("GUPPY.090", "SUCCESS_LOGOUT");
+        FAILURE_AUTH                = new Result("GUPPY.101", "FAILURE_AUTH");
+        FAILURE_AUTH_SESSION        = new Result("GUPPY.102", "FAILURE_AUTH_SESSION");
+        FAILURE_AUTH_WRONG          = new Result("GUPPY.111", "FAILURE_AUTH_WRONG");
+        FAILURE_AUTH_MULTIPLE       = new Result("GUPPY.121", "FAILURE_AUTH_MULTIPLE");
+        FAILURE_AUTH_PERMISSION     = new Result("GUPPY.131", "FAILURE_AUTH_PERMISSION");
+        FAILURE_AUTH_REGISTER       = new Result("GUPPY.151", "FAILURE_AUTH_REGISTER");
+        FAILURE_DB                  = new Result("GUPPY.201", "FAILURE_DB");
+        FAILURE_DB_UPDATE           = new Result("GUPPY.221", "FAILURE_DB_UPDATE");
+        FAILURE_DB_EFFECTED_ROW_NUM = new Result("GUPPY.241", "FAILURE_DB_EFFECTED_ROW_NUM");
+        FAILURE_DB_PRIMARY_KEY      = new Result("GUPPY.251", "FAILURE_DB_PRIMARY_KEY");
+        FAILURE_CACHE               = new Result("GUPPY.301", "FAILURE_CACHE");
+        FAILURE_PARAM_WRONG         = new Result("GUPPY.501", "FAILURE_PARAM_WRONG");
+        FAILURE_PARAM_MISMATCH      = new Result("GUPPY.511", "FAILURE_PARAM_MISMATCH");
+        FAILURE_PARAM_INVALID       = new Result("GUPPY.512", "FAILURE_PARAM_INVALID");
+        FAILURE_PROCESS             = new Result("GUPPY.600", "FAILURE_PROCESS");
+        FAILURE_PROCESS_CASTING     = new Result("GUPPY.610", "FAILURE_PROCESS_CASTING");
+        FAILURE_PROCESS_CONTENTTYPE = new Result("GUPPY.611", "FAILURE_PROCESS_CONTENTTYPE");
+        FAILURE_CHECKER_DATE        = new Result("GUPPY.740", "FAILURE_CHECKER_DATE");
+        LOG_TAG_INFO                = new Result("TAG.001", "INFO_DENTAL_MARKET");
     }
 
     /*Default Getters-Setters*/

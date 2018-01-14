@@ -10,6 +10,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 import market.dental.adapter.ViewPagerAdapter;
 
 
@@ -81,6 +84,10 @@ public class MainFragment extends Fragment {
         viewPager = (ViewPager)view.findViewById(R.id.fragment_main_view_pager);
         viewPagerAdapter = new ViewPagerAdapter(getActivity() , images);
         viewPager.setAdapter(viewPagerAdapter);
+
+        Timer timer = new Timer();
+        timer.scheduleAtFixedRate(new MyTimerTask() , 2000 , 4000);
+
         return view;
     }
 
@@ -121,5 +128,27 @@ public class MainFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+    
+    /**
+     * Bu TimerTask class ile image slider otomatik değiştirmesi sağlanıyor
+     */
+    public class MyTimerTask extends TimerTask{
+        @Override
+        public void run() {
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+
+                    if(viewPager.getCurrentItem()+1==viewPagerAdapter.getCount()){
+                        viewPager.setCurrentItem(0);
+                    }else{
+                        viewPager.setCurrentItem(viewPager.getCurrentItem()+1);
+                    }
+
+                }
+            });
+        }
     }
 }

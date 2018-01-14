@@ -23,6 +23,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import market.dental.adapter.ViewPagerAdapter;
+import market.dental.util.Result;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
@@ -89,10 +90,11 @@ public class MainActivity extends AppCompatActivity
                 startActivity(intent);
                 break;
             case R.id.right_menu_profile:
-                Log.i("DENTALMARKET" , "Settings >> profile");
+
+                Log.i(Result.LOG_TAG_INFO.getResultText() , "Settings >> profile");
                 break;
             case R.id.right_menu_logout:
-                Log.i("DENTALMARKET" , "Settings >> logout");
+                Log.i(Result.LOG_TAG_INFO.getResultText() , "Settings >> logout");
                 break;
         }
 
@@ -157,6 +159,6 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onFragmentInteraction(Uri uri) {
-        Log.i("DENEME", "DENEME");
+        Log.i(Result.LOG_TAG_INFO.getResultText(), "MainActivity >> onFragmentInteraction");
     }
 }
