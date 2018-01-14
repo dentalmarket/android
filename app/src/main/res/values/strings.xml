@@ -39,4 +39,7 @@
     <string name="sp_dental_market">sp_dental_market</string>
     <string name="sp_user_id">userId</string>
 
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
 </resources>
