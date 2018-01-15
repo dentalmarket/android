@@ -19,6 +19,7 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
@@ -46,6 +47,7 @@ import market.dental.util.Result;
  */
 public class MainFragment extends Fragment {
 
+    private View view;
     private RecyclerView mRecyclerView;
     private RecyclerView.LayoutManager mRecyclerLayoutManager;
     private RecyclerView.Adapter mRecyclerAdapter;
@@ -106,63 +108,36 @@ public class MainFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_main, container, false);
-        viewPager = (ViewPager)view.findViewById(R.id.fragment_main_view_pager);
-        viewPagerAdapter = new ViewPagerAdapter(getActivity() , images);
-        viewPager.setAdapter(viewPagerAdapter);
 
-        LinearLayout sliderDotsPanel = (LinearLayout)view.findViewById(R.id.viewpage_dots_layout);
-        dots = new ImageView[viewPagerAdapter.getCount()];
-        for(int i=0; i<viewPagerAdapter.getCount(); i++){
-            dots[i] = new ImageView(getActivity());
+        RequestQueue rq = Volley.newRequestQueue(getContext());
+        view = inflater.inflate(R.layout.fragment_main, container, false);
 
-            if(i==0){
-                dots[i].setImageDrawable(ContextCompat.getDrawable(getActivity().getApplicationContext() , R.drawable.active_dot));
-            }else{
-                dots[i].setImageDrawable(ContextCompat.getDrawable(getActivity().getApplicationContext() , R.drawable.nonactive_dot));
-            }
-
-
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT , LinearLayout.LayoutParams.WRAP_CONTENT);
-            params.setMargins(8,0,8,0);
-            sliderDotsPanel.addView(dots[i],params);
-        }
-
-        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener(){
-
+        // *****************************************************************************************
+        //                              BANNER IMAGES
+        // *****************************************************************************************
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.POST,
+                Resource.ajax_get_banner_images_url, null, new Response.Listener<JSONArray>() {
 
             @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
+            public void onResponse(JSONArray response) {
+                onResponseBannerImages(response);
             }
-
+        }, new Response.ErrorListener() {
             @Override
-            public void onPageSelected(int position) {
-                for(int i=0; i<viewPagerAdapter.getCount(); i++){
-                    if(i==position){
-                        dots[i].setImageDrawable(ContextCompat.getDrawable(getActivity().getApplicationContext() , R.drawable.active_dot));
-                    }else{
-                        dots[i].setImageDrawable(ContextCompat.getDrawable(getActivity().getApplicationContext() , R.drawable.nonactive_dot));
-                    }
-                }
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
+            public void onErrorResponse(VolleyError error) {
+                Log.i(Result.LOG_TAG_INFO.getResultText(),"ERROR ON GET DATA");
             }
         });
-
-        Timer timer = new Timer();
-        timer.scheduleAtFixedRate(new MyTimerTask() , 2000 , 4000);
+        rq.add(jsonArrayRequest);
 
 
+        // *****************************************************************************************
+        //                              FEATURED PRODUCTS
+        // *****************************************************************************************
         mRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
         mRecyclerView.setHasFixedSize(true);
         mRecyclerLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL , false);
 
-        RequestQueue rq = Volley.newRequestQueue(getContext());
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST,
                 Resource.ajax_get_products_featured_url, null, new Response.Listener<JSONObject>() {
 
@@ -187,15 +162,7 @@ public class MainFragment extends Fragment {
                 Log.i(Result.LOG_TAG_INFO.getResultText(),"ERROR ON GET DATA");
             }
         });
-
         rq.add(jsonObjectRequest);
-
-        ArrayList<String> productName = new ArrayList<>();
-        for(int i=0; i<10; i++){
-            productName.add("Procut Name " + i);
-        }
-
-
 
         return view;
     }
@@ -259,5 +226,52 @@ public class MainFragment extends Fragment {
                 }
             });
         }
+    }
+
+
+    /**
+     * ViewPagerAdapter volley response sonrası doldurulmasını sağlar
+     * @param images
+     */
+    public void onResponseBannerImages(JSONArray images){
+        viewPager = (ViewPager)view.findViewById(R.id.fragment_main_view_pager);
+        viewPagerAdapter = new ViewPagerAdapter(getActivity(),images);
+        viewPager.setAdapter(viewPagerAdapter);
+
+        LinearLayout sliderDotsPanel = (LinearLayout)view.findViewById(R.id.viewpage_dots_layout);
+        dots = new ImageView[viewPagerAdapter.getCount()];
+        for(int i=0; i<viewPagerAdapter.getCount(); i++){
+            dots[i] = new ImageView(getActivity());
+
+            if(i==0){
+                dots[i].setImageDrawable(ContextCompat.getDrawable(getActivity().getApplicationContext() , R.drawable.active_dot));
+            }else{
+                dots[i].setImageDrawable(ContextCompat.getDrawable(getActivity().getApplicationContext() , R.drawable.nonactive_dot));
+            }
+
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT , LinearLayout.LayoutParams.WRAP_CONTENT);
+            params.setMargins(8,0,8,0);
+            sliderDotsPanel.addView(dots[i],params);
+        }
+
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener(){
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {}
+            @Override
+            public void onPageSelected(int position) {
+                for(int i=0; i<viewPagerAdapter.getCount(); i++){
+                    if(i==position){
+                        dots[i].setImageDrawable(ContextCompat.getDrawable(getActivity().getApplicationContext() , R.drawable.active_dot));
+                    }else{
+                        dots[i].setImageDrawable(ContextCompat.getDrawable(getActivity().getApplicationContext() , R.drawable.nonactive_dot));
+                    }
+                }
+            }
+            @Override
+            public void onPageScrollStateChanged(int state) {}
+        });
+
+        Timer timer = new Timer();
+        timer.scheduleAtFixedRate(new MyTimerTask() , 2000 , 4000);
     }
 }

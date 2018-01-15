@@ -12,6 +12,8 @@ import android.widget.ImageView;
 
 import com.squareup.picasso.Picasso;
 
+import org.json.JSONArray;
+
 import market.dental.android.R;
 
 /**
@@ -20,18 +22,26 @@ import market.dental.android.R;
 
 public class ViewPagerAdapter extends PagerAdapter {
 
-    Activity activity;
-    String[] images;
-    LayoutInflater inflater;
+    private Activity activity;
+    private LayoutInflater inflater;
+    private JSONArray images;
 
-    public ViewPagerAdapter(Activity activity , String[] images){
+    public ViewPagerAdapter(Activity activity){
         this.activity = activity;
+    }
+
+    public ViewPagerAdapter(Activity activity , JSONArray images){
+        this.activity = activity;
+        this.images = images;
+    }
+
+    public void setImages(JSONArray images){
         this.images = images;
     }
 
     @Override
     public int getCount() {
-        return images.length;
+        return images.length();
     }
 
     @Override
@@ -54,7 +64,7 @@ public class ViewPagerAdapter extends PagerAdapter {
 
         try{
             Picasso.with(activity.getApplicationContext())
-                    .load(images[position])
+                    .load((String) images.get(position))
                     .placeholder(R.mipmap.ic_launcher)
                     .error(R.mipmap.ic_launcher)
                     .into(image);
