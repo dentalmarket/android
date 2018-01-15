@@ -51,6 +51,9 @@ public class MainFragment extends Fragment {
     private RecyclerView mRecyclerView;
     private RecyclerView.LayoutManager mRecyclerLayoutManager;
     private RecyclerView.Adapter mRecyclerAdapter;
+    private ViewPager viewPager;
+    private ViewPagerAdapter viewPagerAdapter;
+    private ImageView[] dots;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -60,16 +63,6 @@ public class MainFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-    ViewPager viewPager;
-    ViewPagerAdapter viewPagerAdapter;
-    private ImageView[] dots;
-    private String[] images = {
-            "http://dental.market/assets/slider/phptkMH7l.jpg",
-            "http://dental.market/assets/slider/phpZu2e98.jpg",
-            "http://dental.market/assets/slider/phptkMH7l.jpg"
-    };
-
-
     private OnFragmentInteractionListener mListener;
 
     public MainFragment() {
@@ -217,11 +210,11 @@ public class MainFragment extends Fragment {
                 @Override
                 public void run() {
 
-                    if(viewPager.getCurrentItem()+1==viewPagerAdapter.getCount()){
-                        viewPager.setCurrentItem(0);
-                    }else{
-                        viewPager.setCurrentItem(viewPager.getCurrentItem()+1);
-                    }
+                if(viewPager.getCurrentItem()+1==viewPagerAdapter.getCount()){
+                    viewPager.setCurrentItem(0);
+                }else{
+                    viewPager.setCurrentItem(viewPager.getCurrentItem()+1);
+                }
 
                 }
             });
