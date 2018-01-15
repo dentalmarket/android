@@ -8,11 +8,23 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Timer;
@@ -20,6 +32,8 @@ import java.util.TimerTask;
 
 import market.dental.adapter.ProductsRecyclerAdapter;
 import market.dental.adapter.ViewPagerAdapter;
+import market.dental.util.Resource;
+import market.dental.util.Result;
 
 
 /**
@@ -144,17 +158,44 @@ public class MainFragment extends Fragment {
         timer.scheduleAtFixedRate(new MyTimerTask() , 2000 , 4000);
 
 
+        mRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
+        mRecyclerView.setHasFixedSize(true);
+        mRecyclerLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL , false);
+
+        RequestQueue rq = Volley.newRequestQueue(getContext());
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST,
+                Resource.ajax_get_products_featured_url, null, new Response.Listener<JSONObject>() {
+
+            @Override
+            public void onResponse(JSONObject response) {
+                Log.i(Result.LOG_TAG_INFO.getResultText(),response.toString());
+                try {
+                    JSONArray products = (JSONArray)response.getJSONArray("products");
+
+                    mRecyclerView.setLayoutManager(mRecyclerLayoutManager);
+                    mRecyclerAdapter = new ProductsRecyclerAdapter(products);
+                    mRecyclerView.setAdapter(mRecyclerAdapter);
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.i(Result.LOG_TAG_INFO.getResultText(),"ERROR ON GET DATA");
+            }
+        });
+
+        rq.add(jsonObjectRequest);
+
         ArrayList<String> productName = new ArrayList<>();
         for(int i=0; i<10; i++){
             productName.add("Procut Name " + i);
         }
 
-        mRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
-        mRecyclerView.setHasFixedSize(true);
-        mRecyclerLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL , false);
-        mRecyclerView.setLayoutManager(mRecyclerLayoutManager);
-        mRecyclerAdapter = new ProductsRecyclerAdapter(productName);
-        mRecyclerView.setAdapter(mRecyclerAdapter);
+
 
         return view;
     }

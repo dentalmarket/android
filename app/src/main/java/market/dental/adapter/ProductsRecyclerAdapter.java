@@ -3,17 +3,19 @@ package market.dental.adapter;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.text.Layout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.squareup.picasso.Picasso;
-
-import java.util.ArrayList;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import market.dental.android.R;
+import market.dental.util.Result;
 
 /**
  * Created by kemalsamikaraca on 14.01.2018.
@@ -22,9 +24,9 @@ import market.dental.android.R;
 public class ProductsRecyclerAdapter extends RecyclerView.Adapter<ProductsRecyclerAdapter.ViewHolder> {
 
     private Context context;
+    private JSONArray products;
 
-    ArrayList<String> products;
-    public ProductsRecyclerAdapter(ArrayList<String> products){
+    public ProductsRecyclerAdapter(JSONArray products){
         this.products = products;
     }
 
@@ -39,21 +41,27 @@ public class ProductsRecyclerAdapter extends RecyclerView.Adapter<ProductsRecycl
 
     @Override
     public void onBindViewHolder(ProductsRecyclerAdapter.ViewHolder holder, int position) {
-        holder.mTextView.setText(products.get(position));
 
-        try{
+        try {
+            JSONObject productJSON = (JSONObject)products.get(position);
+            holder.mTextView.setText(productJSON.getString("productName"));
             Picasso.with(context.getApplicationContext())
-                    .load("http://dental.market/assets/images/products/25_79.png")
+                    .load(productJSON.getString("productImage"))
                     .placeholder(R.mipmap.ic_launcher)
                     .error(R.mipmap.ic_launcher)
                     .into(holder.mImageView);
-        }catch (Exception ex){
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        } catch (Exception ex){
+            ex.printStackTrace();
         }
+
     }
 
     @Override
     public int getItemCount() {
-        return products.size();
+        return products.length();
     }
 
 
@@ -64,6 +72,13 @@ public class ProductsRecyclerAdapter extends RecyclerView.Adapter<ProductsRecycl
             super(itemView);
             mTextView = (TextView)itemView.findViewById(R.id.recycler_view_product_name);
             mImageView = (ImageView)itemView.findViewById(R.id.recycler_view_product_image);
+
+            itemView.setOnClickListener(new View.OnClickListener(){
+                @Override
+                public void onClick(View v){
+                    Log.i(Result.LOG_TAG_INFO.getResultText() , "CardView clicked event ");
+                }
+            });
         }
     }
 }
