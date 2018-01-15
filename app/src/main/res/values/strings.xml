@@ -13,6 +13,7 @@
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>
+    <string name="button_product_detail">Ürün İncele</string>
 
     <string name="forgot_password">Şifremi Unuttum?</string>
     <string name="create_new_account">Yeni Hesap Aç</string>

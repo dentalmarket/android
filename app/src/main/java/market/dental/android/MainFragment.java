@@ -1,22 +1,24 @@
 package market.dental.android;
 
 import android.content.Context;
-import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import market.dental.adapter.ProductsRecyclerAdapter;
 import market.dental.adapter.ViewPagerAdapter;
 
 
@@ -29,6 +31,11 @@ import market.dental.adapter.ViewPagerAdapter;
  * create an instance of this fragment.
  */
 public class MainFragment extends Fragment {
+
+    private RecyclerView mRecyclerView;
+    private RecyclerView.LayoutManager mRecyclerLayoutManager;
+    private RecyclerView.Adapter mRecyclerAdapter;
+
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -45,6 +52,7 @@ public class MainFragment extends Fragment {
             "http://dental.market/assets/slider/phpZu2e98.jpg",
             "http://dental.market/assets/slider/phptkMH7l.jpg"
     };
+
 
     private OnFragmentInteractionListener mListener;
 
@@ -134,6 +142,19 @@ public class MainFragment extends Fragment {
 
         Timer timer = new Timer();
         timer.scheduleAtFixedRate(new MyTimerTask() , 2000 , 4000);
+
+
+        ArrayList<String> productName = new ArrayList<>();
+        for(int i=0; i<10; i++){
+            productName.add("Procut Name " + i);
+        }
+
+        mRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
+        mRecyclerView.setHasFixedSize(true);
+        mRecyclerLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL , false);
+        mRecyclerView.setLayoutManager(mRecyclerLayoutManager);
+        mRecyclerAdapter = new ProductsRecyclerAdapter(productName);
+        mRecyclerView.setAdapter(mRecyclerAdapter);
 
         return view;
     }
