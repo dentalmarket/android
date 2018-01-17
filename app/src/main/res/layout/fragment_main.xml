@@ -24,7 +24,14 @@
         android:layout_below="@+id/viewpage_dots_layout"
         android:id="@+id/recycler_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
+    </android.support.v7.widget.RecyclerView>
+
+    <android.support.v7.widget.RecyclerView
+        android:layout_below="@+id/recycler_view"
+        android:id="@+id/fragment_main_chosen_products_recycler"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
     </android.support.v7.widget.RecyclerView>
 
 </RelativeLayout>

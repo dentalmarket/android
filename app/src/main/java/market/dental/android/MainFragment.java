@@ -54,6 +54,9 @@ public class MainFragment extends Fragment {
     private RecyclerView mRecyclerView;
     private RecyclerView.LayoutManager mRecyclerLayoutManager;
     private RecyclerView.Adapter mRecyclerAdapter;
+    private RecyclerView chosenProducts;
+    private RecyclerView.Adapter chosenProductsAdapter;
+    private RecyclerView.LayoutManager chosenProductsLayoutManager;
     private ViewPager viewPager;
     private ViewPagerAdapter viewPagerAdapter;
     private ImageView[] dots;
@@ -127,9 +130,14 @@ public class MainFragment extends Fragment {
         // *****************************************************************************************
         //                              FEATURED PRODUCTS
         // *****************************************************************************************
+
         mRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
         mRecyclerView.setHasFixedSize(true);
         mRecyclerLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL , false);
+
+        chosenProducts = (RecyclerView) view.findViewById(R.id.fragment_main_chosen_products_recycler);
+        chosenProducts.setHasFixedSize(true);
+        chosenProductsLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL , false);
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST,
                 Resource.ajax_get_products_homeproduct_url, null, new Response.Listener<JSONObject>() {
@@ -143,6 +151,10 @@ public class MainFragment extends Fragment {
                     mRecyclerView.setLayoutManager(mRecyclerLayoutManager);
                     mRecyclerAdapter = new ProductsRecyclerAdapter(Product.ProductList(response.getJSONObject("content").getJSONObject("featured").getJSONArray("products")));
                     mRecyclerView.setAdapter(mRecyclerAdapter);
+
+                    chosenProducts.setLayoutManager(chosenProductsLayoutManager);
+                    chosenProductsAdapter = new ProductsRecyclerAdapter(Product.ProductList(response.getJSONObject("content").getJSONObject("chosen").getJSONArray("products")));
+                    chosenProducts.setAdapter(chosenProductsAdapter);
 
                 } catch (JSONException e) {
                     e.printStackTrace();
