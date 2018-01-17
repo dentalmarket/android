@@ -1,37 +1,137 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    tools:context="market.dental.android.MainFragment"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:id="@+id/fragment_main"
-    tools:context="market.dental.android.MainFragment">
+    android:layout_height="match_parent">
 
-    <android.support.v4.view.ViewPager
-        android:id="@+id/fragment_main_view_pager"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="160dp">
-    </android.support.v4.view.ViewPager>
+        android:layout_height="match_parent"
+        android:id="@+id/fragment_main">
 
-    <LinearLayout
-        android:id="@+id/viewpage_dots_layout"
-        android:layout_below="@+id/fragment_main_view_pager"
-        android:orientation="horizontal"
-        android:gravity="center_horizontal|center_vertical"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-    </LinearLayout>
+        <android.support.v4.view.ViewPager
+            android:id="@+id/fragment_main_view_pager"
+            android:layout_width="match_parent"
+            android:layout_height="160dp">
+        </android.support.v4.view.ViewPager>
 
-    <android.support.v7.widget.RecyclerView
-        android:layout_below="@+id/viewpage_dots_layout"
-        android:id="@+id/recycler_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-    </android.support.v7.widget.RecyclerView>
+        <LinearLayout
+            android:id="@+id/viewpage_dots_layout"
+            android:layout_below="@+id/fragment_main_view_pager"
+            android:orientation="horizontal"
+            android:gravity="center_horizontal|center_vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        </LinearLayout>
 
-    <android.support.v7.widget.RecyclerView
-        android:layout_below="@+id/recycler_view"
-        android:id="@+id/fragment_main_chosen_products_recycler"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-    </android.support.v7.widget.RecyclerView>
+        <LinearLayout
+            android:id="@+id/fragment_main_title_featured"
+            android:layout_below="@+id/viewpage_dots_layout"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginTop="8dp"
+            android:gravity="center"
+            android:orientation="horizontal">
 
-</RelativeLayout>
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:background="#59BE7E"
+                android:paddingLeft="12dp"
+                android:paddingRight="12dp"
+                android:src="@drawable/ic_language_black_24dp" />
+
+            <TextView
+                android:id="@+id/activity_product_detail_store_name"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#EEEEEE"
+                android:gravity="center_vertical"
+                android:paddingLeft="12dp"
+                android:textStyle="bold"
+                android:textSize="16dp"
+                android:text="Öne Çıkanlar" />
+
+        </LinearLayout>
+
+        <android.support.v7.widget.RecyclerView
+            android:layout_below="@+id/fragment_main_title_featured"
+            android:id="@+id/recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        </android.support.v7.widget.RecyclerView>
+
+        <LinearLayout
+            android:id="@+id/fragment_main_title_chosen"
+            android:layout_below="@+id/recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginTop="8dp"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:background="#2781BD"
+                android:paddingLeft="12dp"
+                android:paddingRight="12dp"
+                android:src="@drawable/ic_language_black_24dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#EEEEEE"
+                android:gravity="center_vertical"
+                android:paddingLeft="12dp"
+                android:textStyle="bold"
+                android:textSize="16dp"
+                android:text="Sizin İçin Seçtiklerimiz" />
+
+        </LinearLayout>
+
+        <android.support.v7.widget.RecyclerView
+            android:layout_below="@+id/fragment_main_title_chosen"
+            android:id="@+id/fragment_main_chosen_products_recycler"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        </android.support.v7.widget.RecyclerView>
+
+        <LinearLayout
+            android:id="@+id/fragment_main_title_discounted"
+            android:layout_below="@+id/fragment_main_chosen_products_recycler"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginTop="8dp"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:background="#2781BD"
+                android:paddingLeft="12dp"
+                android:paddingRight="12dp"
+                android:src="@drawable/ic_language_black_24dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#EEEEEE"
+                android:gravity="center_vertical"
+                android:paddingLeft="12dp"
+                android:textStyle="bold"
+                android:textSize="16dp"
+                android:text="İndirimli Ürünler" />
+
+        </LinearLayout>
+
+        <android.support.v7.widget.RecyclerView
+            android:layout_below="@+id/fragment_main_title_discounted"
+            android:id="@+id/fragment_main_discounted_products_recycler"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        </android.support.v7.widget.RecyclerView>
+
+    </RelativeLayout>
+</ScrollView>
