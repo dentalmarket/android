@@ -3,6 +3,8 @@ package market.dental.android;
 import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -15,18 +17,23 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.squareup.picasso.Picasso;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
 
+import market.dental.adapter.ProductsRecyclerAdapter;
+import market.dental.model.Product;
 import market.dental.util.Resource;
 import market.dental.util.Result;
 
 public class ProductDetailActivity extends AppCompatActivity {
 
-
+    private RecyclerView mRecyclerView;
+    private RecyclerView.LayoutManager mRecyclerLayoutManager;
+    private RecyclerView.Adapter mRecyclerAdapter;
     private Context productDetailContext;
     private ImageView  pdImageView;
     private TextView pdProductName;
@@ -48,6 +55,9 @@ public class ProductDetailActivity extends AppCompatActivity {
         // *****************************************************************************************
         //                              GET PRODUCT DETAIL
         // *****************************************************************************************
+        mRecyclerView = (RecyclerView) findViewById(R.id.activity_product_detail_similar_prod_recycler_view);
+        mRecyclerView.setHasFixedSize(true);
+        mRecyclerLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL , false);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST,
                 Resource.ajax_get_product_detail_url, null, new Response.Listener<JSONObject>() {
 
@@ -72,6 +82,10 @@ public class ProductDetailActivity extends AppCompatActivity {
                     storeName.setText(store.getString("name"));
 
 
+                    mRecyclerView.setLayoutManager(mRecyclerLayoutManager);
+                    mRecyclerAdapter = new ProductsRecyclerAdapter(Product.ProductList(content.getJSONArray("similarProducts")));
+                    mRecyclerView.setAdapter(mRecyclerAdapter);
+                    
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

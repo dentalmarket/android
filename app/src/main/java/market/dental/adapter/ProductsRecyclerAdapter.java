@@ -1,12 +1,8 @@
 package market.dental.adapter;
 
 import android.content.Context;
-import android.net.Uri;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentTransaction;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
-import android.text.Layout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,7 +15,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.List;
+
+import market.dental.android.ProductDetailActivity;
 import market.dental.android.R;
+import market.dental.model.Product;
 import market.dental.util.Result;
 
 /**
@@ -29,9 +29,9 @@ import market.dental.util.Result;
 public class ProductsRecyclerAdapter extends RecyclerView.Adapter<ProductsRecyclerAdapter.ViewHolder> {
 
     private Context context;
-    private JSONArray products;
+    private List<Product> products;
 
-    public ProductsRecyclerAdapter(JSONArray products){
+    public ProductsRecyclerAdapter(List<Product> products){
         this.products = products;
     }
 
@@ -48,16 +48,13 @@ public class ProductsRecyclerAdapter extends RecyclerView.Adapter<ProductsRecycl
     public void onBindViewHolder(ProductsRecyclerAdapter.ViewHolder holder, int position) {
 
         try {
-            JSONObject productJSON = (JSONObject)products.get(position);
-            holder.mTextView.setText(productJSON.getString("productName"));
+            Product product = products.get(position);
+            holder.mTextView.setText(product.getName());
             Picasso.with(context.getApplicationContext())
-                    .load(productJSON.getString("productImage"))
+                    .load(product.getImageUrl())
                     .placeholder(R.mipmap.ic_launcher)
                     .error(R.mipmap.ic_launcher)
                     .into(holder.mImageView);
-
-        } catch (JSONException e) {
-            e.printStackTrace();
         } catch (Exception ex){
             ex.printStackTrace();
         }
@@ -66,7 +63,7 @@ public class ProductsRecyclerAdapter extends RecyclerView.Adapter<ProductsRecycl
 
     @Override
     public int getItemCount() {
-        return products.length();
+        return products.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -83,8 +80,10 @@ public class ProductsRecyclerAdapter extends RecyclerView.Adapter<ProductsRecycl
             mButton.setOnClickListener(new View.OnClickListener(){
                 @Override
                 public void onClick(View v) {
-                    /*
 
+                    Intent intent = new Intent(v.getContext(),ProductDetailActivity.class);
+                    v.getContext().startActivity(intent);
+                    /*
                     FragmentTransaction transaction = ((FragmentActivity)v.getContext()).getSupportFragmentManager().beginTransaction();
                     transaction.replace(R.id.content_main , fragment);
                     transaction.commit();

@@ -1,141 +1,147 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/activity_product_detail"
+    android:id="@+id/activity_product_detail_scroll"
     tools:context="market.dental.android.ProductDetailActivity">
 
-    <ImageView
-        android:id="@+id/activity_product_detail_image"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:src="@android:drawable/ic_menu_report_image" />
-
-    <TextView
-        android:id="@+id/activity_product_detail_product_name"
-        android:layout_gravity="center_horizontal|center_vertical"
-        android:maxLines="2"
-        android:layout_below="@+id/activity_product_detail_image"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
-
     <RelativeLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/activity_product_detail_store_panel"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/activity_product_detail_product_name">
+        android:layout_height="match_parent"
+        android:id="@+id/activity_product_detail">
+
+        <ImageView
+            android:id="@+id/activity_product_detail_image"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:src="@android:drawable/ic_menu_report_image" />
 
         <TextView
+            android:id="@+id/activity_product_detail_product_name"
+            android:layout_gravity="center_horizontal|center_vertical"
+            android:maxLines="2"
+            android:layout_below="@+id/activity_product_detail_image"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+
+        <RelativeLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:id="@+id/activity_product_detail_store_panel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/activity_product_detail_product_name">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="#F8F6F8"
+                android:gravity="center_vertical"
+                android:paddingLeft="16dp"
+                android:id="@+id/activity_product_detail_title"
+                android:text="Mağaza Bilgileri" />
+
+            <LinearLayout
+                android:layout_below="@+id/activity_product_detail_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" >
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent" />
+
+                    <TextView
+                        android:id="@+id/activity_product_detail_store_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:paddingLeft="16dp"
+                        android:text="Mağaza asdasd" />
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:gravity="center"
+                    android:autoLink="phone"
+                    android:linksClickable="true"
+                    android:text="05556527348" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:gravity="center"
+                    android:autoLink="phone"
+                    android:linksClickable="true"
+                    android:text="03122901111" />
+
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:gravity="center"
+                    android:autoLink="email"
+                    android:linksClickable="true"
+                    android:text="info@dental.market" />
+
+            </LinearLayout>
+
+        </RelativeLayout>
+
+
+        <Button
+            android:id="@+id/activity_product_detail_product_desc_btn"
+            style="?android:textAppearanceSmall"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:background="#D3BD98"
+            android:text="@string/pdf_product_desc"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold"
+            android:layout_below="@+id/activity_product_detail_store_panel"/>
+
+        <Button
+            android:id="@+id/activity_product_detail_product_prop_btn"
+            style="?android:textAppearanceSmall"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/activity_product_detail_product_desc_btn"
+            android:layout_marginTop="8dp"
+            android:background="#D3BD98"
+            android:text="@string/pdf_product_prop"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold" />
+
+
+        <TextView
+            android:id="@+id/activity_product_detail_similar_products"
+            android:layout_below="@+id/activity_product_detail_product_prop_btn"
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:background="#F8F6F8"
             android:gravity="center_vertical"
             android:paddingLeft="16dp"
-            android:id="@+id/activity_product_detail_title"
-            android:text="Mağaza Bilgileri" />
+            android:text="Benzer Ürünler" />
 
-        <LinearLayout
-            android:layout_below="@+id/activity_product_detail_title"
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/activity_product_detail_similar_prod_recycler_view"
+            android:layout_below="@+id/activity_product_detail_similar_products"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical" >
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:gravity="center"
-                android:orientation="horizontal">
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent" />
-
-                <TextView
-                    android:id="@+id/activity_product_detail_store_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:paddingLeft="16dp"
-                    android:text="Mağaza asdasd" />
-            </LinearLayout>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:gravity="center"
-                android:autoLink="phone"
-                android:linksClickable="true"
-                android:text="05556527348" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:gravity="center"
-                android:autoLink="phone"
-                android:linksClickable="true"
-                android:text="03122901111" />
-
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:gravity="center"
-                android:autoLink="email"
-                android:linksClickable="true"
-                android:text="info@dental.market" />
-
-        </LinearLayout>
+            android:layout_height="match_parent">
+        </android.support.v7.widget.RecyclerView>
 
     </RelativeLayout>
-
-
-    <Button
-        android:id="@+id/activity_product_detail_product_desc_btn"
-        style="?android:textAppearanceSmall"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:background="#D3BD98"
-        android:text="@string/pdf_product_desc"
-        android:textColor="#FFFFFF"
-        android:textStyle="bold"
-        android:layout_below="@+id/activity_product_detail_store_panel"/>
-
-    <Button
-        android:id="@+id/activity_product_detail_product_prop_btn"
-        style="?android:textAppearanceSmall"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/activity_product_detail_product_desc_btn"
-        android:layout_marginTop="8dp"
-        android:background="#D3BD98"
-        android:text="@string/pdf_product_prop"
-        android:textColor="#FFFFFF"
-        android:textStyle="bold" />
-
-
-    <TextView
-        android:id="@+id/activity_product_detail_similar_products"
-        android:layout_below="@+id/activity_product_detail_product_prop_btn"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:background="#F8F6F8"
-        android:gravity="center_vertical"
-        android:paddingLeft="16dp"
-        android:text="Benzer Ürünler" />
-
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/activity_product_detail_similar_prod_recycler_view"
-        android:layout_below="@+id/activity_product_detail_similar_products"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-    </android.support.v7.widget.RecyclerView>
-
-</RelativeLayout>
+</ScrollView>

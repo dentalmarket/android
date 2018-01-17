@@ -28,11 +28,13 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import market.dental.adapter.ProductsRecyclerAdapter;
 import market.dental.adapter.ViewPagerAdapter;
+import market.dental.model.Product;
 import market.dental.util.Resource;
 import market.dental.util.Result;
 
@@ -130,16 +132,16 @@ public class MainFragment extends Fragment {
         mRecyclerLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL , false);
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST,
-                Resource.ajax_get_products_featured_url, null, new Response.Listener<JSONObject>() {
+                Resource.ajax_get_products_homeproduct_url, null, new Response.Listener<JSONObject>() {
 
             @Override
             public void onResponse(JSONObject response) {
                 Log.i(Result.LOG_TAG_INFO.getResultText(),response.toString());
                 try {
-                    JSONArray products = (JSONArray)response.getJSONArray("products");
+                    //JSONArray products = (JSONArray)response.getJSONArray("products");
 
                     mRecyclerView.setLayoutManager(mRecyclerLayoutManager);
-                    mRecyclerAdapter = new ProductsRecyclerAdapter(products);
+                    mRecyclerAdapter = new ProductsRecyclerAdapter(Product.ProductList(response.getJSONObject("content").getJSONObject("featured").getJSONArray("products")));
                     mRecyclerView.setAdapter(mRecyclerAdapter);
 
                 } catch (JSONException e) {
