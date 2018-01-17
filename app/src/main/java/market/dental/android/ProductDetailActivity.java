@@ -43,13 +43,12 @@ public class ProductDetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product_detail);
-
-        productDetailContext = this.getApplicationContext();
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         RequestQueue rq = Volley.newRequestQueue(this);
+        productDetailContext = this.getApplicationContext();
         pdImageView = (ImageView)findViewById(R.id.activity_product_detail_image);
         pdProductName = (TextView)findViewById(R.id.activity_product_detail_product_name);
-
         storeName = (TextView)findViewById(R.id.activity_product_detail_store_name);
 
         // *****************************************************************************************
@@ -106,6 +105,5 @@ public class ProductDetailActivity extends AppCompatActivity {
             }
         };
         rq.add(jsonObjectRequest);
-
     }
 }
