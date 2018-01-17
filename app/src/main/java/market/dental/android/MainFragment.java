@@ -202,7 +202,10 @@ public class MainFragment extends Fragment {
     @Override
     public void onStop(){
         super.onStop();
-        timer.cancel();
+        
+        if(timer!=null){
+            timer.cancel();
+        }
     }
 
     @Override
