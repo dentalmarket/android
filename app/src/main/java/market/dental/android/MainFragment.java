@@ -47,6 +47,7 @@ import market.dental.util.Result;
  */
 public class MainFragment extends Fragment {
 
+    private Timer timer;
     private View view;
     private RecyclerView mRecyclerView;
     private RecyclerView.LayoutManager mRecyclerLayoutManager;
@@ -56,11 +57,8 @@ public class MainFragment extends Fragment {
     private ImageView[] dots;
 
     // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
     private OnFragmentInteractionListener mListener;
@@ -179,6 +177,12 @@ public class MainFragment extends Fragment {
     }
 
     @Override
+    public void onStop(){
+        super.onStop();
+        timer.cancel();
+    }
+
+    @Override
     public void onDetach() {
         super.onDetach();
         mListener = null;
@@ -264,7 +268,7 @@ public class MainFragment extends Fragment {
             public void onPageScrollStateChanged(int state) {}
         });
 
-        Timer timer = new Timer();
+        timer = new Timer();
         timer.scheduleAtFixedRate(new MyTimerTask() , 2000 , 4000);
     }
 }
