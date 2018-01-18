@@ -18,6 +18,7 @@ public class Product {
     private String imageUrl;
     private int price;
     private int currencyId;
+    private Brand brand;
 
     public Product(JSONObject projectJsonObject){
         try {
@@ -26,6 +27,9 @@ public class Product {
             this.imageUrl = projectJsonObject.getString("image");
             this.price = projectJsonObject.getInt("price");
             this.currencyId = projectJsonObject.getInt("currency");
+            if(projectJsonObject.has("brand") && projectJsonObject.getJSONObject("brand")!=null){
+                this.brand = new Brand(projectJsonObject.getJSONObject("brand"));
+            }
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -45,6 +49,13 @@ public class Product {
         return productList;
     }
 
+    public Brand getBrand() {
+        return brand;
+    }
+
+    public void setBrand(Brand brand) {
+        this.brand = brand;
+    }
 
     public int getId() {
         return id;

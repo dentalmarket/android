@@ -12,10 +12,13 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.Currency;
 import java.util.List;
+import java.util.Locale;
 
 import market.dental.android.R;
 import market.dental.model.Product;
+import market.dental.util.Resource;
 
 /**
  * Created by kemalsamikaraca on 18.01.2018.
@@ -54,6 +57,13 @@ public class ProductListAdapter extends ArrayAdapter {
 
         TextView textView = customView.findViewById(R.id.activity_product_list_item_product_name);
         textView.setText(productList.get(position).getName());
+
+        TextView brandTextView = customView.findViewById(R.id.activity_product_list_item_product_brand);
+        brandTextView.setText(productList.get(position).getBrand().getName());
+
+        TextView priceTextView = customView.findViewById(R.id.activity_product_list_item_product_price);
+        String priceString = "" +productList.get(position).getPrice() + " TL";
+        priceTextView.setText(priceString);
 
         ImageView imageView = customView.findViewById(R.id.activity_product_list_item_image);
         Picasso.with(context)

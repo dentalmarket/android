@@ -1,5 +1,6 @@
 package market.dental.android;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -60,11 +61,9 @@ public class ProductListActivity extends AppCompatActivity {
                         new AdapterView.OnItemClickListener() {
                             @Override
                             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-                                Log.i(Result.LOG_TAG_INFO.getResultText() , "DENEME");
-
-                                String x = ((Product) parent.getItemAtPosition(position)).getName();
-                                Toast.makeText(ProductListActivity.this,x,Toast.LENGTH_LONG).show();
+                                int productId = ((Product) parent.getItemAtPosition(position)).getId();
+                                Intent intent = new Intent(view.getContext(),ProductDetailActivity.class);
+                                view.getContext().startActivity(intent);
                             }
                         }
                     );
@@ -88,8 +87,6 @@ public class ProductListActivity extends AppCompatActivity {
             }
         };
         rq.add(jsonObjectRequest);
-
-
 
 
     }
