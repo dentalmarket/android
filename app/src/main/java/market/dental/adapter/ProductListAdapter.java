@@ -6,7 +6,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,10 +23,12 @@ import market.dental.model.Product;
 
 public class ProductListAdapter extends ArrayAdapter {
 
-    public List<Product> productList;
+    private Context context;
+    private List<Product> productList;
 
     public ProductListAdapter(@NonNull Context context) {
         super(context, R.layout.activity_product_list_main_items);
+        this.context  = context;
     }
 
     public void setProductList(List<Product> productList){
@@ -47,9 +52,15 @@ public class ProductListAdapter extends ArrayAdapter {
         LayoutInflater inflater = LayoutInflater.from(getContext());
         View customView = inflater.inflate(R.layout.activity_product_list_main_items,viewgroup,false);
 
-        TextView textView = customView.findViewById(R.id.sssddd);
+        TextView textView = customView.findViewById(R.id.activity_product_list_item_product_name);
         textView.setText(productList.get(position).getName());
 
+        ImageView imageView = customView.findViewById(R.id.activity_product_list_item_image);
+        Picasso.with(context)
+                .load(productList.get(position).getImageUrl())
+                .placeholder(R.mipmap.ic_launcher)
+                .error(R.mipmap.ic_launcher)
+                .into(imageView);
         return customView;
     }
 

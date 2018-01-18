@@ -46,10 +46,8 @@ public class ProductListActivity extends AppCompatActivity {
 
             @Override
             public void onResponse(JSONObject response) {
-                Log.i(Result.LOG_TAG_INFO.getResultText(),response.toString());
 
                 try {
-
                     // result objesinin kontrolü YAPILACAK
                     // result objesinin content değeri alınır
                     JSONObject content = response.getJSONObject("content");
@@ -62,12 +60,14 @@ public class ProductListActivity extends AppCompatActivity {
                         new AdapterView.OnItemClickListener() {
                             @Override
                             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                                Log.i(Result.LOG_TAG_INFO.getResultText() , "DENEME");
+
                                 String x = ((Product) parent.getItemAtPosition(position)).getName();
                                 Toast.makeText(ProductListActivity.this,x,Toast.LENGTH_LONG).show();
                             }
                         }
                     );
-
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
