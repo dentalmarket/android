@@ -49,51 +49,89 @@
                 android:layout_below="@+id/activity_product_detail_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical" >
+                android:orientation="vertical"
+                android:id="@+id/linearLayout">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
-                    android:gravity="center"
+                    android:paddingLeft="20dp"
                     android:orientation="horizontal">
                     <ImageView
                         android:layout_width="wrap_content"
-                        android:layout_height="match_parent" />
+                        android:layout_height="match_parent"
+                        android:src="@drawable/ic_location_city_black_24dp"/>
 
                     <TextView
                         android:id="@+id/activity_product_detail_store_name"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:gravity="center"
                         android:paddingLeft="16dp"
                         android:text="Mağaza asdasd" />
                 </LinearLayout>
 
-                <TextView
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
-                    android:gravity="center"
-                    android:autoLink="phone"
-                    android:linksClickable="true"
-                    android:text="05556527348" />
+                    android:paddingLeft="20dp"
+                    android:orientation="horizontal">
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/ic_phone_black_24dp"/>
 
-                <TextView
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:paddingLeft="16dp"
+                        android:autoLink="phone"
+                        android:linksClickable="true"
+                        android:text="05556527348" />
+                </LinearLayout>
+
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
-                    android:gravity="center"
-                    android:autoLink="phone"
-                    android:linksClickable="true"
-                    android:text="03122901111" />
+                    android:paddingLeft="20dp"
+                    android:orientation="horizontal">
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/ic_phone_black_24dp"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:paddingLeft="16dp"
+                        android:autoLink="phone"
+                        android:linksClickable="true"
+                        android:text="03122901111" />
+                </LinearLayout>
 
 
-                <TextView
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
-                    android:gravity="center"
-                    android:autoLink="email"
-                    android:linksClickable="true"
-                    android:text="info@dental.market" />
+                    android:paddingLeft="20dp"
+                    android:orientation="horizontal">
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/ic_email_black_24dp"/>
 
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:paddingLeft="16dp"
+                        android:autoLink="email"
+                        android:linksClickable="true"
+                        android:text="info@dental.market" />
+                </LinearLayout>
+                
             </LinearLayout>
 
         </RelativeLayout>
