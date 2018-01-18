@@ -114,12 +114,16 @@ public class MainFragment extends Fragment {
         // *****************************************************************************************
         //                              BANNER IMAGES
         // *****************************************************************************************
-        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.POST,
-                Resource.ajax_get_banner_images_url, null, new Response.Listener<JSONArray>() {
+        JsonObjectRequest bannerRequest = new JsonObjectRequest(Request.Method.POST,
+                Resource.ajax_get_banner_images_url, null, new Response.Listener<JSONObject>() {
 
             @Override
-            public void onResponse(JSONArray response) {
-                onResponseBannerImages(response);
+            public void onResponse(JSONObject response) {
+                try {
+                    onResponseBannerImages(response.getJSONArray("content"));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
         }, new Response.ErrorListener() {
             @Override
@@ -127,7 +131,7 @@ public class MainFragment extends Fragment {
                 Log.i(Result.LOG_TAG_INFO.getResultText(),"ERROR ON GET DATA");
             }
         });
-        rq.add(jsonArrayRequest);
+        rq.add(bannerRequest);
 
 
         // *****************************************************************************************

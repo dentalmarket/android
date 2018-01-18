@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
+import org.json.JSONObject;
 
 import market.dental.android.R;
 
@@ -64,7 +65,7 @@ public class ViewPagerAdapter extends PagerAdapter {
 
         try{
             Picasso.with(activity.getApplicationContext())
-                    .load((String) images.get(position))
+                    .load( ((JSONObject)images.get(position)).getString("image"))
                     .placeholder(R.mipmap.ic_launcher)
                     .error(R.mipmap.ic_launcher)
                     .into(image);
