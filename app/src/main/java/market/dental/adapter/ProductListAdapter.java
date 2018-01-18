@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import market.dental.android.R;
+import market.dental.model.Product;
 
 /**
  * Created by kemalsamikaraca on 18.01.2018.
@@ -19,20 +20,14 @@ import market.dental.android.R;
 
 public class ProductListAdapter extends ArrayAdapter {
 
-    public List<String> productList;
+    public List<Product> productList;
 
     public ProductListAdapter(@NonNull Context context) {
         super(context, R.layout.activity_product_list_main_items);
-        productList = new ArrayList<>();
-        productList.add("KEmal");
-        productList.add("Sami");
-        productList.add("Sami");
-        productList.add("Sami");
-        productList.add("Sami");productList.add("Sami");
-        productList.add("Sami");
-        productList.add("Sami");productList.add("Sami");productList.add("Sami");
-        productList.add("Sami");productList.add("Sami");productList.add("Sami");
+    }
 
+    public void setProductList(List<Product> productList){
+        this.productList = productList;
     }
 
 
@@ -53,7 +48,7 @@ public class ProductListAdapter extends ArrayAdapter {
         View customView = inflater.inflate(R.layout.activity_product_list_main_items,viewgroup,false);
 
         TextView textView = customView.findViewById(R.id.sssddd);
-        textView.setText(productList.get(position));
+        textView.setText(productList.get(position).getName());
 
         return customView;
     }
