@@ -37,12 +37,11 @@
         </activity>
         <activity
             android:name=".ProductDetailActivity"
-            android:label="Anasayfa"
-            android:parentActivityName=".MainActivity"></activity>
+            android:label="Ürün Detayı"
+            ></activity>
         <activity
             android:name=".ProductListActivity"
-            android:label="Anasayfa"
-            android:parentActivityName=".MainActivity">
+            android:label="Ürün Listesi">
         </activity>
     </application>
 
