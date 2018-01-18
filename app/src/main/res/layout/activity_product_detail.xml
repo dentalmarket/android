@@ -43,7 +43,8 @@
                 android:gravity="center_vertical"
                 android:paddingLeft="16dp"
                 android:id="@+id/activity_product_detail_title"
-                android:text="Mağaza Bilgileri" />
+                android:text="MAĞAZA BİLGİLERİ"
+                android:textStyle="bold"/>
 
             <LinearLayout
                 android:layout_below="@+id/activity_product_detail_title"
@@ -131,7 +132,7 @@
                         android:linksClickable="true"
                         android:text="info@dental.market" />
                 </LinearLayout>
-                
+
             </LinearLayout>
 
         </RelativeLayout>
@@ -142,12 +143,16 @@
             style="?android:textAppearanceSmall"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_below="@+id/activity_product_detail_store_panel"
             android:layout_marginTop="16dp"
-            android:background="#D3BD98"
+            android:background="#F8F6F8"
+            android:drawableRight="@drawable/ic_keyboard_arrow_right_black_24dp"
+            android:gravity="left|center_vertical"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
             android:text="@string/pdf_product_desc"
-            android:textColor="#FFFFFF"
-            android:textStyle="bold"
-            android:layout_below="@+id/activity_product_detail_store_panel"/>
+            android:textColor="#6B6A6B"
+            android:textStyle="bold" />
 
         <Button
             android:id="@+id/activity_product_detail_product_prop_btn"
@@ -171,7 +176,8 @@
             android:background="#F8F6F8"
             android:gravity="center_vertical"
             android:paddingLeft="16dp"
-            android:text="Benzer Ürünler" />
+            android:text="BENZER ÜRÜNLER"
+            android:textStyle="bold"/>
 
 
         <android.support.v7.widget.RecyclerView
