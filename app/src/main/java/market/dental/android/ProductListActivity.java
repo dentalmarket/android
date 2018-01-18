@@ -62,13 +62,17 @@ public class ProductListActivity extends AppCompatActivity {
                             @Override
                             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                                 int productId = ((Product) parent.getItemAtPosition(position)).getId();
+                                Bundle bundle = new Bundle();
+                                bundle.putInt(Resource.KEY_PRODUCT_ID, productId);
                                 Intent intent = new Intent(view.getContext(),ProductDetailActivity.class);
+                                intent.putExtras(bundle);
                                 view.getContext().startActivity(intent);
                             }
                         }
                     );
                 } catch (JSONException e) {
                     e.printStackTrace();
+                    Log.i(Result.LOG_TAG_INFO.getResultText(),"ProductListActivity >> JSONException >> 120");
                 }
 
             }
@@ -76,7 +80,8 @@ public class ProductListActivity extends AppCompatActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.i(Result.LOG_TAG_INFO.getResultText(),"ERROR ON GET DATA");
+                error.printStackTrace();
+                Log.i(Result.LOG_TAG_INFO.getResultText(),"ProductListActivity >> ERROR ON GET DATA >> 121");
             }
         }){
             @Override

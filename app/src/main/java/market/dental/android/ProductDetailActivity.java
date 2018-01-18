@@ -1,6 +1,7 @@
 package market.dental.android;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -8,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -39,12 +41,20 @@ public class ProductDetailActivity extends AppCompatActivity {
     private TextView pdProductName;
     private TextView storeName;
 
+    private int productId;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product_detail);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        // Get productId
+        Intent intent = getIntent();
+        productId = intent.getIntExtra(Resource.KEY_PRODUCT_ID,-1);
+        Toast.makeText(this,"productId = " + productId , Toast.LENGTH_LONG).show();
+
+        // Initialization
         RequestQueue rq = Volley.newRequestQueue(this);
         productDetailContext = this.getApplicationContext();
         pdImageView = (ImageView)findViewById(R.id.activity_product_detail_image);
@@ -62,10 +72,8 @@ public class ProductDetailActivity extends AppCompatActivity {
 
             @Override
             public void onResponse(JSONObject response) {
-                Log.i(Result.LOG_TAG_INFO.getResultText(),response.toString());
 
                 try {
-
                     // result objesinin kontrolü YAPILACAK
                     // result objesinin content değeri alınır
                     JSONObject content = response.getJSONObject("content");
@@ -80,7 +88,6 @@ public class ProductDetailActivity extends AppCompatActivity {
                     JSONObject store = content.getJSONObject("store");
                     storeName.setText(store.getString("name"));
 
-
                     mRecyclerView.setLayoutManager(mRecyclerLayoutManager);
                     mRecyclerAdapter = new ProductsRecyclerAdapter(Product.ProductList(content.getJSONArray("similarProducts")));
                     mRecyclerView.setAdapter(mRecyclerAdapter);
@@ -88,9 +95,7 @@ public class ProductDetailActivity extends AppCompatActivity {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-
             }
-
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
@@ -100,7 +105,7 @@ public class ProductDetailActivity extends AppCompatActivity {
             @Override
             protected Map<String, String> getParams()  {
                 Map<String, String> params = new HashMap<>();
-                params.put("id", "XXX");
+                params.put("id", "TESTID-111222333");
                 return params;
             }
         };
