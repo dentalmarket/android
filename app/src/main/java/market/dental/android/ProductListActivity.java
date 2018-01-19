@@ -32,7 +32,7 @@ import market.dental.util.Result;
 
 public class ProductListActivity extends AppCompatActivity {
 
-    private ProductListAdapter listAdapter;
+    private ProductListAdapter productListAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,8 +40,17 @@ public class ProductListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_product_list);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        // Get categoryId
+        Intent intent = getIntent();
+        int categoryId = intent.getIntExtra(Resource.KEY_CATEGORY_ID,-1);
+        Toast.makeText(this,"categoryId = " + categoryId , Toast.LENGTH_LONG).show();
 
-        listAdapter = new ProductListAdapter(this);
+        // Initialization
+        productListAdapter = new ProductListAdapter(this);
+
+        // *****************************************************************************************
+        //                        AJAX - GET PRODUCTS BY CATEGORY
+        // *****************************************************************************************
         RequestQueue rq = Volley.newRequestQueue(this);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST,
                 Resource.ajax_get_products_by_category, null, new Response.Listener<JSONObject>() {
@@ -54,9 +63,9 @@ public class ProductListActivity extends AppCompatActivity {
                     // result objesinin content değeri alınır
                     JSONObject content = response.getJSONObject("content");
 
-                    listAdapter.setProductList(Product.ProductList(content.getJSONArray("products")));
+                    productListAdapter.setProductList(Product.ProductList(content.getJSONArray("products")));
                     ListView listView = findViewById(R.id.activity_product_list_main);
-                    listView.setAdapter(listAdapter);
+                    listView.setAdapter(productListAdapter);
 
                     listView.setOnItemClickListener(
                         new AdapterView.OnItemClickListener() {
@@ -88,7 +97,7 @@ public class ProductListActivity extends AppCompatActivity {
             @Override
             protected Map<String, String> getParams()  {
                 Map<String, String> params = new HashMap<>();
-                params.put("id", "XXX");
+                params.put("id", "TESTID-111222333");
                 return params;
             }
         };

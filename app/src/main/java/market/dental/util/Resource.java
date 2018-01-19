@@ -16,5 +16,6 @@ public class Resource {
     public static String ajax_get_categories = "http://demo3259091.mockable.io/get/categories";
 
     public static String KEY_PRODUCT_ID = "KEY_PRODUCT_ID";
+    public static String KEY_CATEGORY_ID = "KEY_CATEGORY_ID";
 
 }

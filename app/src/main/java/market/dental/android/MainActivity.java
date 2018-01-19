@@ -190,28 +190,12 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
 
-        // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
-            //Fragment fragment = new MainFragment();
-            //FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-            //ft.replace(R.id.content_main , fragment);
-            //ft.commit();
-        } else if (id == R.id.nav_gallery) {
-            //Intent intent = new Intent(this,ProductDetailActivity.class);
-            //startActivity(intent);
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
-        }
-
+        Bundle bundle = new Bundle();
+        bundle.putInt(Resource.KEY_CATEGORY_ID, id);
         Intent intent = new Intent(this,ProductListActivity.class);
+        intent.putExtras(bundle);
         startActivity(intent);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
