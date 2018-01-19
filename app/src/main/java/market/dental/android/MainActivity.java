@@ -110,7 +110,7 @@ public class MainActivity extends AppCompatActivity
                         List<Category> categoryList = Category.CategoryList(content.getJSONArray("subCategories"));
                         for(Category category : categoryList){
                             MenuItem menuItem = navigationViewMenu.add(R.id.activity_main_drawer_main_group, category.getId(), Menu.NONE,category.getName() );
-                            menuItem.setIcon(R.drawable.ic_menu_black_24dp);
+                            menuItem.setIcon(R.drawable.ic_menu_black_18dp);
                         }
                     }
 
