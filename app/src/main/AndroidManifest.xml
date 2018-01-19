@@ -20,11 +20,11 @@
         <activity
             android:name=".LoginActivity"
             android:label="Anasayfa"
-            android:parentActivityName=".MainActivity"></activity>
+            android:parentActivityName=".MainActivity" />
         <activity
             android:name=".ForgotPasswordActivity"
             android:label="Anasayfa"
-            android:parentActivityName=".MainActivity"></activity>
+            android:parentActivityName=".MainActivity" />
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
@@ -37,12 +37,13 @@
         </activity>
         <activity
             android:name=".ProductDetailActivity"
-            android:label="Ürün Detayı"
-            ></activity>
+            android:label="Ürün Detayı" />
         <activity
             android:name=".ProductListActivity"
-            android:label="Ürün Listesi">
-        </activity>
+            android:label="Ürün Listesi"/>
+        <activity
+            android:name=".ProductDescriptionActivity"
+            android:label="Ürün Açıklaması"/>
     </application>
 
 </manifest>

@@ -8,6 +8,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -43,6 +45,7 @@ public class ProductDetailActivity extends AppCompatActivity {
     private TextView storeName;
 
     private int productId;
+    private String productDesc;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,6 +82,7 @@ public class ProductDetailActivity extends AppCompatActivity {
                     // result objesinin content değeri alınır
                     JSONObject content = response.getJSONObject("content");
 
+                    productDesc = content.getString("description");
                     pdProductName.setText((String) content.getString("name"));
                     Picasso.with(productDetailContext)
                             .load((String) content.getJSONArray("images").get(0))
@@ -111,6 +115,19 @@ public class ProductDetailActivity extends AppCompatActivity {
             }
         };
         rq.add(jsonObjectRequest);
+
+
+        Button productDescBnt = findViewById(R.id.activity_product_detail_product_desc_btn);
+        productDescBnt.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                Bundle bundle = new Bundle();
+                bundle.putString(Resource.KEY_PRODUCT_DESC, productDesc);
+                Intent intent = new Intent(view.getContext(),ProductDescriptionActivity.class);
+                intent.putExtras(bundle);
+                view.getContext().startActivity(intent);
+            }
+        });
     }
 
     @Override
