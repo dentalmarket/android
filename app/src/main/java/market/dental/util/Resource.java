@@ -13,6 +13,7 @@ public class Resource {
     public static String ajax_get_product_detail_url = "http://demo3259091.mockable.io/get/product";
     public static String ajax_get_banner_images_url = "http://demo3259091.mockable.io/get/banners";
     public static String ajax_get_products_by_category = "http://demo3259091.mockable.io/get/productsByCategory";
+    public static String ajax_get_categories = "http://demo3259091.mockable.io/get/categories";
 
     public static String KEY_PRODUCT_ID = "KEY_PRODUCT_ID";
 

@@ -22,11 +22,17 @@ public class Product {
 
     public Product(JSONObject projectJsonObject){
         try {
-            this.id = projectJsonObject.getInt("id");
-            this.name = projectJsonObject.getString("name");
-            this.imageUrl = projectJsonObject.getString("image");
-            this.price = projectJsonObject.getInt("price");
-            this.currencyId = projectJsonObject.getInt("currency");
+            this.id = projectJsonObject.has("id")?
+                    projectJsonObject.getInt("id") : -1 ;
+            this.name = projectJsonObject.has("name")?
+                    projectJsonObject.getString("name"):"";
+            this.imageUrl = projectJsonObject.has("image")?
+                    projectJsonObject.getString("image"):"";
+            this.price = projectJsonObject.has("price")?
+                    projectJsonObject.getInt("price"):-1;
+            this.currencyId = projectJsonObject.has("currency")?
+                    projectJsonObject.getInt("currency"):-1;
+
             if(projectJsonObject.has("brand") && projectJsonObject.getJSONObject("brand")!=null){
                 this.brand = new Brand(projectJsonObject.getJSONObject("brand"));
             }

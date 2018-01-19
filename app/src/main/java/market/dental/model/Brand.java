@@ -16,9 +16,12 @@ public class Brand {
     public Brand(JSONObject brandJsonObject){
 
         try {
-            this.id = brandJsonObject.getInt("id");
-            this.name = brandJsonObject.getString("name");
-            this.logo = brandJsonObject.getString("logo");
+            this.id = brandJsonObject.has("id") ?
+                    brandJsonObject.getInt("id"):-1;
+            this.name = brandJsonObject.has("name")?
+                    brandJsonObject.getString("name"):"";
+            this.logo = brandJsonObject.has("logo")?
+                    brandJsonObject.getString("logo"):"";
         } catch (JSONException e) {
             e.printStackTrace();
         }

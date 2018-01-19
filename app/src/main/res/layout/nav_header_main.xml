@@ -12,6 +12,9 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="bottom|center_horizontal"
+        android:textColor="#EEA642"
+        android:textStyle="bold"
+        android:textSize="16dp"
         android:text="Anasayfa" />
 
 </LinearLayout>
