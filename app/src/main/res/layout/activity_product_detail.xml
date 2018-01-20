@@ -18,23 +18,58 @@
             android:layout_gravity="center"
             android:src="@android:drawable/ic_menu_report_image" />
 
-        <TextView
-            android:id="@+id/activity_product_detail_product_name"
-            android:layout_gravity="center_horizontal|center_vertical"
-            android:maxLines="2"
-            android:layout_below="@+id/activity_product_detail_image"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-
-        <RelativeLayout
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:app="http://schemas.android.com/apk/res-auto"
-            xmlns:tools="http://schemas.android.com/tools"
-            android:id="@+id/activity_product_detail_store_panel"
+        <LinearLayout
+            android:id="@+id/activity_product_detail_product_linear_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/activity_product_detail_product_name">
+            android:orientation="vertical"
+            android:layout_below="@+id/activity_product_detail_image">
+
+            <TextView
+                android:id="@+id/activity_product_detail_product_name"
+                android:gravity="left"
+                android:maxLines="2"
+                android:paddingTop="6dp"
+                android:paddingLeft="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/dental_market_text_title"
+                android:textSize="14dp"
+                android:text="@string/unknown_name"
+                />
+
+            <TextView
+                android:id="@+id/activity_product_detail_brand_name"
+                android:gravity="left"
+                android:maxLines="2"
+                android:paddingTop="6dp"
+                android:paddingLeft="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="14dp"
+                android:text="@string/unknown_name"
+                />
+
+            <TextView
+                android:id="@+id/activity_product_detail_price"
+                android:gravity="right"
+                android:maxLines="2"
+                android:paddingTop="6dp"
+                android:paddingRight="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="16dp"
+                android:textColor="@color/dental_market_text_price"
+                android:text="@string/unknown_name"
+                />
+        </LinearLayout>
+
+        <RelativeLayout
+            android:id="@+id/activity_product_detail_store_panel"
+            android:layout_below="@+id/activity_product_detail_product_linear_layout"
+            android:paddingTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
             <TextView
                 android:layout_width="match_parent"
@@ -69,7 +104,7 @@
                         android:layout_height="match_parent"
                         android:gravity="center"
                         android:paddingLeft="16dp"
-                        android:text="Mağaza asdasd" />
+                        android:text="@string/unknown_name" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -89,7 +124,7 @@
                         android:paddingLeft="16dp"
                         android:autoLink="phone"
                         android:linksClickable="true"
-                        android:text="05556527348" />
+                        android:text="@string/unknown_phone" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -109,7 +144,7 @@
                         android:paddingLeft="16dp"
                         android:autoLink="phone"
                         android:linksClickable="true"
-                        android:text="03122901111" />
+                        android:text="@string/unknown_phone" />
                 </LinearLayout>
 
 
@@ -130,7 +165,7 @@
                         android:paddingLeft="16dp"
                         android:autoLink="email"
                         android:linksClickable="true"
-                        android:text="info@dental.market" />
+                        android:text="@string/unknown_mail" />
                 </LinearLayout>
 
             </LinearLayout>

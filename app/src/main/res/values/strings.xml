@@ -44,4 +44,9 @@
     <string name="pdf_product_desc">Ürün Açıklaması</string>
     <string name="pdf_product_prop">Ürün Özellikleri</string>
 
+    <!-- UNKNOWN KEYS -->
+    <string name="unknown_name">(??????)</string>
+    <string name="unknown_phone">(???)??? ?? ??</string>
+    <string name="unknown_mail">(???@???)</string>
+
 </resources>
