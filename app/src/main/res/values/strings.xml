@@ -49,4 +49,10 @@
     <string name="unknown_phone">(???)??? ?? ??</string>
     <string name="unknown_mail">(???@???)</string>
 
+    <!-- FONTAWESOME KEYS -->
+    <string name="currency_turkish_lira">\uf195</string>
+    <string name="currency_usd">\uf155</string>
+    <string name="currency_euro">\uf153</string>
+    <string name="currency_bitcoin">\uf15a</string>
+
 </resources>

@@ -2,6 +2,7 @@ package market.dental.android;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -30,6 +31,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import market.dental.adapter.ProductsRecyclerAdapter;
+import market.dental.model.Currency;
 import market.dental.model.Product;
 import market.dental.model.Store;
 import market.dental.util.Resource;
@@ -93,7 +95,10 @@ public class ProductDetailActivity extends AppCompatActivity {
                     Store store = new Store(content.getJSONObject("store"));
                     productDesc = content.getString("description");
 
-                    //pdProductPrice.setText(content.getString("price"));
+                    Typeface font = Typeface.createFromAsset(getAssets(),"fonts/fontawesome-webfont.ttf");
+                    pdProductPrice.setTypeface(font);
+                    pdProductPrice.setText(content.getString("price") + " "  + Currency.getCurrencyString( getResources(),content.getInt("currency")));
+
                     pdProductName.setText((String) content.getString("name"));
                     Picasso.with(productDetailContext)
                             .load((String) content.getJSONArray("images").get(0))
