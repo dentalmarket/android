@@ -31,6 +31,7 @@ import java.util.Map;
 
 import market.dental.adapter.ProductsRecyclerAdapter;
 import market.dental.model.Product;
+import market.dental.model.Store;
 import market.dental.util.Resource;
 import market.dental.util.Result;
 
@@ -42,7 +43,11 @@ public class ProductDetailActivity extends AppCompatActivity {
     private Context productDetailContext;
     private ImageView  pdImageView;
     private TextView pdProductName;
+    private TextView pdProductPrice;
     private TextView storeName;
+    private TextView storePhone;
+    private TextView storeGsm;
+    private TextView storeEmail;
 
     private int productId;
     private String productDesc;
@@ -63,7 +68,11 @@ public class ProductDetailActivity extends AppCompatActivity {
         productDetailContext = this.getApplicationContext();
         pdImageView = (ImageView)findViewById(R.id.activity_product_detail_image);
         pdProductName = (TextView)findViewById(R.id.activity_product_detail_product_name);
+        pdProductPrice = (TextView)findViewById(R.id.activity_product_detail_price);
         storeName = (TextView)findViewById(R.id.activity_product_detail_store_name);
+        storePhone = (TextView)findViewById(R.id.activity_product_detail_store_phone);
+        storeGsm = (TextView)findViewById(R.id.activity_product_detail_store_gsm);
+        storeEmail = (TextView)findViewById(R.id.activity_product_detail_store_email);
 
         // *****************************************************************************************
         //                              GET PRODUCT DETAIL
@@ -78,11 +87,13 @@ public class ProductDetailActivity extends AppCompatActivity {
             public void onResponse(JSONObject response) {
 
                 try {
-                    // result objesinin kontrolü YAPILACAK
+                    // TODO: result objesinin kontrolü YAPILACAK
                     // result objesinin content değeri alınır
                     JSONObject content = response.getJSONObject("content");
-
+                    Store store = new Store(content.getJSONObject("store"));
                     productDesc = content.getString("description");
+
+                    //pdProductPrice.setText(content.getString("price"));
                     pdProductName.setText((String) content.getString("name"));
                     Picasso.with(productDetailContext)
                             .load((String) content.getJSONArray("images").get(0))
@@ -90,8 +101,10 @@ public class ProductDetailActivity extends AppCompatActivity {
                             .error(R.mipmap.ic_launcher)
                             .into(pdImageView);
 
-                    JSONObject store = content.getJSONObject("store");
-                    storeName.setText(store.getString("name"));
+                    storeName.setText(store.getName());
+                    storePhone.setText(store.getPhone());
+                    storeGsm.setText(store.getGsm());
+                    storeEmail.setText(store.getEmail());
 
                     mRecyclerView.setLayoutManager(mRecyclerLayoutManager);
                     mRecyclerAdapter = new ProductsRecyclerAdapter(Product.ProductList(content.getJSONArray("similarProducts")));

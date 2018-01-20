@@ -58,9 +58,9 @@
                 android:paddingRight="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="16dp"
+                android:textSize="20dp"
                 android:textColor="@color/dental_market_text_price"
-                android:text="@string/unknown_name"
+                android:text="@string/currency_tl"
                 />
         </LinearLayout>
 
@@ -118,6 +118,7 @@
                         android:src="@drawable/ic_phone_black_24dp"/>
 
                     <TextView
+                        android:id="@+id/activity_product_detail_store_phone"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:gravity="center"
@@ -138,6 +139,7 @@
                         android:src="@drawable/ic_phone_black_24dp"/>
 
                     <TextView
+                        android:id="@+id/activity_product_detail_store_gsm"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:gravity="center"
@@ -159,6 +161,7 @@
                         android:src="@drawable/ic_email_black_24dp"/>
 
                     <TextView
+                        android:id="@+id/activity_product_detail_store_email"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:gravity="center"
