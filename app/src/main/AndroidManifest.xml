@@ -40,10 +40,13 @@
             android:label="Ürün Detayı" />
         <activity
             android:name=".ProductListActivity"
-            android:label="Ürün Listesi"/>
+            android:label="Ürün Listesi" />
         <activity
             android:name=".ProductDescriptionActivity"
-            android:label="Ürün Açıklaması"/>
+            android:label="Ürün Açıklaması" />
+        <activity
+            android:name=".ProfileActivity"
+            android:label="Profile"/>
     </application>
 
 </manifest>
