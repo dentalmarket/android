@@ -20,14 +20,14 @@ public class Category {
 
     public Category(JSONObject categoryJsonObject){
         try {
-            this.id = categoryJsonObject.has("id") ?
-                    categoryJsonObject.getInt("id") : -1;
-            this.name = categoryJsonObject.has("name") ?
-                    categoryJsonObject.getString("name") : null;
-            this.parentId = categoryJsonObject.has("parentId") ?
-                    categoryJsonObject.getInt("parentId") : -1;
-            this.icon = categoryJsonObject.has("icon") ?
-                    categoryJsonObject.getString("icon") : null;
+            this.id = categoryJsonObject.has("category_id") ?
+                    categoryJsonObject.getInt("category_id") : -1;
+            this.name = categoryJsonObject.has("category") ?
+                    categoryJsonObject.getString("category") : null;
+            this.parentId = categoryJsonObject.has("parent_category_id") && !categoryJsonObject.isNull("parent_category_id") ?
+                    categoryJsonObject.getInt("parent_category_id") : -1;
+            this.icon = categoryJsonObject.has("image") ?
+                    categoryJsonObject.getString("image") : null;
 
         } catch (JSONException e) {
             e.printStackTrace();

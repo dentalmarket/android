@@ -5,6 +5,7 @@ import android.content.Context;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,8 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import market.dental.android.R;
+import market.dental.util.Resource;
+import market.dental.util.Result;
 
 /**
  * Created by kemalsamikaraca on 14.01.2018.
@@ -65,7 +68,7 @@ public class ViewPagerAdapter extends PagerAdapter {
 
         try{
             Picasso.with(activity.getApplicationContext())
-                    .load( ((JSONObject)images.get(position)).getString("image"))
+                    .load( Resource.DOMAIN_NAME + "/" +((JSONObject)images.get(position)).getString("image"))
                     .placeholder(R.mipmap.ic_launcher)
                     .error(R.mipmap.ic_launcher)
                     .into(image);

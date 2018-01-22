@@ -29,6 +29,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.squareup.picasso.Picasso;
 
@@ -95,15 +96,14 @@ public class MainActivity extends AppCompatActivity
         // *****************************************************************************************
         //                          AJAX - GET CATEGORIES
         // *****************************************************************************************
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST,
-                Resource.ajax_get_categories, null, new Response.Listener<JSONObject>() {
+        StringRequest request = new StringRequest(Request.Method.POST,
+                Resource.ajax_get_categories, new Response.Listener<String>() {
 
             @Override
-            public void onResponse(JSONObject response) {
-
+            public void onResponse(String responseString) {
                 try {
-                    // result objesinin kontrolü YAPILACAK
-                    // result objesinin content değeri alınır
+                    // TODO: result objesinin kontrolü YAPILACAK
+                    JSONObject response = new JSONObject(responseString);
                     JSONObject content = response.getJSONObject("content");
 
                     if(content.has("subCategories")) {
@@ -129,11 +129,17 @@ public class MainActivity extends AppCompatActivity
             @Override
             protected Map<String, String> getParams()  {
                 Map<String, String> params = new HashMap<>();
-                params.put("id", "TESTID-111222333");
+                params.put(Resource.KEY_API_TOKEN, Resource.VALUE_API_TOKEN);
+                return params;
+            }
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String,String> params = new HashMap<String, String>();
+                params.put("Content-Type","application/x-www-form-urlencoded");
                 return params;
             }
         };
-        rq.add(jsonObjectRequest);
+        rq.add(request);
 
 
         // *****************************************************************************************

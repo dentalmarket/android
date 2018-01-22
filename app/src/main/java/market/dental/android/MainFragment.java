@@ -21,6 +21,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
@@ -28,7 +29,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -114,23 +117,40 @@ public class MainFragment extends Fragment {
         // *****************************************************************************************
         //                              BANNER IMAGES
         // *****************************************************************************************
-        JsonObjectRequest bannerRequest = new JsonObjectRequest(Request.Method.POST,
-                Resource.ajax_get_banner_images_url, null, new Response.Listener<JSONObject>() {
+        StringRequest bannerRequest = new StringRequest(Request.Method.POST,
+                Resource.ajax_get_banner_images_url, new Response.Listener<String>() {
 
             @Override
-            public void onResponse(JSONObject response) {
+            public void onResponse(String responseString) {
                 try {
+                    // TODO: result objesinin kontrolü YAPILACAK
+                    JSONObject response = new JSONObject(responseString);
                     onResponseBannerImages(response.getJSONArray("content"));
                 } catch (JSONException e) {
                     e.printStackTrace();
+                    Log.i(Result.LOG_TAG_INFO.getResultText(),"MainActivity >> JSONException >> 120");
                 }
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.i(Result.LOG_TAG_INFO.getResultText(),"ERROR ON GET DATA");
+                error.printStackTrace();
+                Log.i(Result.LOG_TAG_INFO.getResultText(),"MainActivity >> ERROR ON GET DATA >> 121");
             }
-        });
+        }){
+            @Override
+            protected Map<String, String> getParams()  {
+                Map<String, String> params = new HashMap<>();
+                params.put(Resource.KEY_API_TOKEN, Resource.VALUE_API_TOKEN);
+                return params;
+            }
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String,String> params = new HashMap<String, String>();
+                params.put("Content-Type","application/x-www-form-urlencoded");
+                return params;
+            }
+        };
         rq.add(bannerRequest);
 
 
