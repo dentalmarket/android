@@ -170,12 +170,15 @@ public class MainFragment extends Fragment {
         discountedProducts.setHasFixedSize(true);
         discountedProductsLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL , false);
 
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST,
-                Resource.ajax_get_products_homeproduct_url, null, new Response.Listener<JSONObject>() {
+        StringRequest jsonObjectRequest = new StringRequest(Request.Method.POST,
+                Resource.ajax_get_products_homeproduct_url, new Response.Listener<String>() {
 
             @Override
-            public void onResponse(JSONObject response) {
+            public void onResponse(String responseString) {
                 try {
+
+                    // TODO: result objesinin kontrolü YAPILACAK
+                    JSONObject response = new JSONObject(responseString);
 
                     mRecyclerView.setLayoutManager(mRecyclerLayoutManager);
                     mRecyclerAdapter = new ProductsRecyclerAdapter(Product.ProductList(response.getJSONObject("content").getJSONObject("featured").getJSONArray("products")));
@@ -191,15 +194,30 @@ public class MainFragment extends Fragment {
 
                 } catch (JSONException e) {
                     e.printStackTrace();
+                    Log.i(Result.LOG_TAG_INFO.getResultText(),"MainActivity >> JSONException >> 122");
                 }
             }
 
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.i(Result.LOG_TAG_INFO.getResultText(),"ERROR ON GET DATA");
+                error.printStackTrace();
+                Log.i(Result.LOG_TAG_INFO.getResultText(),"MainActivity >> ERROR ON GET DATA >> 123");
             }
-        });
+        }){
+            @Override
+            protected Map<String, String> getParams()  {
+                Map<String, String> params = new HashMap<>();
+                params.put(Resource.KEY_API_TOKEN, Resource.VALUE_API_TOKEN);
+                return params;
+            }
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String,String> params = new HashMap<String, String>();
+                params.put("Content-Type","application/x-www-form-urlencoded");
+                return params;
+            }
+        };
         rq.add(jsonObjectRequest);
 
         return view;

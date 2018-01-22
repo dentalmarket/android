@@ -7,6 +7,8 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import market.dental.util.Resource;
+
 /**
  * Created by kemalsamikaraca on 17.01.2018.
  */
@@ -16,21 +18,24 @@ public class Product {
     private int id;
     private String name;
     private String imageUrl;
+    private String description;
     private int price;
     private int currencyId;
     private Brand brand;
 
     public Product(JSONObject projectJsonObject){
         try {
-            this.id = projectJsonObject.has("id")?
-                    projectJsonObject.getInt("id") : -1 ;
-            this.name = projectJsonObject.has("name")?
-                    projectJsonObject.getString("name"):"";
+            this.id = projectJsonObject.has("product_id")?
+                    projectJsonObject.getInt("product_id") : -1 ;
+            this.name = projectJsonObject.has("title")?
+                    projectJsonObject.getString("title"):"";
+            this.description = projectJsonObject.has("description") && !projectJsonObject.isNull("description")?
+                    projectJsonObject.getString("description"):"";
             this.imageUrl = projectJsonObject.has("image")?
-                    projectJsonObject.getString("image"):"";
-            this.price = projectJsonObject.has("price")?
+                    Resource.DOMAIN_NAME + "/" + projectJsonObject.getString("image"):"";
+            this.price = projectJsonObject.has("price") && !projectJsonObject.isNull("price")?
                     projectJsonObject.getInt("price"):-1;
-            this.currencyId = projectJsonObject.has("currency")?
+            this.currencyId = projectJsonObject.has("currency") ?
                     projectJsonObject.getInt("currency"):-1;
 
             if(projectJsonObject.has("brand") && projectJsonObject.getJSONObject("brand")!=null){
@@ -53,6 +58,14 @@ public class Product {
             }
         }
         return productList;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public Brand getBrand() {
