@@ -17,7 +17,8 @@
 
         <LinearLayout
             android:id="@+id/viewpage_dots_layout"
-            android:layout_below="@+id/fragment_main_view_pager"
+            android:layout_alignParentTop="true"
+            android:paddingTop="140dp"
             android:orientation="horizontal"
             android:gravity="center_horizontal|center_vertical"
             android:layout_width="match_parent"
@@ -26,7 +27,7 @@
 
         <LinearLayout
             android:id="@+id/fragment_main_title_featured"
-            android:layout_below="@+id/viewpage_dots_layout"
+            android:layout_below="@+id/fragment_main_view_pager"
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:layout_marginTop="8dp"

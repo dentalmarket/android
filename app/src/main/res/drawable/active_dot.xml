@@ -2,8 +2,8 @@
 <shape xmlns:android="http://schemas.android.com/apk/res/android"
     android:shape="oval"
     android:useLevel="true"
-    android:dither="true">
+    android:dither="true" >
 
-    <size android:height="12dip" android:width="12dip"/>
-    <solid android:color="#bebebe"/>
+    <size android:height="8dip" android:width="8dip"/>
+    <solid android:color="@color/dental_market_text_title"/>
 </shape>

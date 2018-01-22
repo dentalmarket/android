@@ -64,170 +64,271 @@
         android:id="@+id/activity_profile_main_panel"
         android:layout_below="@+id/activity_profile_top_panel">
 
-
-        <TableLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_marginTop="6dp">
+            android:orientation="vertical">
 
-            <TableRow
+            <TableLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="#F8F6F8">
+                android:layout_alignParentStart="true"
+                android:layout_marginTop="6dp">
 
-                <TextView
+                <TableRow
                     android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:background="#F8F6F8"
-                    android:gravity="center_vertical"
-                    android:paddingLeft="16dp"
-                    android:id="@+id/activity_profile_info_title"
-                    android:text="Kişisel Bilgiler"/>
+                    android:layout_height="wrap_content"
+                    android:background="#F8F6F8">
 
-            </TableRow>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:background="#F8F6F8"
+                        android:gravity="center_vertical"
+                        android:paddingLeft="16dp"
+                        android:id="@+id/activity_profile_info_title"
+                        android:text="Kişisel Bilgiler"/>
 
-            <TableRow
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+                </TableRow>
 
-                <TextView
-                    android:paddingLeft="16dp"
-                    android:layout_width="@dimen/activity_profile_text_width"
-                    android:layout_height="@dimen/activity_profile_text_height"
-                    android:gravity="center_vertical"
-                    android:text="Adı" />
-
-                <TextView
+                <TableRow
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:gravity="center_vertical"
-                    android:text="Beraat Aldemir" />
-            </TableRow>
+                    android:layout_height="wrap_content">
 
-            <TableRow
+                    <TextView
+                        android:paddingLeft="16dp"
+                        android:layout_width="@dimen/activity_profile_text_width"
+                        android:layout_height="@dimen/activity_profile_text_height"
+                        android:gravity="center_vertical"
+                        android:text="Adı" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text="Beraat Aldemir" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:paddingLeft="16dp"
+                        android:layout_height="@dimen/activity_profile_text_height"
+                        android:gravity="center_vertical"
+                        android:text="Soyad" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text="ALDEMİR" />
+                </TableRow>
+
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:paddingLeft="16dp"
+                        android:layout_height="@dimen/activity_profile_text_height"
+                        android:gravity="center_vertical"
+                        android:text="Doğum Tarihi" />
+
+                    <TextView
+                        android:id="@+id/activity_profile_birthday"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text="1.1.1990" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:paddingLeft="16dp"
+                        android:layout_height="@dimen/activity_profile_text_height"
+                        android:gravity="center_vertical"
+                        android:text="Mesleğiniz" />
+
+                    <TextView
+                        android:id="@+id/activity_profile_profession"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text="Diş Hekimi" />
+                </TableRow>
+
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:paddingLeft="16dp"
+                        android:layout_height="@dimen/activity_profile_text_height"
+                        android:gravity="center_vertical"
+                        android:text="Şehir" />
+                    <TextView
+                        android:id="@+id/activity_profile_city_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:clickable="true"
+                        android:gravity="center_vertical"
+                        android:text="Ankara" />
+                </TableRow>
+
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:paddingLeft="16dp"
+                        android:layout_height="@dimen/activity_profile_text_height"
+                        android:gravity="center_vertical"
+                        android:text="İlçe" />
+                    <TextView
+                        android:id="@+id/activity_profile_borough_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text="Çankaya" />
+                </TableRow>
+
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:paddingLeft="16dp"
+                        android:layout_height="@dimen/activity_profile_text_height"
+                        android:gravity="center_vertical"
+                        android:text="Sabit Telefon" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text="0312 212 12 12" />
+                </TableRow>
+
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:paddingLeft="16dp"
+                        android:layout_height="@dimen/activity_profile_text_height"
+                        android:gravity="center_vertical"
+                        android:text="Cep Telefon" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text="0532 512 12 12" />
+                </TableRow>
+
+            </TableLayout>
+
+
+            <TableLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_marginTop="6dp">
 
-                <TextView
-                    android:paddingLeft="16dp"
-                    android:layout_height="@dimen/activity_profile_text_height"
-                    android:gravity="center_vertical"
-                    android:text="Soyad" />
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#F8F6F8">
 
-                <TextView
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:background="#F8F6F8"
+                        android:gravity="center_vertical"
+                        android:paddingLeft="16dp"
+                        android:id="@+id/activity_profile_info_password"
+                        android:text="Şifre Değiştirme"/>
+                </TableRow>
+
+                <TableRow
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:gravity="center_vertical"
-                    android:text="ALDEMİR" />
-            </TableRow>
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:paddingLeft="16dp"
+                        android:layout_width="@dimen/activity_profile_text_width"
+                        android:layout_height="@dimen/activity_profile_text_height"
+                        android:gravity="center_vertical"
+                        android:text="Eski Şifre" />
+
+                    <EditText
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:ems="10"
+                        android:textSize="@dimen/dental_market_edit_text_size"
+                        android:inputType="textPassword"
+                        android:gravity="center_vertical"
+                        android:hint="Eski Şifre" />
+                </TableRow>
 
 
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
 
-                <TextView
-                    android:paddingLeft="16dp"
-                    android:layout_height="@dimen/activity_profile_text_height"
-                    android:gravity="center_vertical"
-                    android:text="Doğum Tarihi" />
+                    <TextView
+                        android:paddingLeft="16dp"
+                        android:layout_height="@dimen/activity_profile_text_height"
+                        android:gravity="center_vertical"
+                        android:text="Yeni Şifre" />
 
-                <TextView
-                    android:id="@+id/activity_profile_birthday"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:gravity="center_vertical"
-                    android:text="1.1.1990" />
-            </TableRow>
-
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:paddingLeft="16dp"
-                    android:layout_height="@dimen/activity_profile_text_height"
-                    android:gravity="center_vertical"
-                    android:text="Mesleğiniz" />
-
-                <TextView
-                    android:id="@+id/activity_profile_profession"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:gravity="center_vertical"
-                    android:text="Diş Hekimi" />
-            </TableRow>
+                    <EditText
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:ems="10"
+                        android:textSize="@dimen/dental_market_edit_text_size"
+                        android:inputType="textPassword"
+                        android:gravity="center_vertical"
+                        android:hint="Yeni Şifre" />
+                </TableRow>
 
 
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <TextView
-                    android:paddingLeft="16dp"
-                    android:layout_height="@dimen/activity_profile_text_height"
-                    android:gravity="center_vertical"
-                    android:text="Şehir" />
-                <TextView
-                    android:id="@+id/activity_profile_city_text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:clickable="true"
-                    android:gravity="center_vertical"
-                    android:text="Ankara" />
-            </TableRow>
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:paddingLeft="16dp"
+                        android:layout_height="@dimen/activity_profile_text_height"
+                        android:gravity="center_vertical"
+                        android:text="Yeni Şifre tekrar" />
+
+                    <EditText
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:ems="10"
+                        android:textSize="@dimen/dental_market_edit_text_size"
+                        android:inputType="textPassword"
+                        android:gravity="center_vertical"
+                        android:hint="Yeni Şifre tekrar" />
+                </TableRow>
 
 
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <TextView
-                    android:paddingLeft="16dp"
-                    android:layout_height="@dimen/activity_profile_text_height"
-                    android:gravity="center_vertical"
-                    android:text="İlçe" />
-                <TextView
-                    android:id="@+id/activity_profile_borough_text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:gravity="center_vertical"
-                    android:text="Çankaya" />
-            </TableRow>
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:layout_height="@dimen/activity_profile_text_height"
+                        android:text="" />
+                </TableRow>
 
+            </TableLayout>
 
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <TextView
-                    android:paddingLeft="16dp"
-                    android:layout_height="@dimen/activity_profile_text_height"
-                    android:gravity="center_vertical"
-                    android:text="Sabit Telefon" />
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:gravity="center_vertical"
-                    android:text="0312 212 12 12" />
-            </TableRow>
-
-
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <TextView
-                    android:paddingLeft="16dp"
-                    android:layout_height="@dimen/activity_profile_text_height"
-                    android:gravity="center_vertical"
-                    android:text="Cep Telefon" />
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:gravity="center_vertical"
-                    android:text="0532 512 12 12" />
-            </TableRow>
-
-        </TableLayout>
-
+        </LinearLayout>
     </ScrollView>
 
 
