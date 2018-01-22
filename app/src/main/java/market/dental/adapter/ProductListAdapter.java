@@ -59,10 +59,10 @@ public class ProductListAdapter extends ArrayAdapter {
         textView.setText(productList.get(position).getName());
 
         TextView brandTextView = customView.findViewById(R.id.activity_product_list_item_product_brand);
-        brandTextView.setText(productList.get(position).getBrand().getName());
+        brandTextView.setText(productList.get(position).getBrand()!=null ? productList.get(position).getBrand().getName() : "bilinmiyor");
 
         TextView priceTextView = customView.findViewById(R.id.activity_product_list_item_product_price);
-        String priceString = "" +productList.get(position).getPrice() + " TL";
+        String priceString = "" +productList.get(position).getPrice() + " ₺";
         priceTextView.setText(priceString);
 
         ImageView imageView = customView.findViewById(R.id.activity_product_list_item_image);

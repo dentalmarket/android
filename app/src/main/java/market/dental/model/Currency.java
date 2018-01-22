@@ -22,9 +22,9 @@ public class Currency {
                 return resources.getString(R.string.currency_usd);
             case 3:
                 return resources.getString(R.string.currency_euro);
+            default:
+                return resources.getString(R.string.currency_usd);
         }
-
-        return "";
     }
 
 }

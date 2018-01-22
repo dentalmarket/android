@@ -35,7 +35,7 @@ public class Product {
                     Resource.DOMAIN_NAME + "/" + projectJsonObject.getString("image"):"";
             this.price = projectJsonObject.has("price") && !projectJsonObject.isNull("price")?
                     projectJsonObject.getInt("price"):-1;
-            this.currencyId = projectJsonObject.has("currency") ?
+            this.currencyId = projectJsonObject.has("currency") && !projectJsonObject.isNull("currency")?
                     projectJsonObject.getInt("currency"):-1;
 
             if(projectJsonObject.has("brand") && projectJsonObject.getJSONObject("brand")!=null){

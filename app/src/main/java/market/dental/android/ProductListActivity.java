@@ -15,6 +15,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.squareup.picasso.Picasso;
 
@@ -33,6 +34,7 @@ import market.dental.util.Result;
 public class ProductListActivity extends AppCompatActivity {
 
     private ProductListAdapter productListAdapter;
+    private int categoryId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,8 +44,7 @@ public class ProductListActivity extends AppCompatActivity {
 
         // Get categoryId
         Intent intent = getIntent();
-        int categoryId = intent.getIntExtra(Resource.KEY_CATEGORY_ID,-1);
-        Toast.makeText(this,"categoryId = " + categoryId , Toast.LENGTH_LONG).show();
+        categoryId = intent.getIntExtra(Resource.KEY_CATEGORY_ID,-1);
 
         // Initialization
         productListAdapter = new ProductListAdapter(this);
@@ -52,18 +53,18 @@ public class ProductListActivity extends AppCompatActivity {
         //                        AJAX - GET PRODUCTS BY CATEGORY
         // *****************************************************************************************
         RequestQueue rq = Volley.newRequestQueue(this);
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST,
-                Resource.ajax_get_products_by_category, null, new Response.Listener<JSONObject>() {
+        StringRequest jsonObjectRequest = new StringRequest(Request.Method.POST,
+                Resource.ajax_get_products_by_category, new Response.Listener<String>() {
 
             @Override
-            public void onResponse(JSONObject response) {
+            public void onResponse(String responseString) {
 
                 try {
-                    // result objesinin kontrolü YAPILACAK
-                    // result objesinin content değeri alınır
+                    // TODO: result objesinin kontrolü YAPILACAK
+                    JSONObject response = new JSONObject(responseString);
                     JSONObject content = response.getJSONObject("content");
 
-                    productListAdapter.setProductList(Product.ProductList(content.getJSONArray("products")));
+                    productListAdapter.setProductList(Product.ProductList(content.getJSONArray("data")));
                     ListView listView = findViewById(R.id.activity_product_list_main);
                     listView.setAdapter(productListAdapter);
 
@@ -84,7 +85,6 @@ public class ProductListActivity extends AppCompatActivity {
                     e.printStackTrace();
                     Log.i(Result.LOG_TAG_INFO.getResultText(),"ProductListActivity >> JSONException >> 120");
                 }
-
             }
 
         }, new Response.ErrorListener() {
@@ -97,7 +97,14 @@ public class ProductListActivity extends AppCompatActivity {
             @Override
             protected Map<String, String> getParams()  {
                 Map<String, String> params = new HashMap<>();
-                params.put("id", "TESTID-111222333");
+                params.put(Resource.KEY_API_TOKEN, Resource.VALUE_API_TOKEN);
+                params.put("catId", ""+categoryId);
+                return params;
+            }
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String,String> params = new HashMap<String, String>();
+                params.put("Content-Type","application/x-www-form-urlencoded");
                 return params;
             }
         };

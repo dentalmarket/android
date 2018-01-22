@@ -10,10 +10,10 @@ import java.util.Locale;
 public class Resource {
 
     public static String ajax_get_product_detail_url = "http://demo3259091.mockable.io/get/product";
-    public static String ajax_get_products_by_category = "http://demo3259091.mockable.io/get/productsByCategory";
     public static String ajax_get_banner_images_url = "http://dental.market/api/get/banners";
     public static String ajax_get_categories = "http://dental.market/api/get/categories";
     public static String ajax_get_products_homeproduct_url = "http://dental.market/api/get/homeProducts";
+    public static String ajax_get_products_by_category = "http://dental.market/api/get/productsByCategory";
 
     public static String DOMAIN_NAME = "http://dental.market";
     public static String VALUE_API_TOKEN = "987654321AA";
