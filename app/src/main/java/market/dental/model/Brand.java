@@ -11,6 +11,7 @@ public class Brand {
 
     private int id;
     private String name;
+    private String description;
     private String logo;
 
     public Brand(JSONObject brandJsonObject){
@@ -18,10 +19,12 @@ public class Brand {
         try {
             this.id = brandJsonObject.has("id") ?
                     brandJsonObject.getInt("id"):-1;
-            this.name = brandJsonObject.has("name")?
-                    brandJsonObject.getString("name"):"";
+            this.name = brandJsonObject.has("brand")?
+                    brandJsonObject.getString("brand"):"";
             this.logo = brandJsonObject.has("logo")?
                     brandJsonObject.getString("logo"):"";
+            this.description = brandJsonObject.has("description")?
+                    brandJsonObject.getString("description"):"";
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -50,5 +53,13 @@ public class Brand {
 
     public void setLogo(String logo) {
         this.logo = logo;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

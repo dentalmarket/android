@@ -2,6 +2,7 @@ package market.dental.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,8 +19,10 @@ import org.json.JSONObject;
 import java.util.List;
 
 import market.dental.android.ProductDetailActivity;
+import market.dental.android.ProductListActivity;
 import market.dental.android.R;
 import market.dental.model.Product;
+import market.dental.util.Resource;
 import market.dental.util.Result;
 
 /**
@@ -28,6 +31,7 @@ import market.dental.util.Result;
 
 public class ProductsRecyclerAdapter extends RecyclerView.Adapter<ProductsRecyclerAdapter.ViewHolder> {
 
+    private int mPosition;
     private Context context;
     private List<Product> products;
 
@@ -47,6 +51,7 @@ public class ProductsRecyclerAdapter extends RecyclerView.Adapter<ProductsRecycl
     @Override
     public void onBindViewHolder(ProductsRecyclerAdapter.ViewHolder holder, int position) {
 
+        this.mPosition = position;
         try {
             Product product = products.get(position);
             holder.mTextView.setText(product.getName());
@@ -58,6 +63,17 @@ public class ProductsRecyclerAdapter extends RecyclerView.Adapter<ProductsRecycl
         } catch (Exception ex){
             ex.printStackTrace();
         }
+
+        holder.mButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(v.getContext(),ProductDetailActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putInt(Resource.KEY_PRODUCT_ID, products.get(mPosition).getId());
+                intent.putExtras(bundle);
+                v.getContext().startActivity(intent);
+            }
+        });
 
     }
 
@@ -76,20 +92,6 @@ public class ProductsRecyclerAdapter extends RecyclerView.Adapter<ProductsRecycl
             mTextView = (TextView)itemView.findViewById(R.id.recycler_view_product_name);
             mImageView = (ImageView)itemView.findViewById(R.id.recycler_view_product_image);
             mButton = (Button) itemView.findViewById(R.id.recycler_view_button_product_detail);
-
-            mButton.setOnClickListener(new View.OnClickListener(){
-                @Override
-                public void onClick(View v) {
-
-                    Intent intent = new Intent(v.getContext(),ProductDetailActivity.class);
-                    v.getContext().startActivity(intent);
-                    /*
-                    FragmentTransaction transaction = ((FragmentActivity)v.getContext()).getSupportFragmentManager().beginTransaction();
-                    transaction.replace(R.id.content_main , fragment);
-                    transaction.commit();
-                    */
-                }
-            });
 
             itemView.setOnClickListener(new View.OnClickListener(){
                 @Override

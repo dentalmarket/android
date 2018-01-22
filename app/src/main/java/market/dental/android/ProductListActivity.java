@@ -45,6 +45,7 @@ public class ProductListActivity extends AppCompatActivity {
         // Get categoryId
         Intent intent = getIntent();
         categoryId = intent.getIntExtra(Resource.KEY_CATEGORY_ID,-1);
+        Toast.makeText(this, "" +  categoryId , Toast.LENGTH_SHORT).show();
 
         // Initialization
         productListAdapter = new ProductListAdapter(this);

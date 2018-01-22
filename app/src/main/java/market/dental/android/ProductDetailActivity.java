@@ -20,6 +20,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.squareup.picasso.Picasso;
 
@@ -50,6 +51,7 @@ public class ProductDetailActivity extends AppCompatActivity {
     private TextView storePhone;
     private TextView storeGsm;
     private TextView storeEmail;
+    private TextView brandName;
 
     private int productId;
     private String productDesc;
@@ -63,7 +65,7 @@ public class ProductDetailActivity extends AppCompatActivity {
         // Get productId
         Intent intent = getIntent();
         productId = intent.getIntExtra(Resource.KEY_PRODUCT_ID,-1);
-        Toast.makeText(this,"productId = " + productId , Toast.LENGTH_LONG).show();
+        //Toast.makeText(this,"" +productId , Toast.LENGTH_SHORT ).show();
 
         // Initialization
         RequestQueue rq = Volley.newRequestQueue(this);
@@ -75,6 +77,7 @@ public class ProductDetailActivity extends AppCompatActivity {
         storePhone = (TextView)findViewById(R.id.activity_product_detail_store_phone);
         storeGsm = (TextView)findViewById(R.id.activity_product_detail_store_gsm);
         storeEmail = (TextView)findViewById(R.id.activity_product_detail_store_email);
+        brandName = (TextView)findViewById(R.id.activity_product_detail_brand_name);
 
         // *****************************************************************************************
         //                              GET PRODUCT DETAIL
@@ -82,29 +85,34 @@ public class ProductDetailActivity extends AppCompatActivity {
         mRecyclerView = (RecyclerView) findViewById(R.id.activity_product_detail_similar_prod_recycler_view);
         mRecyclerView.setHasFixedSize(true);
         mRecyclerLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL , false);
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST,
-                Resource.ajax_get_product_detail_url, null, new Response.Listener<JSONObject>() {
+        StringRequest jsonObjectRequest = new StringRequest(Request.Method.POST,
+                Resource.ajax_get_product_detail_url, new Response.Listener<String>() {
 
             @Override
-            public void onResponse(JSONObject response) {
+            public void onResponse(String responseString) {
 
                 try {
                     // TODO: result objesinin kontrolü YAPILACAK
                     // result objesinin content değeri alınır
+                    JSONObject response = new JSONObject(responseString);
                     JSONObject content = response.getJSONObject("content");
                     Store store = new Store(content.getJSONObject("store"));
-                    productDesc = content.getString("description");
+
+                    Product product = new Product(content);
+
+                    productDesc = product.getDescription();
 
                     Typeface font = Typeface.createFromAsset(getAssets(),"fonts/fontawesome-webfont.ttf");
                     pdProductPrice.setTypeface(font);
-                    pdProductPrice.setText(content.getString("price") + " "  + Currency.getCurrencyString( getResources(),content.getInt("currency")));
-
-                    pdProductName.setText((String) content.getString("name"));
+                    pdProductPrice.setText(product.getSalePrice() + " "  + Currency.getCurrencyString( getResources(),product.getCurrencyId()));
+                    pdProductName.setText((String) product.getName());
                     Picasso.with(productDetailContext)
-                            .load((String) content.getJSONArray("images").get(0))
+                            .load(product.getImageUrl())
                             .placeholder(R.mipmap.ic_launcher)
                             .error(R.mipmap.ic_launcher)
                             .into(pdImageView);
+
+                    brandName.setText(product.getBrand().getName());
 
                     storeName.setText(store.getName());
                     storePhone.setText(store.getPhone());
@@ -117,18 +125,27 @@ public class ProductDetailActivity extends AppCompatActivity {
                     
                 } catch (JSONException e) {
                     e.printStackTrace();
+                    Log.i(Result.LOG_TAG_INFO.getResultText(),"ProductListActivity >> JSONException >> 120");
                 }
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.i(Result.LOG_TAG_INFO.getResultText(),"ERROR ON GET DATA");
+                error.printStackTrace();
+                Log.i(Result.LOG_TAG_INFO.getResultText(),"ProductListActivity >> ERROR ON GET DATA >> 121");
             }
         }){
             @Override
             protected Map<String, String> getParams()  {
                 Map<String, String> params = new HashMap<>();
-                params.put("id", "TESTID-111222333");
+                params.put(Resource.KEY_API_TOKEN, Resource.VALUE_API_TOKEN);
+                params.put("id", ""+productId);
+                return params;
+            }
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String,String> params = new HashMap<String, String>();
+                params.put("Content-Type","application/x-www-form-urlencoded");
                 return params;
             }
         };

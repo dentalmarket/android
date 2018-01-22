@@ -19,7 +19,8 @@ public class Product {
     private String name;
     private String imageUrl;
     private String description;
-    private int price;
+    private String price;
+    private String salePrice;
     private int currencyId;
     private Brand brand;
 
@@ -34,7 +35,9 @@ public class Product {
             this.imageUrl = projectJsonObject.has("image")?
                     Resource.DOMAIN_NAME + "/" + projectJsonObject.getString("image"):"";
             this.price = projectJsonObject.has("price") && !projectJsonObject.isNull("price")?
-                    projectJsonObject.getInt("price"):-1;
+                    projectJsonObject.getString("price"):"";
+            this.salePrice = projectJsonObject.has("sale_price") && !projectJsonObject.isNull("sale_price")?
+                    projectJsonObject.getString("sale_price"):"0.00";
             this.currencyId = projectJsonObject.has("currency") && !projectJsonObject.isNull("currency")?
                     projectJsonObject.getInt("currency"):-1;
 
@@ -100,11 +103,11 @@ public class Product {
         this.imageUrl = imageUrl;
     }
 
-    public int getPrice() {
+    public String getPrice() {
         return price;
     }
 
-    public void setPrice(int price) {
+    public void setPrice(String price) {
         this.price = price;
     }
 
@@ -114,5 +117,13 @@ public class Product {
 
     public void setCurrencyId(int currencyId) {
         this.currencyId = currencyId;
+    }
+
+    public String getSalePrice() {
+        return salePrice;
+    }
+
+    public void setSalePrice(String salePrice) {
+        this.salePrice = salePrice;
     }
 }

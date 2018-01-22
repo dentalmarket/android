@@ -3,6 +3,8 @@ package market.dental.model;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import market.dental.util.Resource;
+
 /**
  * Created by kemalsamikaraca on 20.01.2018.
  */
@@ -20,16 +22,16 @@ public class Store {
         try {
             this.id = storeJsonObject.has("id")?
                     storeJsonObject.getInt("id") : -1 ;
-            this.name = storeJsonObject.has("name")?
-                    storeJsonObject.getString("name"):"";
+            this.name = storeJsonObject.has("store_name")?
+                    storeJsonObject.getString("store_name"):"";
             this.phone = storeJsonObject.has("phone")?
                     storeJsonObject.getString("phone"):"";
-            this.gsm = storeJsonObject.has("gsm")?
-                    storeJsonObject.getString("gsm"):"";
+            this.gsm = storeJsonObject.has("mobile_phone")?
+                    storeJsonObject.getString("mobile_phone"):"";
             this.email = storeJsonObject.has("email")?
                     storeJsonObject.getString("email"):"";
             this.photo = storeJsonObject.has("photo")?
-                    storeJsonObject.getString("photo"):"";
+                    Resource.DOMAIN_NAME + "/" + storeJsonObject.getString("photo"):"";
 
         } catch (JSONException e) {
             e.printStackTrace();
