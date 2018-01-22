@@ -23,4 +23,8 @@
 
     </style>
 
+    <style name="DialogTheme" parent="Theme.AppCompat.Light.Dialog.MinWidth">
+        <item name="colorAccent">@color/dental_market_text_title</item>
+    </style>
+
 </resources>

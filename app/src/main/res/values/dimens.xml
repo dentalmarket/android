@@ -6,4 +6,7 @@
     <dimen name="nav_header_vertical_spacing">8dp</dimen>
     <dimen name="nav_header_height">60dp</dimen>
     <dimen name="design_navigation_icon_padding">6dp</dimen>
+
+    <dimen name="activity_profile_text_height">40dp</dimen>
+    <dimen name="activity_profile_text_width">160dp</dimen>
 </resources>
