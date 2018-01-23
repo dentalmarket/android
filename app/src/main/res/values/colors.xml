@@ -6,6 +6,6 @@
     <color name="colorWhite">#FFFFFF</color>
 
     <!-- DENTAL MARKET THEME COLOR -->
-    <color name="dental_market_text_title">#E3D6BF</color>
+    <color name="dental_market_text_title">#e3d6bf</color>
     <color name="dental_market_text_price">#31AC7A</color>
 </resources>

@@ -1,6 +1,7 @@
 package market.dental.android;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -9,11 +10,15 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -66,6 +71,7 @@ public class MainFragment extends Fragment {
     private ViewPager viewPager;
     private ViewPagerAdapter viewPagerAdapter;
     private ImageView[] dots;
+    private EditText searchText;
 
     // TODO: Rename parameter arguments, choose names that match
     private static final String ARG_PARAM1 = "param1";
@@ -220,6 +226,26 @@ public class MainFragment extends Fragment {
         };
         rq.add(jsonObjectRequest);
 
+
+        searchText = (EditText) view.findViewById(R.id.fragment_main_search);
+        searchText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                boolean handled = false;
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                    // REDIRECT TO PRODUCTLIST
+                    Bundle bundle = new Bundle();
+                    bundle.putString(Resource.SHAREDPREF_SEARCH_KEY, searchText.getText().toString());
+                    Intent intent = new Intent(getActivity(),ProductListActivity.class);
+                    intent.putExtras(bundle);
+                    startActivity(intent);
+
+                    handled = true;
+                }
+                return handled;
+            }
+        });
+
         return view;
     }
 
@@ -339,4 +365,5 @@ public class MainFragment extends Fragment {
         timer = new Timer();
         timer.scheduleAtFixedRate(new MyTimerTask() , 2000 , 4000);
     }
+
 }
