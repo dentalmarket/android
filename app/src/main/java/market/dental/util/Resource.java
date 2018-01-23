@@ -14,6 +14,7 @@ public class Resource {
     public static String ajax_get_products_homeproduct_url = "http://dental.market/api/get/homeProducts";
     public static String ajax_get_products_by_category = "http://dental.market/api/get/productsByCategory";
     public static String ajax_get_product_detail_url = "http://dental.market/api/get/product";
+    public static String ajax_get_product_by_search_key = "http://dental.market/api/get/searchProducts";
 
     public static String DOMAIN_NAME = "http://dental.market";
     public static String SHAREDPREF_SEARCH_KEY = "SHAREDPREF_SEARCH_KEY";
