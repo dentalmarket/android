@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="market.dental.android.RegisterActivity">
+
+    <!-- Login progress -->
+    <ProgressBar
+        android:id="@+id/login_progress"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:visibility="gone" />
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="102dp"
+        android:layout_marginTop="20dp"
+        android:paddingLeft="45dp"
+        android:paddingRight="45dp"
+        android:src="@drawable/dentalmarket" />
+
+    <ScrollView
+        android:id="@+id/login_form"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="20dp">
+
+        <LinearLayout
+            android:id="@+id/email_login_form"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <EditText
+                android:id="@+id/activity_register_name"
+                style="@style/DentalMarket.RegisterEditText"
+                android:hint="Ad"
+                android:inputType="text"/>
+
+            <EditText
+                android:id="@+id/activity_register_lastname"
+                style="@style/DentalMarket.RegisterEditText"
+                android:hint="Soyad"
+                android:inputType="text"/>
+
+            <EditText
+                android:id="@+id/activity_register_email"
+                style="@style/DentalMarket.RegisterEditText"
+                android:hint="Email"
+                android:inputType="text"/>
+
+            <EditText
+                android:id="@+id/activity_register_password"
+                style="@style/DentalMarket.RegisterEditText"
+                android:hint="Şifre"
+                android:inputType="text"/>
+
+            <EditText
+                android:id="@+id/activity_register_password_check"
+                style="@style/DentalMarket.RegisterEditText"
+                android:hint="Şifre Tekrar"
+                android:inputType="text"/>
+
+            <EditText
+                android:id="@+id/activity_register_job"
+                style="@style/DentalMarket.RegisterEditText"
+                android:hint="Mesleğiniz"
+                android:inputType="text"/>
+
+            <EditText
+                android:id="@+id/activity_register_city"
+                style="@style/DentalMarket.RegisterEditText"
+                android:hint="Şehir"
+                android:inputType="text"/>
+
+            <EditText
+                android:id="@+id/activity_register_borough"
+                style="@style/DentalMarket.RegisterEditText"
+                android:hint="İlçe"
+                android:inputType="text"/>
+
+            <EditText
+                android:id="@+id/activity_register_phone"
+                style="@style/DentalMarket.RegisterEditText"
+                android:hint="Sabit Telefon"
+                android:inputType="phone"/>
+
+            <EditText
+                android:id="@+id/activity_register_mobile_phone"
+                style="@style/DentalMarket.RegisterEditText"
+                android:hint="Cep Telefonu"
+                android:inputType="phone"/>
+
+            <Button
+                android:id="@+id/email_sign_in_button"
+                style="?android:textAppearanceSmall"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:background="@color/dental_market_text_title"
+                android:text="@string/action_sign_up"
+                android:textColor="#FFFFFF"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
+
+    </ScrollView>
+</LinearLayout>

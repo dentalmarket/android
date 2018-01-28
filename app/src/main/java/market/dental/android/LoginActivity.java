@@ -91,6 +91,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         // Initialization
         requestQueue = Volley.newRequestQueue(this);
+        sharedPref = getSharedPreferences(getString(R.string.sp_dental_market), Context.MODE_PRIVATE);
+        mLoginFormView = findViewById(R.id.login_form);
+        mProgressView = findViewById(R.id.login_progress);
 
         // Set up the login form.
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
@@ -116,8 +119,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             }
         });
 
-        mLoginFormView = findViewById(R.id.login_form);
-        mProgressView = findViewById(R.id.login_progress);
 
         // FORGOT PASSWORD EVENTS
         TextView forgot_password = (TextView)findViewById(R.id.forgot_password);
@@ -127,13 +128,23 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             }
         });
 
+        // REGISTER EVENT
+        TextView registerBtn = (TextView)findViewById(R.id.activity_login_register);
+        registerBtn.setOnClickListener(new TextView.OnClickListener(){
+            public void onClick(View v){
+                goToRegisterActivity();
+            }
+        });
 
-        // INITIALIZATION
-        sharedPref = getSharedPreferences(getString(R.string.sp_dental_market), Context.MODE_PRIVATE);
     }
 
     private void goToForgotPasswordActivity(){
         Intent i = new Intent(this,ForgotPasswordActivity.class);
+        startActivity(i);
+    }
+
+    private void goToRegisterActivity(){
+        Intent i = new Intent(this,RegisterActivity.class);
         startActivity(i);
     }
 

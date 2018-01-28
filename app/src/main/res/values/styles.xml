@@ -27,4 +27,19 @@
         <item name="colorAccent">@color/dental_market_text_title</item>
     </style>
 
+    <style name="DentalMarket.RegisterEditText" parent="@android:style/TextAppearance.Small">
+        <item name="android:gravity">center_horizontal</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">40dp</item>
+        <item name="android:layout_marginTop">10dp</item>
+        <item name="android:paddingBottom">10dp</item>
+        <item name="android:paddingTop">10dp</item>
+        <item name="android:textSize">14dp</item>
+        <item name="android:textCursorDrawable">@null</item>
+        <item name="android:background">@drawable/edit_text_register</item>
+        <item name="android:textColorLink">@color/dental_market_text_title</item>
+        <item name="android:layout_alignParentStart">true</item>
+        <item name="android:layout_alignParentTop">true</item>
+    </style>
+
 </resources>
