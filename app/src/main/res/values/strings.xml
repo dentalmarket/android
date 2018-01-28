@@ -6,8 +6,6 @@
     <string name="prompt_password">Şifre</string>
     <string name="action_sign_in">Giriş</string>
     <string name="action_sign_in_short">Giriş</string>
-    <string name="action_sign_up">Kayıt Ol</string>
-    <string name="action_sign_up_short">Kaydol</string>
     <string name="error_invalid_email">Hatalı mail adresi</string>
     <string name="error_invalid_password">Şifre çok kısa</string>
     <string name="error_incorrect_password">Şifre hatalı</string>
@@ -16,14 +14,28 @@
         completions."
     </string>
     <string name="button_product_detail">Ürün İncele</string>
-
     <string name="forgot_password">Şifremi Unuttum?</string>
     <string name="create_new_account">Yeni Hesap Aç</string>
     <string name="title_activity_forgot_password">ForgotPasswordActivity</string>
     <string name="title_activity_main">MainActivity</string>
-
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
+
+
+    <!-- DENTAL.MARKET STATIC -->
+    <string name="terms_warning">Kayıt olarak dental.market kullanım koşullarını kabul etmiş sayılırsınız</string>
+    <string name="name">Adı</string>
+    <string name="surname">Soyadı</string>
+    <string name="email">Email</string>
+    <string name="password">Şifre</string>
+    <string name="password_check">Şifre Tekrar</string>
+    <string name="profession">Mesleğiniz</string>
+    <string name="city">Şehir</string>
+    <string name="borough">İlçe</string>
+    <string name="phone">Sabit Telefon</string>
+    <string name="mobile_phone">Cep Telefonu</string>
+    <string name="action_sign_up">Kayıt Ol</string>
+    <string name="action_sign_up_short">Kaydol</string>
 
     <!-- RIGHT-TOP MENU -->
     <string name="action_settings">Settings</string>

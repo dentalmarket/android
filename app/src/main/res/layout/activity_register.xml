@@ -45,62 +45,67 @@
             <EditText
                 android:id="@+id/activity_register_name"
                 style="@style/DentalMarket.RegisterEditText"
-                android:hint="Ad"
+                android:hint="@string/name"
                 android:inputType="text"/>
 
             <EditText
                 android:id="@+id/activity_register_lastname"
                 style="@style/DentalMarket.RegisterEditText"
-                android:hint="Soyad"
+                android:hint="@string/surname"
                 android:inputType="text"/>
 
             <EditText
                 android:id="@+id/activity_register_email"
                 style="@style/DentalMarket.RegisterEditText"
-                android:hint="Email"
+                android:hint="@string/email"
                 android:inputType="text"/>
 
             <EditText
                 android:id="@+id/activity_register_password"
                 style="@style/DentalMarket.RegisterEditText"
-                android:hint="Şifre"
+                android:hint="@string/password"
                 android:inputType="text"/>
 
             <EditText
                 android:id="@+id/activity_register_password_check"
                 style="@style/DentalMarket.RegisterEditText"
-                android:hint="Şifre Tekrar"
+                android:hint="@string/password_check"
                 android:inputType="text"/>
 
             <EditText
                 android:id="@+id/activity_register_job"
                 style="@style/DentalMarket.RegisterEditText"
-                android:hint="Mesleğiniz"
+                android:hint="@string/profession"
                 android:inputType="text"/>
 
             <EditText
                 android:id="@+id/activity_register_city"
                 style="@style/DentalMarket.RegisterEditText"
-                android:hint="Şehir"
+                android:hint="@string/city"
                 android:inputType="text"/>
 
             <EditText
                 android:id="@+id/activity_register_borough"
                 style="@style/DentalMarket.RegisterEditText"
-                android:hint="İlçe"
+                android:hint="@string/borough"
                 android:inputType="text"/>
 
             <EditText
                 android:id="@+id/activity_register_phone"
                 style="@style/DentalMarket.RegisterEditText"
-                android:hint="Sabit Telefon"
+                android:hint="@string/phone"
                 android:inputType="phone"/>
 
             <EditText
                 android:id="@+id/activity_register_mobile_phone"
                 style="@style/DentalMarket.RegisterEditText"
-                android:hint="Cep Telefonu"
+                android:hint="@string/mobile_phone"
                 android:inputType="phone"/>
+
+            <TextView
+                android:id="@+id/activity_register_terms"
+                style="@style/DentalMarket.Register.TermsTextView"
+                android:text="@string/terms_warning" />
 
             <Button
                 android:id="@+id/email_sign_in_button"
