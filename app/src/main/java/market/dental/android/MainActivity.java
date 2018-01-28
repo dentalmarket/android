@@ -219,10 +219,10 @@ public class MainActivity extends AppCompatActivity
 
     public void setSettingMenuItem(){
         SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.sp_dental_market), Context.MODE_PRIVATE);
-        String userSessionID = sharedPreferences.getString(getString(R.string.sp_user_id) , null);
+        int userSessionID = sharedPreferences.getInt(getString(R.string.sp_user_id) , -1);
 
         if(menu!=null){
-            if(userSessionID != null){
+            if(userSessionID != -1){
                 menu.findItem(R.id.right_menu_login).setVisible(false);
                 menu.findItem(R.id.right_menu_profile).setVisible(true);
                 menu.findItem(R.id.right_menu_logout).setVisible(true);

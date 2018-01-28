@@ -39,6 +39,7 @@
     <!-- SHAREDPREFERENCES KEYS -->
     <string name="sp_dental_market">sp_dental_market</string>
     <string name="sp_user_id">userId</string>
+    <string name="sp_user_json_str">userJsonString</string>
 
     <!-- PRODUCTDETAILFRAGMENT KEYS -->
     <string name="pdf_product_desc">Ürün Açıklaması</string>

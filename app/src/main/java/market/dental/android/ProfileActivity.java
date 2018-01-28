@@ -1,7 +1,9 @@
 package market.dental.android;
 
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.support.v7.app.AlertDialog;
@@ -14,11 +16,17 @@ import android.widget.DatePicker;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.Calendar;
 
+import market.dental.model.User;
 import market.dental.util.Result;
 
 public class ProfileActivity extends AppCompatActivity {
+
+    private SharedPreferences sharedPref = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,9 +34,33 @@ public class ProfileActivity extends AppCompatActivity {
         setContentView(R.layout.activity_profile);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        TextView activity_profile_header_name = (TextView)findViewById(R.id.activity_profile_header_name);
+        TextView activity_profile_header_mail = (TextView)findViewById(R.id.activity_profile_header_mail);
+        TextView activity_profile_header_rate = (TextView)findViewById(R.id.activity_profile_header_rate);
+        TextView activity_profile_content_name = (TextView)findViewById(R.id.activity_profile_content_name);
+        TextView activity_profile_content_lastname = (TextView)findViewById(R.id.activity_profile_content_lastname);
+        TextView activity_profile_profession = (TextView)findViewById(R.id.activity_profile_profession);
+
+
+        // INITIALIZATION
+        sharedPref = getSharedPreferences(getString(R.string.sp_dental_market), Context.MODE_PRIVATE);
+        try {
+            JSONObject userJsonObject = new JSONObject(sharedPref.getString(getString(R.string.sp_user_json_str) , ""));
+            User user = new User(userJsonObject);
+            activity_profile_header_name.setText(user.getFirst_name() + " " + user.getLast_name());
+            activity_profile_header_mail.setText(user.getEmail());
+            activity_profile_header_rate.setText(" ?? / 10");
+            activity_profile_content_name.setText(user.getFirst_name());
+            activity_profile_content_lastname.setText(user.getLast_name());
+            activity_profile_profession.setText(user.getJob());
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
         final String[] cityList = {"Ankara" , "İstanbul" , "Kocaeli" , "İzmir" , "Bursa" , "Sakarya", "Kayseri" , "Konya" , "Antalya", "Eskişehir"};
         final String[] boroughList = {"Çankaya" , "Keçiören" , "Etimesgut" , "Sincan" };
-        final String[] professionList = {"Diş Hekimliği" , "Doktor" };
+        final String[] professionList = {"Diş Hekimliği" , "Doktor" , "Mühendis"};
 
         TextView cityText = findViewById(R.id.activity_profile_city_text);
         cityText.setOnClickListener(new View.OnClickListener(){

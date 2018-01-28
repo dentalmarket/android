@@ -5,6 +5,7 @@
 
     <ImageView
         android:id="@+id/viewpage_imageView"
+        android:scaleType="center"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

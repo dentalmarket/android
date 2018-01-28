@@ -3,7 +3,6 @@ package market.dental.android;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -34,8 +33,24 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import market.dental.model.User;
+import market.dental.util.Resource;
+import market.dental.util.Result;
 
 import static android.Manifest.permission.READ_CONTACTS;
 
@@ -59,8 +74,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
-    private UserLoginTask mAuthTask = null;
     private SharedPreferences sharedPref = null;
+    private RequestQueue requestQueue;
 
     // UI references.
     private AutoCompleteTextView mEmailView;
@@ -73,6 +88,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        // Initialization
+        requestQueue = Volley.newRequestQueue(this);
 
         // Set up the login form.
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
@@ -169,9 +187,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      * errors are presented and no actual login attempt is made.
      */
     private void attemptLogin() {
-        if (mAuthTask != null) {
-            return;
-        }
 
         // Reset errors.
         mEmailView.setError(null);
@@ -210,8 +225,53 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true);
-            mAuthTask = new UserLoginTask(email, password);
-            mAuthTask.execute((Void) null);
+
+            // *************************************************************************************
+            //                          AJAX - LOGIN
+            // *************************************************************************************
+            StringRequest request = new StringRequest(Request.Method.POST,
+                    Resource.ajax_login, new Response.Listener<String>() {
+
+                @Override
+                public void onResponse(String responseString) {
+                    try {
+                        // TODO: result objesinin kontrolü YAPILACAK
+                        JSONObject response = new JSONObject(responseString);
+                        JSONObject content = response.getJSONObject("content");
+
+                        setUserSessionAndFinish(content);
+
+                        // TODO: 1- dönen content sharedPreference içerisinde tutulacak
+                        // TODO: 2- UserLoginTask kaldırılıp direk Volley kullanılacak
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        Log.i(Result.LOG_TAG_INFO.getResultText(),"LoginActivity >> JSONException >> 120");
+                    }
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    error.printStackTrace();
+                    Log.i(Result.LOG_TAG_INFO.getResultText(),"LoginActivity >> ERROR ON GET DATA >> 121");
+                }
+            }){
+                @Override
+                protected Map<String, String> getParams()  {
+                    Map<String, String> params = new HashMap<>();
+                    params.put("email", mEmailView.getText().toString());
+                    params.put("password", mPasswordView.getText().toString());
+                    return params;
+                }
+                @Override
+                public Map<String, String> getHeaders() {
+                    Map<String,String> params = new HashMap<String, String>();
+                    params.put("Content-Type","application/x-www-form-urlencoded");
+                    return params;
+                }
+            };
+            requestQueue.add(request);
+
         }
     }
 
@@ -315,70 +375,17 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         int IS_PRIMARY = 1;
     }
 
+
     /**
-     * Represents an asynchronous login/registration task used to authenticate
-     * the user.
+     * sp_user_id key değerine user session değeri yazılır
      */
-    public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
-
-        private final String mEmail;
-        private final String mPassword;
-
-        UserLoginTask(String email, String password) {
-            mEmail = email;
-            mPassword = password;
-        }
-
-        @Override
-        protected Boolean doInBackground(Void... params) {
-            // TODO: attempt authentication against a network service.
-
-            try {
-                // Simulate network access.
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                return false;
-            }
-
-            for (String credential : DUMMY_CREDENTIALS) {
-                String[] pieces = credential.split(":");
-                if (pieces[0].equals(mEmail)) {
-                    // Account exists, return true if the password matches.
-                    return pieces[1].equals(mPassword);
-                }
-            }
-
-            // TODO: register the new account here.
-            return true;
-        }
-
-        @Override
-        protected void onPostExecute(final Boolean success) {
-            mAuthTask = null;
-            showProgress(false);
-            if (success) {
-                setUserSession();
-                finish();
-            } else {
-                mPasswordView.setError(getString(R.string.error_incorrect_password));
-                mPasswordView.requestFocus();
-            }
-        }
-
-        @Override
-        protected void onCancelled() {
-            mAuthTask = null;
-            showProgress(false);
-        }
-
-        /**
-         * sp_user_id key değerine user session değeri yazılır
-         */
-        protected void setUserSession(){
-            SharedPreferences.Editor editor = sharedPref.edit();
-            editor.putString(getString(R.string.sp_user_id), "sessionId-12345678-dentalmarket");
-            editor.commit();
-        }
+    protected void setUserSessionAndFinish(JSONObject userJsonObject){
+        User dentalUser = new User(userJsonObject);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putInt(getString(R.string.sp_user_id), dentalUser.getId());
+        editor.putString(getString(R.string.sp_user_json_str), userJsonObject.toString());
+        editor.commit();
+        finish();
     }
 }
 
