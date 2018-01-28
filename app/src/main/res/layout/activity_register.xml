@@ -58,19 +58,19 @@
                 android:id="@+id/activity_register_email"
                 style="@style/DentalMarket.RegisterEditText"
                 android:hint="@string/email"
-                android:inputType="text"/>
+                android:inputType="textEmailAddress"/>
 
             <EditText
                 android:id="@+id/activity_register_password"
                 style="@style/DentalMarket.RegisterEditText"
                 android:hint="@string/password"
-                android:inputType="text"/>
+                android:inputType="textPassword"/>
 
             <EditText
                 android:id="@+id/activity_register_password_check"
                 style="@style/DentalMarket.RegisterEditText"
                 android:hint="@string/password_check"
-                android:inputType="text"/>
+                android:inputType="textPassword"/>
 
             <EditText
                 android:id="@+id/activity_register_job"
