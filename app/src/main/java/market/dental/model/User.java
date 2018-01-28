@@ -18,6 +18,7 @@ public class User {
     private String phone;
     private String mobile_phone;
     private String job;
+    private String api_token;
 
     public User(JSONObject userJsonObject){
 
@@ -36,6 +37,8 @@ public class User {
                     userJsonObject.getString("mobile_phone"):"";
             this.job = userJsonObject.has("job") && !userJsonObject.isNull("job")?
                     userJsonObject.getString("job"):"";
+            this.api_token = userJsonObject.has("api_token") && !userJsonObject.isNull("api_token")?
+                    userJsonObject.getString("api_token"):"";
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -95,5 +98,13 @@ public class User {
 
     public void setJob(String job) {
         this.job = job;
+    }
+
+    public String getApi_token() {
+        return api_token;
+    }
+
+    public void setApi_token(String api_token) {
+        this.api_token = api_token;
     }
 }

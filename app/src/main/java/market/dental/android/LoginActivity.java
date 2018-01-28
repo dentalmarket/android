@@ -381,6 +381,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      */
     protected void setUserSessionAndFinish(JSONObject userJsonObject){
         User dentalUser = new User(userJsonObject);
+        Resource.VALUE_API_TOKEN = dentalUser.getApi_token();
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putInt(getString(R.string.sp_user_id), dentalUser.getId());
         editor.putString(getString(R.string.sp_user_json_str), userJsonObject.toString());

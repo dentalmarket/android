@@ -60,8 +60,7 @@ public class MainActivity extends AppCompatActivity
 
         // Initialization
         RequestQueue rq = Volley.newRequestQueue(this);
-
-
+        Resource.setDefaultAPITOKEN();
 
 
         // *****************************************************************************************
@@ -186,7 +185,8 @@ public class MainActivity extends AppCompatActivity
                 startActivity(intent);
                 break;
             case R.id.right_menu_logout:
-                Log.i(Result.LOG_TAG_INFO.getResultText() , "Settings >> logout");
+                Resource.setDefaultAPITOKEN();
+                Log.i(Result.LOG_TAG_INFO.getResultText() , "MainActivity >> Settings >> logout");
                 break;
         }
 
