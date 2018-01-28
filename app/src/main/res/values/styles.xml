@@ -53,4 +53,16 @@
         <item name="android:textColor">@color/dental_market_blue</item>
     </style>
 
+
+    <style name="DentalMarket.Password.DescTextView" parent="@android:style/TextAppearance.Small">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:paddingTop">20dp</item>
+        <item name="android:paddingLeft">40dp</item>
+        <item name="android:paddingRight">40dp</item>
+        <item name="android:gravity">center_horizontal</item>
+        <item name="android:lineSpacingMultiplier">1</item>
+        <item name="android:textSize">@dimen/dental_market_text_view_12dp</item>
+    </style>
+
 </resources>

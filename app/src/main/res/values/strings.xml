@@ -24,6 +24,8 @@
 
     <!-- DENTAL.MARKET STATIC -->
     <string name="terms_warning">Kayıt olarak dental.market kullanım koşullarını kabul etmiş sayılırsınız</string>
+    <string name="password_link_request">Şifre Yenileme Linki Gönder</string>
+    <string name="password_link_request_desc">Şifrenizi değiştirmeniz için email hesabınıza bir link gönderilecektir. Linke tıklayarak şifrenizi yenileyebilirsiniz.</string>
     <string name="name">Adı</string>
     <string name="surname">Soyadı</string>
     <string name="email">Email</string>
