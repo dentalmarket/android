@@ -46,6 +46,10 @@ public class RegisterActivity extends AppCompatActivity {
     private RequestQueue requestQueue;
     private Context context;
 
+    private EditText boroughEditText;
+    private EditText cityEditText;
+    private EditText professionTextView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,6 +60,10 @@ public class RegisterActivity extends AppCompatActivity {
         requestQueue = Volley.newRequestQueue(context);
         professionListAdapter = new ProfessionListAdapter(context);
         cityListAdapter = new CityListAdapter(context);
+
+        boroughEditText = findViewById(R.id.activity_register_borough);
+        cityEditText = findViewById(R.id.activity_register_city);
+        professionTextView = findViewById(R.id.activity_register_job);
 
         // *****************************************************************************************
         //                          AJAX - GET CITY
@@ -208,7 +216,6 @@ public class RegisterActivity extends AppCompatActivity {
 
 
     public void boroughSetOnFocusChangeListener(final BoroughListAdapter boroughListAdapter){
-        EditText boroughEditText = findViewById(R.id.activity_register_borough);
         boroughEditText.setOnFocusChangeListener(new View.OnFocusChangeListener(){
             @Override
             public void onFocusChange(View view, boolean hasFocus){
@@ -218,7 +225,7 @@ public class RegisterActivity extends AppCompatActivity {
                     mBuilder.setAdapter(boroughListAdapter, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            Log.i(Result.LOG_TAG_INFO.getResultText(), "Selected borough ID " + ((Borough) boroughListAdapter.getItem(which)).getId());
+                            boroughEditText.setText(((Borough) boroughListAdapter.getItem(which)).getName());
                         }
                     });
                     mBuilder.show();
@@ -229,7 +236,6 @@ public class RegisterActivity extends AppCompatActivity {
 
 
     public void citySetOnFocusChangeListener(){
-        EditText cityEditText = findViewById(R.id.activity_register_city);
         cityEditText.setOnFocusChangeListener(new View.OnFocusChangeListener(){
             @Override
             public void onFocusChange(View view, boolean hasFocus){
@@ -239,7 +245,7 @@ public class RegisterActivity extends AppCompatActivity {
                     mBuilder.setAdapter(cityListAdapter, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            Log.i(Result.LOG_TAG_INFO.getResultText(), "Selected city ID " + ((City) cityListAdapter.getItem(which)).getId());
+                            cityEditText.setText( ((City) cityListAdapter.getItem(which)).getName() );
                             getBoroughListWithAjax();
                         }
                     });
@@ -251,11 +257,9 @@ public class RegisterActivity extends AppCompatActivity {
 
 
     public void professionSetOnFocusChangeListener(){
-        EditText professionTextView = findViewById(R.id.activity_register_job);
         professionTextView.setOnFocusChangeListener(new View.OnFocusChangeListener(){
             @Override
             public void onFocusChange(View view, boolean hasFocus){
-
                 if(hasFocus) {
                     AlertDialog.Builder mBuilder = new AlertDialog.Builder(RegisterActivity.this);
                     mBuilder.setTitle("Mesleğinizi seçiniz");
@@ -263,7 +267,7 @@ public class RegisterActivity extends AppCompatActivity {
                     mBuilder.setAdapter(professionListAdapter, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            Log.i(Result.LOG_TAG_INFO.getResultText(), "Selected profession ID " + ((Profession) professionListAdapter.getItem(which)).getId());
+                            professionTextView.setText(((Profession) professionListAdapter.getItem(which)).getName());
                         }
                     });
                     mBuilder.show();
