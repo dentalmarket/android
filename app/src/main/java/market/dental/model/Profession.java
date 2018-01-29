@@ -1,7 +1,11 @@
 package market.dental.model;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by kemalsamikaraca on 28.01.2018.
@@ -22,6 +26,19 @@ public class Profession {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
+
+    public static List<Profession> ProfessionList(JSONArray professionJsonArray){
+
+        List<Profession> professionList = new ArrayList<Profession>();
+        for(int i=0; i<professionJsonArray.length(); i++){
+            try {
+                professionList.add(new Profession((JSONObject) professionJsonArray.get(i)));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        return professionList;
     }
 
     public int getId() {
