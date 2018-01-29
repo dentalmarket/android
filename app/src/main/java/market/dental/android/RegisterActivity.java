@@ -46,9 +46,12 @@ public class RegisterActivity extends AppCompatActivity {
     private RequestQueue requestQueue;
     private Context context;
 
+    private AlertDialog progressDialog;
     private EditText boroughEditText;
     private EditText cityEditText;
     private EditText professionTextView;
+    private boolean cityListRequestSuccess = false;
+    private boolean professionListRequestSuccess = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +67,13 @@ public class RegisterActivity extends AppCompatActivity {
         boroughEditText = findViewById(R.id.activity_register_borough);
         cityEditText = findViewById(R.id.activity_register_city);
         professionTextView = findViewById(R.id.activity_register_job);
+
+
+        AlertDialog.Builder progressDialogBuilder = new AlertDialog.Builder(this);
+        progressDialogBuilder.setCancelable(false);
+        progressDialogBuilder.setView(getLayoutInflater().inflate(R.layout.dialog_progressbar,null));
+        progressDialog = progressDialogBuilder.create();
+        progressDialog.show();
 
         // *****************************************************************************************
         //                          AJAX - GET CITY
@@ -81,10 +91,13 @@ public class RegisterActivity extends AppCompatActivity {
                     cityList = City.getCityList(content.getJSONArray("cities"));
                     cityListAdapter.setCityList(cityList);
                     citySetOnFocusChangeListener();
+                    cityListRequestSuccess = true;
 
                 } catch (JSONException e) {
                     e.printStackTrace();
                     Log.i(Result.LOG_TAG_INFO.getResultText(),"RegisterActivity >> JSONException >> 120");
+                } finally {
+                    closeProgressDialog(progressDialog);
                 }
             }
         }, new Response.ErrorListener() {
@@ -126,10 +139,14 @@ public class RegisterActivity extends AppCompatActivity {
                     professionList = Profession.ProfessionList(content.getJSONArray("professions"));
                     professionListAdapter.setProfessionList(professionList);
                     professionSetOnFocusChangeListener();
+                    professionListRequestSuccess = true;
 
                 } catch (JSONException e) {
                     e.printStackTrace();
                     Log.i(Result.LOG_TAG_INFO.getResultText(),"RegisterActivity >> JSONException >> 122");
+
+                } finally {
+                    closeProgressDialog(progressDialog);
                 }
             }
         }, new Response.ErrorListener() {
@@ -167,8 +184,15 @@ public class RegisterActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    public void closeProgressDialog(AlertDialog progressDialog){
+        if(professionListRequestSuccess && cityListRequestSuccess){
+            progressDialog.dismiss();
+        }
+    }
+
 
     public void getBoroughListWithAjax(){
+        progressDialog.show();
         // *****************************************************************************************
         //                          AJAX - GET PROFESSIONS
         // *****************************************************************************************
@@ -189,6 +213,8 @@ public class RegisterActivity extends AppCompatActivity {
                 } catch (JSONException e) {
                     e.printStackTrace();
                     Log.i(Result.LOG_TAG_INFO.getResultText(),"RegisterActivity >> JSONException >> 124");
+                } finally {
+                    progressDialog.dismiss();
                 }
             }
         }, new Response.ErrorListener() {
