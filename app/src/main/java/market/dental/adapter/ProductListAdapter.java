@@ -1,6 +1,7 @@
 package market.dental.adapter;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,13 +13,13 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
-import java.util.Currency;
 import java.util.List;
 import java.util.Locale;
 
 import market.dental.android.R;
 import market.dental.model.Product;
 import market.dental.util.Resource;
+import market.dental.model.Currency;
 
 /**
  * Created by kemalsamikaraca on 18.01.2018.
@@ -61,9 +62,11 @@ public class ProductListAdapter extends ArrayAdapter {
         TextView brandTextView = customView.findViewById(R.id.activity_product_list_item_product_brand);
         brandTextView.setText(productList.get(position).getBrand()!=null ? productList.get(position).getBrand().getName() : "bilinmiyor");
 
+        Typeface font = Typeface.createFromAsset(context.getAssets(),"fonts/fontawesome-webfont.ttf");
         TextView priceTextView = customView.findViewById(R.id.activity_product_list_item_product_price);
-        String priceString = "" +productList.get(position).getSalePrice() + " ₺";
-        priceTextView.setText(priceString);
+        priceTextView.setTypeface(font);
+        priceTextView.setText("" +productList.get(position).getSalePrice() + " " +
+                Currency.getCurrencyString( context.getResources(),productList.get(position).getCurrencyId()));
 
         ImageView imageView = customView.findViewById(R.id.activity_product_list_item_image);
         Picasso.with(context)
