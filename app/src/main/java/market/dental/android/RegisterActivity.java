@@ -19,6 +19,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -134,9 +135,9 @@ public class RegisterActivity extends AppCompatActivity {
                 try {
                     // TODO: result objesinin kontrolü YAPILACAK
                     JSONObject response = new JSONObject(responseString);
-                    JSONObject content = response.getJSONObject("content");
+                    JSONArray content = response.getJSONArray("content");
 
-                    professionList = Profession.ProfessionList(content.getJSONArray("professions"));
+                    professionList = Profession.ProfessionList(content);
                     professionListAdapter.setProfessionList(professionList);
                     professionSetOnFocusChangeListener();
                     professionListRequestSuccess = true;
