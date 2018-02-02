@@ -160,12 +160,12 @@
                         android:gravity="center_vertical"
                         android:text="Mesleğiniz" />
 
-                    <TextView
+                    <EditText
                         android:id="@+id/activity_profile_profession"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:gravity="center_vertical"
-                        android:text="Diş Hekimi" />
+                        android:hint="@string/profession" />
                 </TableRow>
 
 
@@ -177,13 +177,13 @@
                         android:layout_height="@dimen/activity_profile_text_height"
                         android:gravity="center_vertical"
                         android:text="Şehir" />
-                    <TextView
+                    <EditText
                         android:id="@+id/activity_profile_city_text"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:clickable="true"
                         android:gravity="center_vertical"
-                        android:text="Ankara" />
+                        android:hint="@string/city" />
                 </TableRow>
 
 

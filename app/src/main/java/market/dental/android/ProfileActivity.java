@@ -4,8 +4,6 @@ import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -13,26 +11,58 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
+import market.dental.adapter.CityListAdapter;
+import market.dental.adapter.ProfessionListAdapter;
+import market.dental.model.City;
+import market.dental.model.Profession;
 import market.dental.model.User;
+import market.dental.util.Resource;
 import market.dental.util.Result;
 
 public class ProfileActivity extends AppCompatActivity {
 
     private SharedPreferences sharedPref = null;
+    private RequestQueue requestQueue;
+    private Context context;
+    private AlertDialog progressDialog;
+    private EditText professionTextView;
+    private EditText cityEditText;
+
+    private List<Profession> professionList = new ArrayList<>();
+    private ProfessionListAdapter professionListAdapter = null;
+    private List<City> cityList = new ArrayList<>();
+    private CityListAdapter cityListAdapter = null;
+    private boolean professionListRequestSuccess = false;
+    private boolean cityListRequestSuccess = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        context = this;
+        requestQueue = Volley.newRequestQueue(context);
 
         TextView activity_profile_header_name = (TextView)findViewById(R.id.activity_profile_header_name);
         TextView activity_profile_header_mail = (TextView)findViewById(R.id.activity_profile_header_mail);
@@ -58,27 +88,114 @@ public class ProfileActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        final String[] cityList = {"Ankara" , "İstanbul" , "Kocaeli" , "İzmir" , "Bursa" , "Sakarya", "Kayseri" , "Konya" , "Antalya", "Eskişehir"};
-        final String[] boroughList = {"Çankaya" , "Keçiören" , "Etimesgut" , "Sincan" };
-        final String[] professionList = {"Diş Hekimliği" , "Doktor" , "Mühendis"};
 
-        TextView cityText = findViewById(R.id.activity_profile_city_text);
-        cityText.setOnClickListener(new View.OnClickListener(){
+        AlertDialog.Builder progressDialogBuilder = new AlertDialog.Builder(this);
+        progressDialogBuilder.setCancelable(false);
+        progressDialogBuilder.setView(getLayoutInflater().inflate(R.layout.dialog_progressbar,null));
+        progressDialog = progressDialogBuilder.create();
+        progressDialog.show();
+
+
+        // *****************************************************************************************
+        //                          AJAX - GET PROFESSIONS
+        // *****************************************************************************************
+        StringRequest request = new StringRequest(Request.Method.POST,
+                Resource.ajax_get_professions, new Response.Listener<String>() {
+
             @Override
-            public void onClick(View view){
+            public void onResponse(String responseString) {
+                try {
+                    // TODO: result objesinin kontrolü YAPILACAK
+                    JSONObject response = new JSONObject(responseString);
+                    JSONArray content = response.getJSONArray("content");
 
-                AlertDialog.Builder mBuilder = new AlertDialog.Builder(ProfileActivity.this);
-                mBuilder.setTitle("Şehir seçiniz");
-                mBuilder.setItems(cityList, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        Log.i(Result.LOG_TAG_INFO.getResultText() , "dedede");
-                    }
-                });
-                mBuilder.show();
+                    professionList = Profession.ProfessionList(content);
+                    professionListAdapter = new ProfessionListAdapter(context);
+                    professionListAdapter.setProfessionList(professionList);
+                    professionSetOnFocusChangeListener();
+                    professionListRequestSuccess = true;
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Log.i(Result.LOG_TAG_INFO.getResultText(),"" + this.getClass() + " >> JSONException >> ajax_get_professions");
+
+                } finally {
+                    closeProgressDialog(progressDialog);
+                }
             }
-        });
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+                Log.i(Result.LOG_TAG_INFO.getResultText(),"" + this.getClass() + " >> ERROR ON GET DATA >> ajax_get_professions");
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams()  {
+                Map<String, String> params = new HashMap<>();
+                params.put(Resource.KEY_API_TOKEN, Resource.VALUE_API_TOKEN);
+                return params;
+            }
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String,String> params = new HashMap<String, String>();
+                params.put("Content-Type","application/x-www-form-urlencoded");
+                return params;
+            }
+        };
+        requestQueue.add(request);
 
+
+        // *****************************************************************************************
+        //                          AJAX - GET CITY
+        // *****************************************************************************************
+        StringRequest requestCityList = new StringRequest(Request.Method.POST,
+                Resource.ajax_get_city_list, new Response.Listener<String>() {
+
+            @Override
+            public void onResponse(String responseString) {
+                try {
+                    // TODO: result objesinin kontrolü YAPILACAK
+                    JSONObject response = new JSONObject(responseString);
+                    JSONArray content = response.getJSONArray("content");
+
+                    cityList = City.getCityList(content);
+                    cityListAdapter = new CityListAdapter(context);
+                    cityListAdapter.setCityList(cityList);
+                    citySetOnFocusChangeListener();
+                    cityListRequestSuccess = true;
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Log.i(Result.LOG_TAG_INFO.getResultText(),"" + this.getClass() + " >> JSONException >> ajax_get_city_list");
+                } finally {
+                    closeProgressDialog(progressDialog);
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+                Log.i(Result.LOG_TAG_INFO.getResultText(),"" + this.getClass() + " >> ERROR ON GET DATA >> ajax_get_city_list");
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams()  {
+                Map<String, String> params = new HashMap<>();
+                params.put(Resource.KEY_API_TOKEN, Resource.VALUE_API_TOKEN);
+                return params;
+            }
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String,String> params = new HashMap<String, String>();
+                params.put("Content-Type","application/x-www-form-urlencoded");
+                return params;
+            }
+        };
+        requestQueue.add(requestCityList);
+
+
+        final String[] boroughList = {"Çankaya" , "Keçiören" , "Etimesgut" , "Sincan" };
 
         TextView boroughText = findViewById(R.id.activity_profile_borough_text);
         boroughText.setOnClickListener(new View.OnClickListener(){
@@ -88,24 +205,6 @@ public class ProfileActivity extends AppCompatActivity {
                 AlertDialog.Builder mBuilder = new AlertDialog.Builder(ProfileActivity.this);
                 mBuilder.setTitle("İlçe seçiniz");
                 mBuilder.setItems(boroughList, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        Log.i(Result.LOG_TAG_INFO.getResultText() , "meslek seçildi");
-                    }
-                });
-                mBuilder.show();
-            }
-        });
-
-
-        TextView professionText = findViewById(R.id.activity_profile_profession);
-        professionText.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view){
-
-                AlertDialog.Builder mBuilder = new AlertDialog.Builder(ProfileActivity.this);
-                mBuilder.setTitle("Mesleğinizi seçiniz");
-                mBuilder.setItems(professionList, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         Log.i(Result.LOG_TAG_INFO.getResultText() , "meslek seçildi");
@@ -147,6 +246,55 @@ public class ProfileActivity extends AppCompatActivity {
                 finish();
         }
         return super.onOptionsItemSelected(item);
+    }
+
+
+    public void closeProgressDialog(AlertDialog progressDialog){
+        if(professionListRequestSuccess && cityListRequestSuccess){
+            progressDialog.dismiss();
+        }
+    }
+
+    public void professionSetOnFocusChangeListener(){
+        professionTextView = findViewById(R.id.activity_profile_profession);
+        professionTextView.setOnFocusChangeListener(new View.OnFocusChangeListener(){
+            @Override
+            public void onFocusChange(View view, boolean hasFocus){
+                if(hasFocus) {
+                    AlertDialog.Builder mBuilder = new AlertDialog.Builder(ProfileActivity.this);
+                    mBuilder.setTitle("Mesleğinizi seçiniz");
+
+                    mBuilder.setAdapter(professionListAdapter, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            professionTextView.setText(((Profession) professionListAdapter.getItem(which)).getName());
+                        }
+                    });
+                    mBuilder.show();
+                }
+            }
+        });
+    }
+
+    public void citySetOnFocusChangeListener(){
+        cityEditText = findViewById(R.id.activity_profile_city_text);
+        cityEditText.setOnFocusChangeListener(new View.OnFocusChangeListener(){
+            @Override
+            public void onFocusChange(View view, boolean hasFocus){
+                if(hasFocus) {
+                    AlertDialog.Builder mBuilder = new AlertDialog.Builder(ProfileActivity.this);
+                    mBuilder.setTitle("Şehir seçiniz");
+                    mBuilder.setAdapter(cityListAdapter, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            cityEditText.setText( ((City) cityListAdapter.getItem(which)).getName() );
+                            //getBoroughListWithAjax();
+                        }
+                    });
+                    mBuilder.show();
+                }
+            }
+        });
     }
 
 }

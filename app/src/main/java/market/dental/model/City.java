@@ -21,8 +21,8 @@ public class City {
         try {
             this.id = cityJsonObject.has("id")?
                     cityJsonObject.getInt("id") : -1 ;
-            this.name = cityJsonObject.has("name") && !cityJsonObject.isNull("name")?
-                    cityJsonObject.getString("name"):"";
+            this.name = cityJsonObject.has("il_adi") && !cityJsonObject.isNull("il_adi")?
+                    cityJsonObject.getString("il_adi"):"";
         } catch (JSONException e) {
             e.printStackTrace();
         }

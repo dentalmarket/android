@@ -87,9 +87,9 @@ public class RegisterActivity extends AppCompatActivity {
                 try {
                     // TODO: result objesinin kontrolü YAPILACAK
                     JSONObject response = new JSONObject(responseString);
-                    JSONObject content = response.getJSONObject("content");
+                    JSONArray content = response.getJSONArray("content");
 
-                    cityList = City.getCityList(content.getJSONArray("cities"));
+                    cityList = City.getCityList(content);
                     cityListAdapter.setCityList(cityList);
                     citySetOnFocusChangeListener();
                     cityListRequestSuccess = true;
