@@ -195,12 +195,12 @@
                         android:layout_height="@dimen/activity_profile_text_height"
                         android:gravity="center_vertical"
                         android:text="İlçe" />
-                    <TextView
+                    <EditText
                         android:id="@+id/activity_profile_borough_text"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:gravity="center_vertical"
-                        android:text="Çankaya" />
+                        android:hint="@string/borough" />
                 </TableRow>
 
 

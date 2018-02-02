@@ -192,7 +192,7 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
 
-    public void getBoroughListWithAjax(){
+    public void getBoroughListWithAjax(final int cityId){
         progressDialog.show();
         // *****************************************************************************************
         //                          AJAX - GET PROFESSIONS
@@ -205,9 +205,9 @@ public class RegisterActivity extends AppCompatActivity {
                 try {
                     // TODO: result objesinin kontrolü YAPILACAK
                     JSONObject response = new JSONObject(responseString);
-                    JSONObject content = response.getJSONObject("content");
+                    JSONArray content = response.getJSONArray("content");
 
-                    List<Borough> boroughList = Borough.getBoroughList(content.getJSONArray("boroughs"));
+                    List<Borough> boroughList = Borough.getBoroughList(content);
                     BoroughListAdapter boroughListAdapter = new BoroughListAdapter(context,boroughList);
                     boroughSetOnFocusChangeListener(boroughListAdapter);
 
@@ -229,6 +229,7 @@ public class RegisterActivity extends AppCompatActivity {
             protected Map<String, String> getParams()  {
                 Map<String, String> params = new HashMap<>();
                 params.put(Resource.KEY_API_TOKEN, Resource.VALUE_API_TOKEN);
+                params.put("city", String.valueOf(cityId));
                 return params;
             }
             @Override
@@ -273,7 +274,7 @@ public class RegisterActivity extends AppCompatActivity {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             cityEditText.setText( ((City) cityListAdapter.getItem(which)).getName() );
-                            getBoroughListWithAjax();
+                            getBoroughListWithAjax( ((City) cityListAdapter.getItem(which)).getId() );
                         }
                     });
                     mBuilder.show();

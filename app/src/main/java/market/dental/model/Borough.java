@@ -21,8 +21,8 @@ public class Borough {
         try {
             this.id = boroughJsonObject.has("id")?
                     boroughJsonObject.getInt("id") : -1 ;
-            this.name = boroughJsonObject.has("name") && !boroughJsonObject.isNull("name")?
-                    boroughJsonObject.getString("name"):"";
+            this.name = boroughJsonObject.has("ilce_adi") && !boroughJsonObject.isNull("ilce_adi")?
+                    boroughJsonObject.getString("ilce_adi"):"";
         } catch (JSONException e) {
             e.printStackTrace();
         }

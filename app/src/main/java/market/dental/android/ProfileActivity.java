@@ -31,8 +31,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import market.dental.adapter.BoroughListAdapter;
 import market.dental.adapter.CityListAdapter;
 import market.dental.adapter.ProfessionListAdapter;
+import market.dental.model.Borough;
 import market.dental.model.City;
 import market.dental.model.Profession;
 import market.dental.model.User;
@@ -47,6 +49,7 @@ public class ProfileActivity extends AppCompatActivity {
     private AlertDialog progressDialog;
     private EditText professionTextView;
     private EditText cityEditText;
+    private EditText boroughEditText;
 
     private List<Profession> professionList = new ArrayList<>();
     private ProfessionListAdapter professionListAdapter = null;
@@ -195,26 +198,9 @@ public class ProfileActivity extends AppCompatActivity {
         requestQueue.add(requestCityList);
 
 
-        final String[] boroughList = {"Çankaya" , "Keçiören" , "Etimesgut" , "Sincan" };
-
-        TextView boroughText = findViewById(R.id.activity_profile_borough_text);
-        boroughText.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view){
-
-                AlertDialog.Builder mBuilder = new AlertDialog.Builder(ProfileActivity.this);
-                mBuilder.setTitle("İlçe seçiniz");
-                mBuilder.setItems(boroughList, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        Log.i(Result.LOG_TAG_INFO.getResultText() , "meslek seçildi");
-                    }
-                });
-                mBuilder.show();
-            }
-        });
-
-
+        // *****************************************************************************************
+        //                          AJAX - DATEPICKER
+        // *****************************************************************************************
         TextView birthdayText = findViewById(R.id.activity_profile_birthday);
         birthdayText.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -288,7 +274,79 @@ public class ProfileActivity extends AppCompatActivity {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             cityEditText.setText( ((City) cityListAdapter.getItem(which)).getName() );
-                            //getBoroughListWithAjax();
+                            getBoroughListWithAjax(((City) cityListAdapter.getItem(which)).getId());
+                        }
+                    });
+                    mBuilder.show();
+                }
+            }
+        });
+    }
+
+
+    public void getBoroughListWithAjax(final int cityId){
+        progressDialog.show();
+        // *****************************************************************************************
+        //                          AJAX - GET PROFESSIONS
+        // *****************************************************************************************
+        StringRequest request = new StringRequest(Request.Method.POST,
+                Resource.ajax_get_borough_list, new Response.Listener<String>() {
+
+            @Override
+            public void onResponse(String responseString) {
+                try {
+                    // TODO: result objesinin kontrolü YAPILACAK
+                    JSONObject response = new JSONObject(responseString);
+                    JSONArray content = response.getJSONArray("content");
+
+                    List<Borough> boroughList = Borough.getBoroughList(content);
+                    BoroughListAdapter boroughListAdapter = new BoroughListAdapter(context,boroughList);
+                    boroughSetOnFocusChangeListener(boroughListAdapter);
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Log.i(Result.LOG_TAG_INFO.getResultText(),"" + this.getClass() + " >> JSONException >> 124");
+                } finally {
+                    progressDialog.dismiss();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+                Log.i(Result.LOG_TAG_INFO.getResultText(),"" + this.getClass() + " >> ERROR ON GET DATA >> 125");
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams()  {
+                Map<String, String> params = new HashMap<>();
+                params.put(Resource.KEY_API_TOKEN, Resource.VALUE_API_TOKEN);
+                params.put("city", String.valueOf(cityId));
+                return params;
+            }
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String,String> params = new HashMap<String, String>();
+                params.put("Content-Type","application/x-www-form-urlencoded");
+                return params;
+            }
+        };
+        requestQueue.add(request);
+    }
+
+
+    public void boroughSetOnFocusChangeListener(final BoroughListAdapter boroughListAdapter){
+        boroughEditText = findViewById(R.id.activity_profile_borough_text);
+        boroughEditText.setOnFocusChangeListener(new View.OnFocusChangeListener(){
+            @Override
+            public void onFocusChange(View view, boolean hasFocus){
+                if(hasFocus) {
+                    AlertDialog.Builder mBuilder = new AlertDialog.Builder(ProfileActivity.this);
+                    mBuilder.setTitle("İlçe seçiniz");
+                    mBuilder.setAdapter(boroughListAdapter, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            boroughEditText.setText(((Borough) boroughListAdapter.getItem(which)).getName());
                         }
                     });
                     mBuilder.show();
