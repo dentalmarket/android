@@ -1,6 +1,10 @@
 package market.dental.util;
 
 import com.google.gson.annotations.Expose;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.Serializable;
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -51,10 +55,20 @@ public class Result <T> implements Serializable{
 
     public Result(){}
 
+    public Result(JSONObject jsonObject){
+        try {
+            this.resultText = jsonObject.getString("resultText");
+            this.resultCode = jsonObject.getString("resultCode");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
     private Result(String resultCode, String resultText){
         this.resultCode = resultCode;
         this.resultText = resultText;
     }
+
 
     /**
      * This method checks whether the resultCode of the object equals to the resultCode of the given result object

@@ -1,20 +1,49 @@
 package market.dental.android;
 
+import android.app.Notification;
+import android.app.NotificationManager;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
+import android.widget.Toast;
+
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import market.dental.util.Resource;
+import market.dental.util.Result;
 
 public class ForgotPasswordActivity extends AppCompatActivity {
+
+    private RequestQueue requestQueue;
+    private AlertDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_forgot_password);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        requestQueue = Volley.newRequestQueue(this);
+
+        AlertDialog.Builder progressDialogBuilder = new AlertDialog.Builder(this);
+        progressDialogBuilder.setCancelable(false);
+        progressDialogBuilder.setView(getLayoutInflater().inflate(R.layout.dialog_progressbar,null));
+        progressDialog = progressDialogBuilder.create();
     }
 
 
@@ -26,5 +55,69 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                 finish();
         }
         return super.onOptionsItemSelected(item);
+    }
+
+
+    public void forgotPasswordAction(final View view){
+
+        progressDialog.show();
+        // *****************************************************************************************
+        //                          AJAX - FORGOT PASSWORD
+        // *****************************************************************************************
+        StringRequest request = new StringRequest(Request.Method.POST,
+                Resource.ajax_forgot_password, new Response.Listener<String>() {
+
+            @Override
+            public void onResponse(String responseString) {
+                try {
+
+                    // TODO: result objesinin kontrolü YAPILACAK
+                    JSONObject response = new JSONObject(responseString);
+                    if(Result.SUCCESS.checkResult(new Result(response))){
+                        NotificationManager notificationManager = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
+                        Notification notification = new Notification.Builder(view.getContext())
+                                .setSmallIcon(R.drawable.ic_launcher)
+                                .setContentTitle("Şifremi Unuttum")
+                                .setContentText("Şifrenizi yenileme linki mail adresinize gönderilmiştir")
+                                .build();
+
+                        notificationManager.notify(0,notification);
+                        finish();
+                    }else{
+
+                        // --- HATA MESAJI GÖSTERİLİR ---
+                        Toast.makeText(view.getContext() , response.getString("content"), Toast.LENGTH_LONG ).show();
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Log.i(Result.LOG_TAG_INFO.getResultText(),"" + this.getClass() + " >> JSONException >> 121");
+                } finally {
+                    progressDialog.dismiss();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+                Log.i(Result.LOG_TAG_INFO.getResultText(),"" + this.getClass().getName() + " >> ERROR ON GET DATA >> 122");
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams()  {
+                Map<String, String> params = new HashMap<>();
+                params.put(Resource.KEY_API_TOKEN, Resource.VALUE_API_TOKEN);
+                params.put("email", ((EditText)findViewById(R.id.activity_forgot_password_email)).getText().toString());
+                return params;
+            }
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String,String> params = new HashMap<String, String>();
+                params.put("Content-Type","application/x-www-form-urlencoded");
+                return params;
+            }
+        };
+        requestQueue.add(request);
+
     }
 }
