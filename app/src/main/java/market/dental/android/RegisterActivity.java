@@ -4,6 +4,7 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -11,6 +12,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -314,67 +316,80 @@ public class RegisterActivity extends AppCompatActivity {
      */
     public void registerNewUser(final View view){
 
-        progressDialog.show();
-        // *****************************************************************************************
-        //                          AJAX - REGISTER NEW USER
-        // *****************************************************************************************
-        StringRequest request = new StringRequest(Request.Method.POST,
-                Resource.ajax_register, new Response.Listener<String>() {
+        final String password = ((TextInputEditText)findViewById(R.id.activity_register_password)).getText().toString();
+        String passwordCheck = ((TextInputEditText)findViewById(R.id.activity_register_password_check)).getText().toString();
+        if(password.length() < 6) {
+            ((TextInputEditText) findViewById(R.id.activity_register_password)).setError("Şifreniz en az 6 karakterden oluşmalıdır");
+        }else if(!password.equals(passwordCheck)){
+            ((TextInputEditText) findViewById(R.id.activity_register_password_check)).setError("Şifreleriniz uyuşmamaktadır");
+        }else{
+            progressDialog.show();
+            // *****************************************************************************************
+            //                          AJAX - REGISTER NEW USER
+            // *****************************************************************************************
+            StringRequest request = new StringRequest(Request.Method.POST,
+                    Resource.ajax_register, new Response.Listener<String>() {
 
-            @Override
-            public void onResponse(String responseString) {
-                try {
-                    // TODO: result objesinin kontrolü YAPILACAK
-                    JSONObject response = new JSONObject(responseString);
-                    JSONObject content = response.getJSONObject("content");
+                @Override
+                public void onResponse(String responseString) {
+                    try {
 
-                    NotificationManager notificationManager = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
-                    Notification notification = new Notification.Builder(view.getContext())
-                            .setSmallIcon(R.drawable.ic_launcher)
-                            .setContentTitle("Yeni Kayıt")
-                            .setContentText("Kayıt işlemi başarıyla gerçekleştirildi")
-                            .build();
+                        JSONObject response = new JSONObject(responseString);
+                        if(Result.SUCCESS.checkResult(new Result(response))){
+                            NotificationManager notificationManager = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
+                            Notification notification = new Notification.Builder(view.getContext())
+                                    .setSmallIcon(R.drawable.ic_launcher)
+                                    .setContentTitle("Yeni Kayıt")
+                                    .setContentText("Kayıt işlemi başarıyla gerçekleştirildi")
+                                    .build();
 
-                    notificationManager.notify(0,notification);
+                            notificationManager.notify(0,notification);
+                            finish();
+                        }else {
+                            Toast.makeText(view.getContext() , response.getString("content"), Toast.LENGTH_LONG ).show();
+                        }
 
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    Log.i(Result.LOG_TAG_INFO.getResultText(),"" + this.getClass() + " >> JSONException >> 126");
-                } finally {
-                    progressDialog.dismiss();
-                    finish();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        Log.i(Result.LOG_TAG_INFO.getResultText(),"" + this.getClass().getName() + " >> JSONException >> 126");
+                    } finally {
+                        progressDialog.dismiss();
+                    }
                 }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                error.printStackTrace();
-                Log.i(Result.LOG_TAG_INFO.getResultText(),"" + this.getClass() + " >> ERROR ON GET DATA >> 127");
-            }
-        }){
-            @Override
-            protected Map<String, String> getParams()  {
-                Map<String, String> params = new HashMap<>();
-                params.put(Resource.KEY_API_TOKEN, Resource.VALUE_API_TOKEN);
-                params.put("type", "1");
-                params.put("email", ((EditText)findViewById(R.id.activity_register_email)).getText().toString());
-                params.put("password", ((EditText)findViewById(R.id.activity_register_password)).getText().toString());
-                params.put("first_name", ((EditText)findViewById(R.id.activity_register_name)).getText().toString());
-                params.put("last_name", ((EditText)findViewById(R.id.activity_register_lastname)).getText().toString());
-                params.put("job", ((EditText)findViewById(R.id.activity_register_job)).getText().toString());
-                params.put("city", ""+selectedCity.getId());
-                params.put("district", ""+selectedBorough.getId());
-                params.put("phone", ((EditText)findViewById(R.id.activity_register_phone)).getText().toString());
-                params.put("mobile_phone", ((EditText)findViewById(R.id.activity_register_mobile_phone)).getText().toString());
-                return params;
-            }
-            @Override
-            public Map<String, String> getHeaders() {
-                Map<String,String> params = new HashMap<String, String>();
-                params.put("Content-Type","application/x-www-form-urlencoded");
-                return params;
-            }
-        };
-        requestQueue.add(request);
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    error.printStackTrace();
+                    Log.i(Result.LOG_TAG_INFO.getResultText(),this.getClass().getSimpleName() + " >> ERROR ON GET DATA >> 127");
+                    Toast.makeText(view.getContext() , "İstek gerçekleştirilemedi :(", Toast.LENGTH_LONG ).show();
+                    progressDialog.dismiss();
+                }
+            }){
+                @Override
+                protected Map<String, String> getParams()  {
+                    Map<String, String> params = new HashMap<>();
+                    params.put(Resource.KEY_API_TOKEN, Resource.VALUE_API_TOKEN);
+                    params.put("type", "1");
+                    params.put("email", ((EditText)findViewById(R.id.activity_register_email)).getText().toString());
+                    params.put("password", password);
+                    params.put("first_name", ((EditText)findViewById(R.id.activity_register_name)).getText().toString());
+                    params.put("last_name", ((EditText)findViewById(R.id.activity_register_lastname)).getText().toString());
+                    params.put("job", ((EditText)findViewById(R.id.activity_register_job)).getText().toString());
+                    params.put("city", ""+selectedCity.getId());
+                    params.put("district", ""+selectedBorough.getId());
+                    params.put("phone", ((EditText)findViewById(R.id.activity_register_phone)).getText().toString());
+                    params.put("mobile_phone", ((EditText)findViewById(R.id.activity_register_mobile_phone)).getText().toString());
+                    return params;
+                }
+                @Override
+                public Map<String, String> getHeaders() {
+                    Map<String,String> params = new HashMap<String, String>();
+                    params.put("Content-Type","application/x-www-form-urlencoded");
+                    return params;
+                }
+            };
+            requestQueue.add(request);
+
+        }
     }
 }

@@ -71,7 +71,6 @@ public class ForgotPasswordActivity extends AppCompatActivity {
             public void onResponse(String responseString) {
                 try {
 
-                    // TODO: result objesinin kontrolü YAPILACAK
                     JSONObject response = new JSONObject(responseString);
                     if(Result.SUCCESS.checkResult(new Result(response))){
                         NotificationManager notificationManager = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
@@ -84,8 +83,6 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                         notificationManager.notify(0,notification);
                         finish();
                     }else{
-
-                        // --- HATA MESAJI GÖSTERİLİR ---
                         Toast.makeText(view.getContext() , response.getString("content"), Toast.LENGTH_LONG ).show();
                     }
 
