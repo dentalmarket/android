@@ -10,6 +10,7 @@ import java.util.Locale;
 public class Resource {
 
     public static String ajax_login = "http://dental.market/api/set/login";
+    public static String ajax_register = "http://dental.market/api/set/register";
     public static String ajax_get_banner_images_url = "http://dental.market/api/get/banners";
     public static String ajax_get_categories = "http://dental.market/api/get/categories";
     public static String ajax_get_products_homeproduct_url = "http://dental.market/api/get/homeProducts";

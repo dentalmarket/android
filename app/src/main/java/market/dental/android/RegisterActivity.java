@@ -1,16 +1,16 @@
 package market.dental.android;
 
+import android.app.Notification;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.TextView;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -32,7 +32,6 @@ import market.dental.adapter.BoroughListAdapter;
 import market.dental.adapter.CityListAdapter;
 import market.dental.adapter.ProfessionListAdapter;
 import market.dental.model.Borough;
-import market.dental.model.Category;
 import market.dental.model.City;
 import market.dental.model.Profession;
 import market.dental.util.Resource;
@@ -54,6 +53,9 @@ public class RegisterActivity extends AppCompatActivity {
     private boolean cityListRequestSuccess = false;
     private boolean professionListRequestSuccess = false;
 
+    private City selectedCity = null;
+    private Borough selectedBorough = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,12 +65,10 @@ public class RegisterActivity extends AppCompatActivity {
         context = this;
         requestQueue = Volley.newRequestQueue(context);
         professionListAdapter = new ProfessionListAdapter(context);
-        cityListAdapter = new CityListAdapter(context);
-
-        boroughEditText = findViewById(R.id.activity_register_borough);
-        cityEditText = findViewById(R.id.activity_register_city);
         professionTextView = findViewById(R.id.activity_register_job);
-
+        cityListAdapter = new CityListAdapter(context);
+        cityEditText = findViewById(R.id.activity_register_city);
+        boroughEditText = findViewById(R.id.activity_register_borough);
 
         AlertDialog.Builder progressDialogBuilder = new AlertDialog.Builder(this);
         progressDialogBuilder.setCancelable(false);
@@ -96,7 +96,7 @@ public class RegisterActivity extends AppCompatActivity {
 
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    Log.i(Result.LOG_TAG_INFO.getResultText(),"RegisterActivity >> JSONException >> 120");
+                    Log.i(Result.LOG_TAG_INFO.getResultText(),"" + this.getClass() + " >> JSONException >> 120");
                 } finally {
                     closeProgressDialog(progressDialog);
                 }
@@ -105,7 +105,7 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace();
-                Log.i(Result.LOG_TAG_INFO.getResultText(),"RegisterActivity >> ERROR ON GET DATA >> 121");
+                Log.i(Result.LOG_TAG_INFO.getResultText(),"" + this.getClass() + " >> ERROR ON GET DATA >> 121");
             }
         }){
             @Override
@@ -144,7 +144,7 @@ public class RegisterActivity extends AppCompatActivity {
 
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    Log.i(Result.LOG_TAG_INFO.getResultText(),"RegisterActivity >> JSONException >> 122");
+                    Log.i(Result.LOG_TAG_INFO.getResultText(),"" + this.getClass() + " >> JSONException >> 122");
 
                 } finally {
                     closeProgressDialog(progressDialog);
@@ -154,7 +154,7 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace();
-                Log.i(Result.LOG_TAG_INFO.getResultText(),"RegisterActivity >> ERROR ON GET DATA >> 123");
+                Log.i(Result.LOG_TAG_INFO.getResultText(),"" + this.getClass() + " >> ERROR ON GET DATA >> 123");
             }
         }){
             @Override
@@ -213,7 +213,7 @@ public class RegisterActivity extends AppCompatActivity {
 
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    Log.i(Result.LOG_TAG_INFO.getResultText(),"RegisterActivity >> JSONException >> 124");
+                    Log.i(Result.LOG_TAG_INFO.getResultText(),"" + this.getClass() + " >> JSONException >> 124");
                 } finally {
                     progressDialog.dismiss();
                 }
@@ -222,7 +222,7 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace();
-                Log.i(Result.LOG_TAG_INFO.getResultText(),"RegisterActivity >> ERROR ON GET DATA >> 125");
+                Log.i(Result.LOG_TAG_INFO.getResultText(),"" + this.getClass() + " >> ERROR ON GET DATA >> 125");
             }
         }){
             @Override
@@ -253,7 +253,8 @@ public class RegisterActivity extends AppCompatActivity {
                     mBuilder.setAdapter(boroughListAdapter, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            boroughEditText.setText(((Borough) boroughListAdapter.getItem(which)).getName());
+                            selectedBorough = (Borough) boroughListAdapter.getItem(which);
+                            boroughEditText.setText(selectedBorough.getName());
                         }
                     });
                     mBuilder.show();
@@ -273,8 +274,9 @@ public class RegisterActivity extends AppCompatActivity {
                     mBuilder.setAdapter(cityListAdapter, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            cityEditText.setText( ((City) cityListAdapter.getItem(which)).getName() );
-                            getBoroughListWithAjax( ((City) cityListAdapter.getItem(which)).getId() );
+                            selectedCity = (City) cityListAdapter.getItem(which);
+                            cityEditText.setText(selectedCity.getName());
+                            getBoroughListWithAjax(selectedCity.getId());
                         }
                     });
                     mBuilder.show();
@@ -302,5 +304,77 @@ public class RegisterActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    /**
+     *
+     * activity_register_sign_up_button click event
+     *
+     * @param view
+     */
+    public void registerNewUser(final View view){
+
+        progressDialog.show();
+        // *****************************************************************************************
+        //                          AJAX - REGISTER NEW USER
+        // *****************************************************************************************
+        StringRequest request = new StringRequest(Request.Method.POST,
+                Resource.ajax_register, new Response.Listener<String>() {
+
+            @Override
+            public void onResponse(String responseString) {
+                try {
+                    // TODO: result objesinin kontrolü YAPILACAK
+                    JSONObject response = new JSONObject(responseString);
+                    JSONObject content = response.getJSONObject("content");
+
+                    NotificationManager notificationManager = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
+                    Notification notification = new Notification.Builder(view.getContext())
+                            .setSmallIcon(R.drawable.ic_launcher)
+                            .setContentTitle("Yeni Kayıt")
+                            .setContentText("Kayıt işlemi başarıyla gerçekleştirildi")
+                            .build();
+
+                    notificationManager.notify(0,notification);
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Log.i(Result.LOG_TAG_INFO.getResultText(),"" + this.getClass() + " >> JSONException >> 126");
+                } finally {
+                    progressDialog.dismiss();
+                    finish();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+                Log.i(Result.LOG_TAG_INFO.getResultText(),"" + this.getClass() + " >> ERROR ON GET DATA >> 127");
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams()  {
+                Map<String, String> params = new HashMap<>();
+                params.put(Resource.KEY_API_TOKEN, Resource.VALUE_API_TOKEN);
+                params.put("type", "1");
+                params.put("email", ((EditText)findViewById(R.id.activity_register_email)).getText().toString());
+                params.put("password", ((EditText)findViewById(R.id.activity_register_password)).getText().toString());
+                params.put("first_name", ((EditText)findViewById(R.id.activity_register_name)).getText().toString());
+                params.put("last_name", ((EditText)findViewById(R.id.activity_register_lastname)).getText().toString());
+                params.put("job", ((EditText)findViewById(R.id.activity_register_job)).getText().toString());
+                params.put("city", ""+selectedCity.getId());
+                params.put("district", ""+selectedBorough.getId());
+                params.put("phone", ((EditText)findViewById(R.id.activity_register_phone)).getText().toString());
+                params.put("mobile_phone", ((EditText)findViewById(R.id.activity_register_mobile_phone)).getText().toString());
+                return params;
+            }
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String,String> params = new HashMap<String, String>();
+                params.put("Content-Type","application/x-www-form-urlencoded");
+                return params;
+            }
+        };
+        requestQueue.add(request);
     }
 }
