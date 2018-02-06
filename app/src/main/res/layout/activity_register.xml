@@ -72,19 +72,19 @@
                 android:hint="@string/password_check"
                 android:inputType="textPassword"/>
 
-            <EditText
+            <TextView
                 android:id="@+id/activity_register_job"
                 style="@style/DentalMarket.RegisterEditText"
                 android:hint="@string/profession"
                 android:inputType="text"/>
 
-            <EditText
+            <TextView
                 android:id="@+id/activity_register_city"
                 style="@style/DentalMarket.RegisterEditText"
                 android:hint="@string/city"
                 android:inputType="text"/>
 
-            <EditText
+            <TextView
                 android:id="@+id/activity_register_borough"
                 style="@style/DentalMarket.RegisterEditText"
                 android:hint="@string/borough"

@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -49,9 +50,9 @@ public class RegisterActivity extends AppCompatActivity {
     private Context context;
 
     private AlertDialog progressDialog;
-    private EditText boroughEditText;
-    private EditText cityEditText;
-    private EditText professionTextView;
+    private TextView boroughEditText;
+    private TextView cityEditText;
+    private TextView professionTextView;
     private boolean cityListRequestSuccess = false;
     private boolean professionListRequestSuccess = false;
 
@@ -67,10 +68,7 @@ public class RegisterActivity extends AppCompatActivity {
         context = this;
         requestQueue = Volley.newRequestQueue(context);
         professionListAdapter = new ProfessionListAdapter(context);
-        professionTextView = findViewById(R.id.activity_register_job);
         cityListAdapter = new CityListAdapter(context);
-        cityEditText = findViewById(R.id.activity_register_city);
-        boroughEditText = findViewById(R.id.activity_register_borough);
 
         AlertDialog.Builder progressDialogBuilder = new AlertDialog.Builder(this);
         progressDialogBuilder.setCancelable(false);
@@ -93,7 +91,7 @@ public class RegisterActivity extends AppCompatActivity {
 
                     cityList = City.getCityList(content);
                     cityListAdapter.setCityList(cityList);
-                    citySetOnFocusChangeListener();
+                    citySetOnClickListener();
                     cityListRequestSuccess = true;
 
                 } catch (JSONException e) {
@@ -141,7 +139,7 @@ public class RegisterActivity extends AppCompatActivity {
 
                     professionList = Profession.ProfessionList(content);
                     professionListAdapter.setProfessionList(professionList);
-                    professionSetOnFocusChangeListener();
+                    professionSetOnClickListener();
                     professionListRequestSuccess = true;
 
                 } catch (JSONException e) {
@@ -211,7 +209,7 @@ public class RegisterActivity extends AppCompatActivity {
 
                     List<Borough> boroughList = Borough.getBoroughList(content);
                     BoroughListAdapter boroughListAdapter = new BoroughListAdapter(context,boroughList);
-                    boroughSetOnFocusChangeListener(boroughListAdapter);
+                    boroughSetOnClickListener(boroughListAdapter);
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -245,65 +243,61 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
 
-    public void boroughSetOnFocusChangeListener(final BoroughListAdapter boroughListAdapter){
-        boroughEditText.setOnFocusChangeListener(new View.OnFocusChangeListener(){
+    public void boroughSetOnClickListener(final BoroughListAdapter boroughListAdapter){
+        boroughEditText = findViewById(R.id.activity_register_borough);
+        boroughEditText.setOnClickListener(new View.OnClickListener(){
             @Override
-            public void onFocusChange(View view, boolean hasFocus){
-                if(hasFocus) {
-                    AlertDialog.Builder mBuilder = new AlertDialog.Builder(RegisterActivity.this);
-                    mBuilder.setTitle("İlçe seçiniz");
-                    mBuilder.setAdapter(boroughListAdapter, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            selectedBorough = (Borough) boroughListAdapter.getItem(which);
-                            boroughEditText.setText(selectedBorough.getName());
-                        }
-                    });
-                    mBuilder.show();
-                }
+            public void onClick(View view){
+                AlertDialog.Builder mBuilder = new AlertDialog.Builder(RegisterActivity.this);
+                mBuilder.setTitle("İlçe seçiniz");
+                mBuilder.setAdapter(boroughListAdapter, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        selectedBorough = (Borough) boroughListAdapter.getItem(which);
+                        boroughEditText.setText(selectedBorough.getName());
+                    }
+                });
+                mBuilder.show();
             }
         });
     }
 
 
-    public void citySetOnFocusChangeListener(){
-        cityEditText.setOnFocusChangeListener(new View.OnFocusChangeListener(){
+    public void citySetOnClickListener(){
+        cityEditText = findViewById(R.id.activity_register_city);
+        cityEditText.setOnClickListener(new View.OnClickListener(){
             @Override
-            public void onFocusChange(View view, boolean hasFocus){
-                if(hasFocus) {
-                    AlertDialog.Builder mBuilder = new AlertDialog.Builder(RegisterActivity.this);
-                    mBuilder.setTitle("Şehir seçiniz");
-                    mBuilder.setAdapter(cityListAdapter, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            selectedCity = (City) cityListAdapter.getItem(which);
-                            cityEditText.setText(selectedCity.getName());
-                            getBoroughListWithAjax(selectedCity.getId());
-                        }
-                    });
-                    mBuilder.show();
-                }
+            public void onClick(View view){
+                AlertDialog.Builder mBuilder = new AlertDialog.Builder(RegisterActivity.this);
+                mBuilder.setTitle("Şehir seçiniz");
+                mBuilder.setAdapter(cityListAdapter, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        selectedCity = (City) cityListAdapter.getItem(which);
+                        cityEditText.setText(selectedCity.getName());
+                        getBoroughListWithAjax(selectedCity.getId());
+                    }
+                });
+                mBuilder.show();
             }
         });
     }
 
 
-    public void professionSetOnFocusChangeListener(){
-        professionTextView.setOnFocusChangeListener(new View.OnFocusChangeListener(){
+    public void professionSetOnClickListener(){
+        professionTextView = findViewById(R.id.activity_register_job);
+        professionTextView.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onFocusChange(View view, boolean hasFocus){
-                if(hasFocus) {
-                    AlertDialog.Builder mBuilder = new AlertDialog.Builder(RegisterActivity.this);
-                    mBuilder.setTitle("Mesleğinizi seçiniz");
-
-                    mBuilder.setAdapter(professionListAdapter, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            professionTextView.setText(((Profession) professionListAdapter.getItem(which)).getName());
-                        }
-                    });
-                    mBuilder.show();
-                }
+            public void onClick(View v) {
+                AlertDialog.Builder mBuilder = new AlertDialog.Builder(RegisterActivity.this);
+                mBuilder.setTitle("Mesleğinizi seçiniz");
+                mBuilder.setAdapter(professionListAdapter, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        professionTextView.setText(((Profession) professionListAdapter.getItem(which)).getName());
+                    }
+                });
+                mBuilder.show();
             }
         });
     }
@@ -367,6 +361,9 @@ public class RegisterActivity extends AppCompatActivity {
             }){
                 @Override
                 protected Map<String, String> getParams()  {
+                    String cityId = String.valueOf(selectedCity==null ? -1 : selectedCity.getId());
+                    String boroughId = String.valueOf(selectedBorough==null ? -1 : selectedBorough.getId());
+
                     Map<String, String> params = new HashMap<>();
                     params.put(Resource.KEY_API_TOKEN, Resource.VALUE_API_TOKEN);
                     params.put("type", "1");
@@ -374,9 +371,9 @@ public class RegisterActivity extends AppCompatActivity {
                     params.put("password", password);
                     params.put("first_name", ((EditText)findViewById(R.id.activity_register_name)).getText().toString());
                     params.put("last_name", ((EditText)findViewById(R.id.activity_register_lastname)).getText().toString());
-                    params.put("job", ((EditText)findViewById(R.id.activity_register_job)).getText().toString());
-                    params.put("city", ""+selectedCity.getId());
-                    params.put("district", ""+selectedBorough.getId());
+                    params.put("job", ((TextView)findViewById(R.id.activity_register_job)).getText().toString());
+                    params.put("city", cityId);
+                    params.put("district", boroughId);
                     params.put("phone", ((EditText)findViewById(R.id.activity_register_phone)).getText().toString());
                     params.put("mobile_phone", ((EditText)findViewById(R.id.activity_register_mobile_phone)).getText().toString());
                     return params;
