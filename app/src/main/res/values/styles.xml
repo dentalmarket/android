@@ -26,6 +26,15 @@
         <item name="colorAccent">@color/dental_market_text_title</item>
     </style>
 
+
+    <style name="DentalMarket.Profile.InputField" parent="@android:style/TextAppearance.Small">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:singleLine">true</item>
+    </style>
+
     <style name="DentalMarket.RegisterEditText" parent="@android:style/TextAppearance.Small">
         <item name="android:gravity">center_horizontal</item>
         <item name="android:layout_width">match_parent</item>

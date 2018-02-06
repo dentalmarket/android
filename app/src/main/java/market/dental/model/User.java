@@ -19,6 +19,8 @@ public class User {
     private String mobile_phone;
     private String job;
     private String api_token;
+    private String city_id;
+    private String borough_id;
 
     public User(JSONObject userJsonObject){
 
@@ -39,6 +41,10 @@ public class User {
                     userJsonObject.getString("job"):"";
             this.api_token = userJsonObject.has("api_token") && !userJsonObject.isNull("api_token")?
                     userJsonObject.getString("api_token"):"";
+            this.city_id = userJsonObject.has("city") && !userJsonObject.isNull("city")?
+                    userJsonObject.getString("city"):"";
+            this.borough_id = userJsonObject.has("district") && !userJsonObject.isNull("district")?
+                    userJsonObject.getString("district"):"";
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -106,5 +112,21 @@ public class User {
 
     public void setApi_token(String api_token) {
         this.api_token = api_token;
+    }
+
+    public String getCity_id() {
+        return city_id;
+    }
+
+    public void setCity_id(String city_id) {
+        this.city_id = city_id;
+    }
+
+    public String getBorough_id() {
+        return borough_id;
+    }
+
+    public void setBorough_id(String borough_id) {
+        this.borough_id = borough_id;
     }
 }

@@ -105,12 +105,10 @@
                         android:gravity="center_vertical"
                         android:text="Adı" />
 
-                    <TextView
+                    <EditText
                         android:id="@+id/activity_profile_content_name"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:gravity="center_vertical"
-                        android:text="Beraat Aldemir" />
+                        style="@style/DentalMarket.Profile.InputField"
+                        android:background="@android:color/transparent"/>
                 </TableRow>
 
                 <TableRow
@@ -123,12 +121,10 @@
                         android:gravity="center_vertical"
                         android:text="Soyad" />
 
-                    <TextView
+                    <EditText
                         android:id="@+id/activity_profile_content_lastname"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:gravity="center_vertical"
-                        android:text="ALDEMİR" />
+                        style="@style/DentalMarket.Profile.InputField"
+                        android:background="@android:color/transparent"/>
                 </TableRow>
 
 
@@ -144,9 +140,7 @@
 
                     <TextView
                         android:id="@+id/activity_profile_birthday"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:gravity="center_vertical"
+                        style="@style/DentalMarket.Profile.InputField"
                         android:text="1.1.1990" />
                 </TableRow>
 
@@ -159,12 +153,10 @@
                         android:layout_height="@dimen/activity_profile_text_height"
                         android:gravity="center_vertical"
                         android:text="Mesleğiniz" />
-
-                    <EditText
+                    <TextView
                         android:id="@+id/activity_profile_profession"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:gravity="center_vertical"
+                        style="@style/DentalMarket.Profile.InputField"
+                        android:background="@android:color/transparent"
                         android:hint="@string/profession" />
                 </TableRow>
 
@@ -177,12 +169,10 @@
                         android:layout_height="@dimen/activity_profile_text_height"
                         android:gravity="center_vertical"
                         android:text="Şehir" />
-                    <EditText
+                    <TextView
                         android:id="@+id/activity_profile_city_text"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:clickable="true"
-                        android:gravity="center_vertical"
+                        style="@style/DentalMarket.Profile.InputField"
+                        android:background="@android:color/transparent"
                         android:hint="@string/city" />
                 </TableRow>
 
@@ -195,11 +185,10 @@
                         android:layout_height="@dimen/activity_profile_text_height"
                         android:gravity="center_vertical"
                         android:text="İlçe" />
-                    <EditText
+                    <TextView
                         android:id="@+id/activity_profile_borough_text"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:gravity="center_vertical"
+                        style="@style/DentalMarket.Profile.InputField"
+                        android:background="@android:color/transparent"
                         android:hint="@string/borough" />
                 </TableRow>
 
@@ -212,11 +201,9 @@
                         android:layout_height="@dimen/activity_profile_text_height"
                         android:gravity="center_vertical"
                         android:text="Sabit Telefon" />
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:gravity="center_vertical"
-                        android:text="0312 212 12 12" />
+                    <EditText
+                        style="@style/DentalMarket.Profile.InputField"
+                        android:hint="@string/unknown_phone" />
                 </TableRow>
 
 
@@ -228,11 +215,9 @@
                         android:layout_height="@dimen/activity_profile_text_height"
                         android:gravity="center_vertical"
                         android:text="Cep Telefon" />
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:gravity="center_vertical"
-                        android:text="0532 512 12 12" />
+                    <EditText
+                        style="@style/DentalMarket.Profile.InputField"
+                        android:hint="@string/unknown_phone" />
                 </TableRow>
 
             </TableLayout>
