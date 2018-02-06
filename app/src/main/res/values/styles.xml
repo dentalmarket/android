@@ -33,6 +33,7 @@
         <item name="android:layout_weight">1</item>
         <item name="android:gravity">center_vertical</item>
         <item name="android:singleLine">true</item>
+        <item name="android:background">@android:color/transparent</item>
     </style>
 
     <style name="DentalMarket.RegisterEditText" parent="@android:style/TextAppearance.Small">

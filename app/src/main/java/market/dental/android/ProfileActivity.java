@@ -50,6 +50,7 @@ public class ProfileActivity extends AppCompatActivity {
     private TextView professionTextView;
     private TextView cityEditText;
     private TextView boroughEditText;
+    private TextView birthdayText;
 
     private List<Profession> professionList = new ArrayList<>();
     private ProfessionListAdapter professionListAdapter = null;
@@ -57,6 +58,9 @@ public class ProfileActivity extends AppCompatActivity {
     private CityListAdapter cityListAdapter = null;
     private boolean professionListRequestSuccess = false;
     private boolean cityListRequestSuccess = false;
+
+    private City selectedCity = null;
+    private Borough selectedBorough = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +76,8 @@ public class ProfileActivity extends AppCompatActivity {
         TextView activity_profile_header_rate = (TextView)findViewById(R.id.activity_profile_header_rate);
         EditText activity_profile_content_name = (EditText)findViewById(R.id.activity_profile_content_name);
         EditText activity_profile_content_lastname = (EditText)findViewById(R.id.activity_profile_content_lastname);
+        EditText activity_profile_phone = (EditText)findViewById(R.id.activity_profile_phone);
+        EditText activity_profile_mobile_phone = (EditText)findViewById(R.id.activity_profile_mobile_phone);
         professionTextView = (TextView)findViewById(R.id.activity_profile_profession);
         cityEditText = (TextView)findViewById(R.id.activity_profile_city_text);
         boroughEditText = (TextView)findViewById(R.id.activity_profile_borough_text);
@@ -87,6 +93,8 @@ public class ProfileActivity extends AppCompatActivity {
             activity_profile_header_rate.setText(" ?? / 10");
             activity_profile_content_name.setText(user.getFirst_name());
             activity_profile_content_lastname.setText(user.getLast_name());
+            activity_profile_phone.setText(user.getPhone());
+            activity_profile_mobile_phone.setText(user.getMobile_phone());
             professionTextView.setText(user.getJob());
         } catch (JSONException e) {
             e.printStackTrace();
@@ -202,7 +210,7 @@ public class ProfileActivity extends AppCompatActivity {
         // *****************************************************************************************
         //                          AJAX - DATEPICKER
         // *****************************************************************************************
-        TextView birthdayText = findViewById(R.id.activity_profile_birthday);
+        birthdayText = findViewById(R.id.activity_profile_birthday);
         birthdayText.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
@@ -214,10 +222,12 @@ public class ProfileActivity extends AppCompatActivity {
                     @Override
                     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                         Log.i(Result.LOG_TAG_INFO.getResultText() , "DENEME datepicker");
+                        birthdayText.setText(dayOfMonth + "." + (month+1) + "." + year);
                     }
                 } , year , month, day);
 
                 mDatePicker.show();
+
             }
         });
     }
@@ -267,8 +277,9 @@ public class ProfileActivity extends AppCompatActivity {
                 mBuilder.setAdapter(cityListAdapter, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        cityEditText.setText( ((City) cityListAdapter.getItem(which)).getName() );
-                        getBoroughListWithAjax(((City) cityListAdapter.getItem(which)).getId());
+                        selectedCity = (City) cityListAdapter.getItem(which);
+                        cityEditText.setText( selectedCity.getName() );
+                        getBoroughListWithAjax(selectedCity.getId());
                     }
                 });
                 mBuilder.show();
@@ -278,6 +289,11 @@ public class ProfileActivity extends AppCompatActivity {
 
 
     public void getBoroughListWithAjax(final int cityId){
+
+        // remove previous borough list
+        boroughEditText.setText("");
+        selectedBorough = null;
+
         progressDialog.show();
         // *****************************************************************************************
         //                          AJAX - GET PROFESSIONS
@@ -337,7 +353,8 @@ public class ProfileActivity extends AppCompatActivity {
                 mBuilder.setAdapter(boroughListAdapter, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        boroughEditText.setText(((Borough) boroughListAdapter.getItem(which)).getName());
+                        selectedBorough = (Borough) boroughListAdapter.getItem(which);
+                        boroughEditText.setText(selectedBorough.getName());
                     }
                 });
                 mBuilder.show();

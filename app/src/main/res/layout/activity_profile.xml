@@ -202,6 +202,7 @@
                         android:gravity="center_vertical"
                         android:text="Sabit Telefon" />
                     <EditText
+                        android:id="@+id/activity_profile_phone"
                         style="@style/DentalMarket.Profile.InputField"
                         android:hint="@string/unknown_phone" />
                 </TableRow>
@@ -216,6 +217,7 @@
                         android:gravity="center_vertical"
                         android:text="Cep Telefon" />
                     <EditText
+                        android:id="@+id/activity_profile_mobile_phone"
                         style="@style/DentalMarket.Profile.InputField"
                         android:hint="@string/unknown_phone" />
                 </TableRow>
