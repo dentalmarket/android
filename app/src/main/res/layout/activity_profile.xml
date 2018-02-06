@@ -15,11 +15,14 @@
         android:paddingTop="10dp"
         android:paddingBottom="10dp">
 
-        <ImageView
-            android:layout_width="160dp"
-            android:layout_height="120dp"
-            android:src="@drawable/ic_language_black_24dp"
-            />
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginLeft="20dp"
+            android:src="@drawable/ic_person_24dp"
+            app:civ_border_color="#FFFFFF"
+            app:civ_border_width="2dp" />
 
         <TableLayout
             android:layout_width="match_parent"
