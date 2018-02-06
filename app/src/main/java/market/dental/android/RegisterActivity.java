@@ -50,8 +50,8 @@ public class RegisterActivity extends AppCompatActivity {
     private Context context;
 
     private AlertDialog progressDialog;
-    private TextView boroughEditText;
-    private TextView cityEditText;
+    private TextView boroughTextView;
+    private TextView cityTextView;
     private TextView professionTextView;
     private boolean cityListRequestSuccess = false;
     private boolean professionListRequestSuccess = false;
@@ -69,6 +69,7 @@ public class RegisterActivity extends AppCompatActivity {
         requestQueue = Volley.newRequestQueue(context);
         professionListAdapter = new ProfessionListAdapter(context);
         cityListAdapter = new CityListAdapter(context);
+        boroughTextView = findViewById(R.id.activity_register_borough);
 
         AlertDialog.Builder progressDialogBuilder = new AlertDialog.Builder(this);
         progressDialogBuilder.setCancelable(false);
@@ -193,6 +194,11 @@ public class RegisterActivity extends AppCompatActivity {
 
 
     public void getBoroughListWithAjax(final int cityId){
+
+        // remove previous borough list
+        boroughTextView.setText("");
+        selectedBorough = null;
+
         progressDialog.show();
         // *****************************************************************************************
         //                          AJAX - GET PROFESSIONS
@@ -244,8 +250,7 @@ public class RegisterActivity extends AppCompatActivity {
 
 
     public void boroughSetOnClickListener(final BoroughListAdapter boroughListAdapter){
-        boroughEditText = findViewById(R.id.activity_register_borough);
-        boroughEditText.setOnClickListener(new View.OnClickListener(){
+        boroughTextView.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
                 AlertDialog.Builder mBuilder = new AlertDialog.Builder(RegisterActivity.this);
@@ -254,7 +259,7 @@ public class RegisterActivity extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         selectedBorough = (Borough) boroughListAdapter.getItem(which);
-                        boroughEditText.setText(selectedBorough.getName());
+                        boroughTextView.setText(selectedBorough.getName());
                     }
                 });
                 mBuilder.show();
@@ -264,8 +269,8 @@ public class RegisterActivity extends AppCompatActivity {
 
 
     public void citySetOnClickListener(){
-        cityEditText = findViewById(R.id.activity_register_city);
-        cityEditText.setOnClickListener(new View.OnClickListener(){
+        cityTextView = findViewById(R.id.activity_register_city);
+        cityTextView.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
                 AlertDialog.Builder mBuilder = new AlertDialog.Builder(RegisterActivity.this);
@@ -274,7 +279,7 @@ public class RegisterActivity extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         selectedCity = (City) cityListAdapter.getItem(which);
-                        cityEditText.setText(selectedCity.getName());
+                        cityTextView.setText(selectedCity.getName());
                         getBoroughListWithAjax(selectedCity.getId());
                     }
                 });
