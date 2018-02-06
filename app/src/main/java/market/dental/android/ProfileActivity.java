@@ -221,7 +221,6 @@ public class ProfileActivity extends AppCompatActivity {
                 DatePickerDialog mDatePicker = new DatePickerDialog(ProfileActivity.this , R.style.DialogTheme , new DatePickerDialog.OnDateSetListener(){
                     @Override
                     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                        Log.i(Result.LOG_TAG_INFO.getResultText() , "DENEME datepicker");
                         birthdayText.setText(dayOfMonth + "." + (month+1) + "." + year);
                     }
                 } , year , month, day);

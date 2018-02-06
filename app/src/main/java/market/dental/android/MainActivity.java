@@ -10,6 +10,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.view.menu.MenuView;
 import android.util.Log;
 import android.view.SubMenu;
@@ -33,6 +34,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.squareup.picasso.Picasso;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -40,7 +42,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import market.dental.adapter.BoroughListAdapter;
 import market.dental.adapter.ViewPagerAdapter;
+import market.dental.model.Borough;
 import market.dental.model.Category;
 import market.dental.util.Resource;
 import market.dental.util.Result;
@@ -52,6 +56,9 @@ public class MainActivity extends AppCompatActivity
     private Menu menu;
     private Menu navigationViewMenu;
     private NavigationView navigationView;
+    private AlertDialog progressDialog;
+    private RequestQueue requestQueue;
+    private Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,7 +66,7 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
 
         // Initialization
-        RequestQueue rq = Volley.newRequestQueue(this);
+        requestQueue = Volley.newRequestQueue(this);
         Resource.setDefaultAPITOKEN();
 
 
@@ -87,6 +94,11 @@ public class MainActivity extends AppCompatActivity
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         navigationViewMenu = navigationView.getMenu();
+
+        AlertDialog.Builder progressDialogBuilder = new AlertDialog.Builder(this);
+        progressDialogBuilder.setCancelable(false);
+        progressDialogBuilder.setView(getLayoutInflater().inflate(R.layout.dialog_progressbar,null));
+        progressDialog = progressDialogBuilder.create();
 
         SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.sp_dental_market), Context.MODE_PRIVATE);
         sharedPreferences.edit().clear().commit();
@@ -138,7 +150,7 @@ public class MainActivity extends AppCompatActivity
                 return params;
             }
         };
-        rq.add(request);
+        requestQueue.add(request);
 
 
         // *****************************************************************************************
@@ -185,8 +197,7 @@ public class MainActivity extends AppCompatActivity
                 startActivity(intent);
                 break;
             case R.id.right_menu_logout:
-                Resource.setDefaultAPITOKEN();
-                Log.i(Result.LOG_TAG_INFO.getResultText() , "MainActivity >> Settings >> logout");
+                userLogout();
                 break;
         }
 
@@ -232,6 +243,70 @@ public class MainActivity extends AppCompatActivity
                 menu.findItem(R.id.right_menu_logout).setVisible(false);
             }
         }
+    }
+
+
+    /**
+     * User Logout
+     *
+     * Kullanıcı logout olması durumunda API TOKEN değeri update edilir. Default API TOKEN set edilir
+     * Kullanıcının sessionId değeri silinir
+     * Sayfa sağ üst köşesindeki menu update edilir
+     */
+    public void userLogout(){
+
+        progressDialog.show();
+        // *****************************************************************************************
+        //                          AJAX - LOGOUT
+        // *****************************************************************************************
+        StringRequest request = new StringRequest(Request.Method.POST,
+                Resource.ajax_logout, new Response.Listener<String>() {
+
+            @Override
+            public void onResponse(String responseString) {
+                try {
+
+                    JSONObject response = new JSONObject(responseString);
+                    if(Result.SUCCESS.checkResult(new Result(response))){
+
+                        // remove API TOKEN & sessionId from shared Preference
+                        Resource.setDefaultAPITOKEN();
+                        SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.sp_dental_market), Context.MODE_PRIVATE);
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.remove(getString(R.string.sp_user_id));
+                        editor.commit();
+
+                        // update View
+                        onResume();
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                } finally {
+                    progressDialog.dismiss();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+                progressDialog.dismiss();
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams()  {
+                Map<String, String> params = new HashMap<>();
+                params.put(Resource.KEY_API_TOKEN, Resource.VALUE_API_TOKEN);
+                return params;
+            }
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String,String> params = new HashMap<String, String>();
+                params.put("Content-Type","application/x-www-form-urlencoded");
+                return params;
+            }
+        };
+        requestQueue.add(request);
     }
 
     @Override
