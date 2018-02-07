@@ -25,7 +25,7 @@ public class Resource {
 
     public static String DOMAIN_NAME = "http://dental.market";
     public static String SHAREDPREF_SEARCH_KEY = "SHAREDPREF_SEARCH_KEY";
-    public static String STATIC_ANDROID_API_TOKEN = "987654321AA";
+    public static String STATIC_ANDROID_API_TOKEN = "izcfpXu74i6YgIxSG712AEaohc0FfYpC";
     public static String VALUE_API_TOKEN = "";
     public static String KEY_API_TOKEN = "api_token";
     public static String KEY_PRODUCT_ID = "KEY_PRODUCT_ID";
