@@ -60,16 +60,18 @@ public class ProfileActivity extends AppCompatActivity {
     private EditText activity_profile_content_lastname;
     private EditText activity_profile_phone;
     private EditText activity_profile_mobile_phone;
-
+    private EditText activity_profile_password;
+    private EditText activity_profile_password_new;
+    private EditText activity_profile_password_check;
     private List<Profession> professionList = new ArrayList<>();
     private ProfessionListAdapter professionListAdapter = null;
     private List<City> cityList = new ArrayList<>();
     private CityListAdapter cityListAdapter = null;
     private boolean professionListRequestSuccess = false;
     private boolean cityListRequestSuccess = false;
-
     private City selectedCity = null;
     private Borough selectedBorough = null;
+    private String localError = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,6 +94,9 @@ public class ProfileActivity extends AppCompatActivity {
         cityEditText = (TextView)findViewById(R.id.activity_profile_city_text);
         boroughEditText = (TextView)findViewById(R.id.activity_profile_borough_text);
         Button updateProfileButton = (Button) findViewById(R.id.activity_profile_save_btn);
+        activity_profile_password = (EditText)findViewById(R.id.activity_profile_password);
+        activity_profile_password_new = (EditText)findViewById(R.id.activity_profile_password_new);
+        activity_profile_password_check = (EditText)findViewById(R.id.activity_profile_password_check);
 
         // INITIALIZATION
         updateView();
@@ -382,12 +387,18 @@ public class ProfileActivity extends AppCompatActivity {
             public void onResponse(String responseString) {
                 try {
                     // TODO: result objesinin kontrolü YAPILACAK
-                    Log.i("DENEME" , responseString);
                     JSONObject response = new JSONObject(responseString);
                     JSONObject userJsonObject = response.getJSONObject("content").getJSONObject("user");
+                    String responseMessage = response.getJSONObject("content").getString("message");
 
                     setUserSession(userJsonObject);
                     updateView();
+
+                    if(localError.length()>0){
+                        Toast.makeText(context, localError , Toast.LENGTH_LONG).show();
+                    }else{
+                        Toast.makeText(context, responseMessage , Toast.LENGTH_LONG).show();
+                    }
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -406,6 +417,7 @@ public class ProfileActivity extends AppCompatActivity {
         }){
             @Override
             protected Map<String, String> getParams()  {
+                localError = "";
                 Map<String, String> params = new HashMap<>();
                 params.put(Resource.KEY_API_TOKEN, Resource.VALUE_API_TOKEN);
                 params.put("first_name", activity_profile_content_name.getText().toString());
@@ -416,6 +428,19 @@ public class ProfileActivity extends AppCompatActivity {
                 params.put("mobile_phone", activity_profile_mobile_phone.getText().toString());
                 params.put("job", professionTextView.getText().toString());
                 params.put("birthday", birthdayText.getText().toString());
+
+                // Şifre Değişikliği Durumu
+                if(activity_profile_password_new.getText().toString().length() > 0 &&
+                        activity_profile_password_check.getText().toString().length() > 0){
+                    if(activity_profile_password_new.getText().toString().equals(
+                            activity_profile_password_check.getText().toString())){
+                        params.put("password", activity_profile_password.getText().toString());
+                        params.put("new_password", activity_profile_password_new.getText().toString());
+                    }else{
+                        localError = "Yeni Şifrenizi Doğru Giriniz...";
+                    }
+                }
+
                 return params;
             }
             @Override
@@ -459,6 +484,9 @@ public class ProfileActivity extends AppCompatActivity {
             activity_profile_mobile_phone.setText(user.getMobile_phone());
             professionTextView.setText(user.getJob());
             birthdayText.setText(user.getBirthday());
+            activity_profile_password.setText(null);
+            activity_profile_password_new.setText(null);
+            activity_profile_password_check.setText(null);
         } catch (JSONException e) {
             e.printStackTrace();
             Log.i(Result.LOG_TAG_INFO.getResultText(),"" + this.getClass() + " >> JSONException >> updateView");

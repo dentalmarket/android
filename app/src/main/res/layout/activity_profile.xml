@@ -261,6 +261,7 @@
                         android:text="Eski Şifre" />
 
                     <EditText
+                        android:id="@+id/activity_profile_password"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:ems="10"
@@ -282,6 +283,7 @@
                         android:text="Yeni Şifre" />
 
                     <EditText
+                        android:id="@+id/activity_profile_password_new"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:ems="10"
@@ -303,6 +305,7 @@
                         android:text="Yeni Şifre tekrar" />
 
                     <EditText
+                        android:id="@+id/activity_profile_password_check"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:ems="10"
