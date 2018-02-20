@@ -98,9 +98,6 @@ public class ProfileActivity extends AppCompatActivity {
         activity_profile_password_new = (EditText)findViewById(R.id.activity_profile_password_new);
         activity_profile_password_check = (EditText)findViewById(R.id.activity_profile_password_check);
 
-        // INITIALIZATION
-        updateView();
-
 
         AlertDialog.Builder progressDialogBuilder = new AlertDialog.Builder(this);
         progressDialogBuilder.setCancelable(false);
@@ -126,19 +123,21 @@ public class ProfileActivity extends AppCompatActivity {
                     professionListAdapter = new ProfessionListAdapter(context);
                     professionListAdapter.setProfessionList(professionList);
                     professionSetOnClickListener();
-                    professionListRequestSuccess = true;
 
                 } catch (JSONException e) {
                     e.printStackTrace();
                     Log.i(Result.LOG_TAG_INFO.getResultText(),"" + this.getClass() + " >> JSONException >> ajax_get_professions");
 
                 } finally {
+                    professionListRequestSuccess = true;
                     closeProgressDialog(progressDialog);
                 }
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                professionListRequestSuccess = true;
+                closeProgressDialog(progressDialog);
                 error.printStackTrace();
                 Log.i(Result.LOG_TAG_INFO.getResultText(),"" + this.getClass() + " >> ERROR ON GET DATA >> ajax_get_professions");
             }
@@ -176,18 +175,20 @@ public class ProfileActivity extends AppCompatActivity {
                     cityListAdapter = new CityListAdapter(context);
                     cityListAdapter.setCityList(cityList);
                     citySetOnClickListener();
-                    cityListRequestSuccess = true;
 
                 } catch (JSONException e) {
                     e.printStackTrace();
                     Log.i(Result.LOG_TAG_INFO.getResultText(),"" + this.getClass() + " >> JSONException >> ajax_get_city_list");
                 } finally {
+                    cityListRequestSuccess = true;
                     closeProgressDialog(progressDialog);
                 }
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                cityListRequestSuccess = true;
+                closeProgressDialog(progressDialog);
                 error.printStackTrace();
                 Log.i(Result.LOG_TAG_INFO.getResultText(),"" + this.getClass() + " >> ERROR ON GET DATA >> ajax_get_city_list");
             }
@@ -256,6 +257,7 @@ public class ProfileActivity extends AppCompatActivity {
 
     public void closeProgressDialog(AlertDialog progressDialog){
         if(professionListRequestSuccess && cityListRequestSuccess){
+            updateView();
             progressDialog.dismiss();
         }
     }
@@ -422,8 +424,8 @@ public class ProfileActivity extends AppCompatActivity {
                 params.put(Resource.KEY_API_TOKEN, Resource.VALUE_API_TOKEN);
                 params.put("first_name", activity_profile_content_name.getText().toString());
                 params.put("last_name", activity_profile_content_lastname.getText().toString());
-                params.put("city", "41");
-                params.put("district", "36");
+                params.put("city", String.valueOf(selectedCity.getId()));
+                params.put("district", String.valueOf(selectedBorough.getId()));
                 params.put("phone", activity_profile_phone.getText().toString());
                 params.put("mobile_phone", activity_profile_mobile_phone.getText().toString());
                 params.put("job", professionTextView.getText().toString());
@@ -487,6 +489,15 @@ public class ProfileActivity extends AppCompatActivity {
             activity_profile_password.setText(null);
             activity_profile_password_new.setText(null);
             activity_profile_password_check.setText(null);
+
+            cityLoop:
+            for(City city:cityList){
+                if(String.valueOf(city.getId()).equals(user.getCity_id())){
+                    cityEditText.setText(city.getName());
+                    break cityLoop;
+                }
+            }
+
         } catch (JSONException e) {
             e.printStackTrace();
             Log.i(Result.LOG_TAG_INFO.getResultText(),"" + this.getClass() + " >> JSONException >> updateView");
