@@ -33,6 +33,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -66,6 +67,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private static final int REQUEST_READ_CONTACTS = 0;
     private SharedPreferences sharedPref = null;
     private RequestQueue requestQueue;
+    private Context context;
 
     // UI references.
     private AutoCompleteTextView mEmailView;
@@ -80,6 +82,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         // Initialization
+        context = this;
         requestQueue = Volley.newRequestQueue(this);
         sharedPref = getSharedPreferences(getString(R.string.sp_dental_market), Context.MODE_PRIVATE);
         mLoginFormView = findViewById(R.id.login_form);
@@ -239,13 +242,10 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                         // TODO: result objesinin kontrolü YAPILACAK
                         JSONObject response = new JSONObject(responseString);
                         JSONObject content = response.getJSONObject("content");
-
                         setUserSessionAndFinish(content);
 
-                        // TODO: 1- dönen content sharedPreference içerisinde tutulacak
-                        // TODO: 2- UserLoginTask kaldırılıp direk Volley kullanılacak
-
                     } catch (JSONException e) {
+                        showProgress(false);
                         e.printStackTrace();
                         Log.i(Result.LOG_TAG_INFO.getResultText(),"LoginActivity >> JSONException >> 120");
                     }
@@ -253,6 +253,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
+                    showProgress(false);
+                    Toast.makeText( context, "Beklenmeyen Hata" , Toast.LENGTH_LONG).show();
                     error.printStackTrace();
                     Log.i(Result.LOG_TAG_INFO.getResultText(),"LoginActivity >> ERROR ON GET DATA >> 121");
                 }
@@ -260,6 +262,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 @Override
                 protected Map<String, String> getParams()  {
                     Map<String, String> params = new HashMap<>();
+                    params.put(Resource.KEY_API_TOKEN, Resource.VALUE_API_TOKEN);
                     params.put("email", mEmailView.getText().toString());
                     params.put("password", mPasswordView.getText().toString());
                     return params;
