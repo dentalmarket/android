@@ -96,6 +96,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                progressDialog.dismiss();
                 error.printStackTrace();
                 Log.i(Result.LOG_TAG_INFO.getResultText(),"" + this.getClass().getName() + " >> ERROR ON GET DATA >> 122");
             }

@@ -17,6 +17,7 @@ public class User {
     private String last_name;
     private String phone;
     private String mobile_phone;
+    private String birthday;
     private String job;
     private String api_token;
     private String city_id;
@@ -37,6 +38,8 @@ public class User {
                     userJsonObject.getString("phone"):"";
             this.mobile_phone = userJsonObject.has("mobile_phone") && !userJsonObject.isNull("mobile_phone")?
                     userJsonObject.getString("mobile_phone"):"";
+            this.birthday = userJsonObject.has("birthday") && !userJsonObject.isNull("birthday")?
+                    userJsonObject.getString("birthday"):"";
             this.job = userJsonObject.has("job") && !userJsonObject.isNull("job")?
                     userJsonObject.getString("job"):"";
             this.api_token = userJsonObject.has("api_token") && !userJsonObject.isNull("api_token")?
@@ -96,6 +99,14 @@ public class User {
 
     public void setMobile_phone(String mobile_phone) {
         this.mobile_phone = mobile_phone;
+    }
+
+    public String getBirthday() {
+        return birthday;
+    }
+
+    public void setBirthday(String birthday) {
+        this.birthday = birthday;
     }
 
     public String getJob() {

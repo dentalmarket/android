@@ -10,9 +10,11 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -51,6 +53,13 @@ public class ProfileActivity extends AppCompatActivity {
     private TextView cityEditText;
     private TextView boroughEditText;
     private TextView birthdayText;
+    private TextView activity_profile_header_name;
+    private TextView activity_profile_header_mail;
+    private TextView activity_profile_header_rate;
+    private EditText activity_profile_content_name;
+    private EditText activity_profile_content_lastname;
+    private EditText activity_profile_phone;
+    private EditText activity_profile_mobile_phone;
 
     private List<Profession> professionList = new ArrayList<>();
     private ProfessionListAdapter professionListAdapter = null;
@@ -71,34 +80,21 @@ public class ProfileActivity extends AppCompatActivity {
         context = this;
         requestQueue = Volley.newRequestQueue(context);
 
-        TextView activity_profile_header_name = (TextView)findViewById(R.id.activity_profile_header_name);
-        TextView activity_profile_header_mail = (TextView)findViewById(R.id.activity_profile_header_mail);
-        TextView activity_profile_header_rate = (TextView)findViewById(R.id.activity_profile_header_rate);
-        EditText activity_profile_content_name = (EditText)findViewById(R.id.activity_profile_content_name);
-        EditText activity_profile_content_lastname = (EditText)findViewById(R.id.activity_profile_content_lastname);
-        EditText activity_profile_phone = (EditText)findViewById(R.id.activity_profile_phone);
-        EditText activity_profile_mobile_phone = (EditText)findViewById(R.id.activity_profile_mobile_phone);
+        activity_profile_header_name = (TextView)findViewById(R.id.activity_profile_header_name);
+        activity_profile_header_mail = (TextView)findViewById(R.id.activity_profile_header_mail);
+        activity_profile_header_rate = (TextView)findViewById(R.id.activity_profile_header_rate);
+        activity_profile_content_name = (EditText)findViewById(R.id.activity_profile_content_name);
+        activity_profile_content_lastname = (EditText)findViewById(R.id.activity_profile_content_lastname);
+        activity_profile_phone = (EditText)findViewById(R.id.activity_profile_phone);
+        activity_profile_mobile_phone = (EditText)findViewById(R.id.activity_profile_mobile_phone);
+        birthdayText = findViewById(R.id.activity_profile_birthday);
         professionTextView = (TextView)findViewById(R.id.activity_profile_profession);
         cityEditText = (TextView)findViewById(R.id.activity_profile_city_text);
         boroughEditText = (TextView)findViewById(R.id.activity_profile_borough_text);
-
+        Button updateProfileButton = (Button) findViewById(R.id.activity_profile_save_btn);
 
         // INITIALIZATION
-        sharedPref = getSharedPreferences(getString(R.string.sp_dental_market), Context.MODE_PRIVATE);
-        try {
-            JSONObject userJsonObject = new JSONObject(sharedPref.getString(getString(R.string.sp_user_json_str) , ""));
-            User user = new User(userJsonObject);
-            activity_profile_header_name.setText(user.getFirst_name() + " " + user.getLast_name());
-            activity_profile_header_mail.setText(user.getEmail());
-            activity_profile_header_rate.setText(" ?? / 10");
-            activity_profile_content_name.setText(user.getFirst_name());
-            activity_profile_content_lastname.setText(user.getLast_name());
-            activity_profile_phone.setText(user.getPhone());
-            activity_profile_mobile_phone.setText(user.getMobile_phone());
-            professionTextView.setText(user.getJob());
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        updateView();
 
 
         AlertDialog.Builder progressDialogBuilder = new AlertDialog.Builder(this);
@@ -210,7 +206,6 @@ public class ProfileActivity extends AppCompatActivity {
         // *****************************************************************************************
         //                          AJAX - DATEPICKER
         // *****************************************************************************************
-        birthdayText = findViewById(R.id.activity_profile_birthday);
         birthdayText.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
@@ -227,6 +222,17 @@ public class ProfileActivity extends AppCompatActivity {
 
                 mDatePicker.show();
 
+            }
+        });
+
+
+        // *****************************************************************************************
+        //                          CLICK EVENTS
+        // *****************************************************************************************
+        updateProfileButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                ajaxUpdateProfile();
             }
         });
     }
@@ -361,4 +367,101 @@ public class ProfileActivity extends AppCompatActivity {
         });
     }
 
+
+    // *********************************************************************************************
+    //                          FUNCTION - UPDATE PROFILE
+    // *********************************************************************************************
+    public void ajaxUpdateProfile(){
+
+        progressDialog.show();
+
+        StringRequest requestUpdateProfile = new StringRequest(Request.Method.POST,
+                Resource.ajax_profile_update, new Response.Listener<String>() {
+
+            @Override
+            public void onResponse(String responseString) {
+                try {
+                    // TODO: result objesinin kontrolü YAPILACAK
+                    Log.i("DENEME" , responseString);
+                    JSONObject response = new JSONObject(responseString);
+                    JSONObject userJsonObject = response.getJSONObject("content").getJSONObject("user");
+
+                    setUserSession(userJsonObject);
+                    updateView();
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Log.i(Result.LOG_TAG_INFO.getResultText(),"" + this.getClass() + " >> JSONException >> ajaxUpdateProfile");
+                } finally {
+                    progressDialog.dismiss();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                progressDialog.dismiss();
+                error.printStackTrace();
+                Log.i(Result.LOG_TAG_INFO.getResultText(),"" + this.getClass() + " >> ERROR ON GET DATA >> ajaxUpdateProfile");
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams()  {
+                Map<String, String> params = new HashMap<>();
+                params.put(Resource.KEY_API_TOKEN, Resource.VALUE_API_TOKEN);
+                params.put("first_name", activity_profile_content_name.getText().toString());
+                params.put("last_name", activity_profile_content_lastname.getText().toString());
+                params.put("city", "41");
+                params.put("district", "36");
+                params.put("phone", activity_profile_phone.getText().toString());
+                params.put("mobile_phone", activity_profile_mobile_phone.getText().toString());
+                params.put("job", professionTextView.getText().toString());
+                params.put("birthday", birthdayText.getText().toString());
+                return params;
+            }
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String,String> params = new HashMap<String, String>();
+                params.put("Content-Type","application/x-www-form-urlencoded");
+                return params;
+            }
+        };
+        requestQueue.add(requestUpdateProfile);
+    }
+
+
+    /**
+     * sp_user_id key değerine user session değeri yazılır
+     */
+    protected void setUserSession(JSONObject userJsonObject){
+        User dentalUser = new User(userJsonObject);
+        Resource.VALUE_API_TOKEN = dentalUser.getApi_token();
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putInt(getString(R.string.sp_user_id), dentalUser.getId());
+        editor.putString(getString(R.string.sp_user_json_str), userJsonObject.toString());
+        editor.commit();
+    }
+
+
+    /**
+     * activity_profile.xml data ile doldurulur
+     */
+    protected void updateView(){
+        sharedPref = getSharedPreferences(getString(R.string.sp_dental_market), Context.MODE_PRIVATE);
+        try {
+            JSONObject userJsonObject = new JSONObject(sharedPref.getString(getString(R.string.sp_user_json_str) , ""));
+            User user = new User(userJsonObject);
+            activity_profile_header_name.setText(user.getFirst_name() + " " + user.getLast_name());
+            activity_profile_header_mail.setText(user.getEmail());
+            activity_profile_header_rate.setText(" ?? / 10");
+            activity_profile_content_name.setText(user.getFirst_name());
+            activity_profile_content_lastname.setText(user.getLast_name());
+            activity_profile_phone.setText(user.getPhone());
+            activity_profile_mobile_phone.setText(user.getMobile_phone());
+            professionTextView.setText(user.getJob());
+            birthdayText.setText(user.getBirthday());
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Log.i(Result.LOG_TAG_INFO.getResultText(),"" + this.getClass() + " >> JSONException >> updateView");
+        }
+    }
 }
