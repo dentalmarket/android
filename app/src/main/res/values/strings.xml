@@ -43,6 +43,7 @@
     <string name="action_settings">Settings</string>
     <string name="right_menu_login">Giriş</string>
     <string name="right_menu_profile">Profil</string>
+    <string name="right_menu_messages">Mesajlar</string>
     <string name="right_menu_logout">Çıkış</string>
 
 
@@ -71,5 +72,8 @@
     <string name="currency_usd">\uf155</string>
     <string name="currency_euro">\uf153</string>
     <string name="currency_bitcoin">\uf15a</string>
+
+    <!-- ACTIVITY TITLES -->
+    <string name="title_activity_conversation_list">Sohbet Listesi</string>
 
 </resources>

@@ -196,6 +196,10 @@ public class MainActivity extends AppCompatActivity
                 intent = new Intent(this,ProfileActivity.class);
                 startActivity(intent);
                 break;
+            case R.id.right_menu_messages:
+                intent = new Intent(this,ConversationListActivity.class);
+                startActivity(intent);
+                break;
             case R.id.right_menu_logout:
                 userLogout();
                 break;
@@ -236,10 +240,12 @@ public class MainActivity extends AppCompatActivity
             if(userSessionID != -1){
                 menu.findItem(R.id.right_menu_login).setVisible(false);
                 menu.findItem(R.id.right_menu_profile).setVisible(true);
+                menu.findItem(R.id.right_menu_messages).setVisible(true);
                 menu.findItem(R.id.right_menu_logout).setVisible(true);
             }else{
                 menu.findItem(R.id.right_menu_login).setVisible(true);
                 menu.findItem(R.id.right_menu_profile).setVisible(false);
+                menu.findItem(R.id.right_menu_messages).setVisible(false);
                 menu.findItem(R.id.right_menu_logout).setVisible(false);
             }
         }

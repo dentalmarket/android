@@ -16,6 +16,13 @@
         app:showAsAction="never" />
 
     <item
+        android:id="@+id/right_menu_messages"
+        android:orderInCategory="100"
+        android:title="@string/right_menu_messages"
+        android:visible="false"
+        app:showAsAction="never" />
+
+    <item
         android:id="@+id/right_menu_logout"
         android:orderInCategory="100"
         android:title="@string/right_menu_logout"
