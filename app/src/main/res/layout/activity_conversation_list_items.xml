@@ -25,17 +25,17 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/activity_conversation_list_item_product_name"
+                android:id="@+id/activity_conversation_list_item_name_surname"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="left"
                 android:maxLines="2"
                 android:paddingLeft="16dp"
                 android:text="@string/unknown_name"
-                android:textSize="14dp" />
+                android:textSize="16dp" />
 
             <TextView
-                android:id="@+id/activity_conversation_list_item_product_brand"
+                android:id="@+id/activity_conversation_list_item_message"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="left"
@@ -43,20 +43,16 @@
                 android:paddingLeft="16dp"
                 android:paddingTop="4dp"
                 android:text="@string/unknown_name"
-                android:textColor="#E3D6BF"
-                android:textSize="8dp" />
+                android:textSize="14dp" />
 
             <TextView
-                android:id="@+id/activity_conversation_list_item_product_price"
+                android:id="@+id/activity_conversation_list_item_date"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="left"
-                android:paddingTop="12dp"
-                android:paddingLeft="80dp"
+                android:gravity="right"
+                android:paddingRight="20dp"
                 android:text="@string/unknown_name"
-                android:textStyle="bold"
-                android:textColor="#31AC7A"
-                android:textSize="16dp" />
+                android:textSize="14dp" />
 
         </LinearLayout>
 
