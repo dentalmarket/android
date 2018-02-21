@@ -66,6 +66,7 @@ public class ProfileActivity extends AppCompatActivity {
     private List<Profession> professionList = new ArrayList<>();
     private ProfessionListAdapter professionListAdapter = null;
     private List<City> cityList = new ArrayList<>();
+    private List<Borough> boroughList = new ArrayList<>();
     private CityListAdapter cityListAdapter = null;
     private boolean professionListRequestSuccess = false;
     private boolean cityListRequestSuccess = false;
@@ -291,7 +292,7 @@ public class ProfileActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int which) {
                         selectedCity = (City) cityListAdapter.getItem(which);
                         cityEditText.setText( selectedCity.getName() );
-                        getBoroughListWithAjax(selectedCity.getId());
+                        getBoroughListWithAjax(selectedCity.getId(), null);
                     }
                 });
                 mBuilder.show();
@@ -300,7 +301,7 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
 
-    public void getBoroughListWithAjax(final int cityId){
+    public void getBoroughListWithAjax(final int cityId , final String userBoroughId){
 
         // remove previous borough list
         boroughEditText.setText("");
@@ -320,9 +321,20 @@ public class ProfileActivity extends AppCompatActivity {
                     JSONObject response = new JSONObject(responseString);
                     JSONArray content = response.getJSONArray("content");
 
-                    List<Borough> boroughList = Borough.getBoroughList(content);
+                    boroughList = Borough.getBoroughList(content);
                     BoroughListAdapter boroughListAdapter = new BoroughListAdapter(context,boroughList);
                     boroughSetOnClickListener(boroughListAdapter);
+
+                    if(userBoroughId!=null){
+                        boroughLoop:
+                        for(Borough borough:boroughList){
+                            if(String.valueOf(borough.getId()).equals(userBoroughId)){
+                                selectedBorough = borough;
+                                boroughEditText.setText(selectedBorough.getName());
+                                break boroughLoop;
+                            }
+                        }
+                    }
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -493,7 +505,9 @@ public class ProfileActivity extends AppCompatActivity {
             cityLoop:
             for(City city:cityList){
                 if(String.valueOf(city.getId()).equals(user.getCity_id())){
-                    cityEditText.setText(city.getName());
+                    selectedCity = city;
+                    cityEditText.setText(selectedCity.getName());
+                    getBoroughListWithAjax(selectedCity.getId() , user.getBorough_id());
                     break cityLoop;
                 }
             }
