@@ -14,7 +14,7 @@
             android:id="@+id/activity_conversation_list_item_image"
             android:layout_width="100dp"
             android:layout_height="match_parent"
-            android:src="@drawable/ic_image_black_24dp"/>
+            android:src="@drawable/ic_person_24dp"/>
 
         <LinearLayout
             android:layout_width="match_parent"

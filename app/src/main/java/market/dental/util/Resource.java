@@ -24,6 +24,7 @@ public class Resource {
     public static String ajax_get_city_list = "http://dental.market/api/get/cities";
     public static String ajax_get_borough_list = "http://dental.market/api/get/towns";
     public static String ajax_get_conversation_list = "http://dental.market/api/get/userMessages";
+    public static String ajax_get_message_list = "http://dental.market/api/get/convoMessages";
 
     public static String DOMAIN_NAME = "http://dental.market";
     public static String SHAREDPREF_SEARCH_KEY = "SHAREDPREF_SEARCH_KEY";

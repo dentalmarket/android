@@ -75,5 +75,6 @@
 
     <!-- ACTIVITY TITLES -->
     <string name="title_activity_conversation_list">Sohbet Listesi</string>
+    <string name="title_activity_message_list">Mesajlarınız</string>
 
 </resources>

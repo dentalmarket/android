@@ -1,15 +1,12 @@
 package market.dental.android;
 
-import android.content.Intent;
-import android.os.Bundle;
+import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -21,35 +18,42 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import market.dental.adapter.ConversationListAdapter;
-import market.dental.model.Conversation;
+import market.dental.adapter.MessageListAdapter;
+import market.dental.model.Message;
 import market.dental.util.Resource;
 import market.dental.util.Result;
 
-public class ConversationListActivity extends AppCompatActivity {
+public class MessageListActivity extends AppCompatActivity {
 
-    private ConversationListAdapter conversationListAdapter;
+    private MessageListAdapter messageListAdapter;
     private RequestQueue requestQueue;
-    private TextView placeHolder;
+    private Context context;
+    private RecyclerView messageRecycler;
+    private RecyclerView.LayoutManager messageRecyclerLayoutManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_conversation_list);
+        setContentView(R.layout.activity_message_list);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         // Initialization
+        context = this;
         requestQueue = Volley.newRequestQueue(this);
-        conversationListAdapter = new ConversationListAdapter(this);
-        placeHolder = (TextView)findViewById(R.id.activity_conversation_list_empty);
+        messageRecycler = (RecyclerView) findViewById(R.id.reyclerview_message_list);
+        messageRecyclerLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL , false);
 
-        // Get List
-        this.getConversationList();
+        // *****************************************************************************************
+        // *****************************************************************************************
+        // https://blog.sendbird.com/android-chat-tutorial-building-a-messaging-ui
+        // *****************************************************************************************
+        // *****************************************************************************************
+
+        getMessageList();
     }
 
     @Override
@@ -66,10 +70,10 @@ public class ConversationListActivity extends AppCompatActivity {
     // *********************************************************************************************
     //                        AJAX - GET CONVERSATION LIST
     // *********************************************************************************************
-    public void getConversationList(){
+    public void getMessageList(){
 
         StringRequest jsonObjectRequest = new StringRequest(Request.Method.POST,
-                Resource.ajax_get_conversation_list, new Response.Listener<String>() {
+                Resource.ajax_get_message_list, new Response.Listener<String>() {
 
             @Override
             public void onResponse(String responseString) {
@@ -79,29 +83,10 @@ public class ConversationListActivity extends AppCompatActivity {
                     JSONObject response = new JSONObject(responseString);
                     JSONObject content = response.getJSONObject("content");
 
-                    conversationListAdapter.setConversationList(Conversation.ConversationList(content.getJSONArray("conversations")));
-
-                    if(conversationListAdapter.getCount() > 0){
-                        placeHolder.setVisibility(View.GONE);
-                        ListView listView = findViewById(R.id.activity_conversation_list_main);
-                        listView.setAdapter(conversationListAdapter);
-                        listView.setOnItemClickListener(
-                                new AdapterView.OnItemClickListener() {
-                                    @Override
-                                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-                                        //int productId = ((Product) parent.getItemAtPosition(position)).getId();
-                                        //Bundle bundle = new Bundle();
-                                        //bundle.putInt(Resource.KEY_PRODUCT_ID, productId);
-                                        Intent intent = new Intent(view.getContext(),MessageListActivity.class);
-                                        //intent.putExtras(bundle);
-                                        view.getContext().startActivity(intent);
-
-                                        //Toast.makeText(view.getContext() , "Sohbetin mesajları açılacak ", Toast.LENGTH_LONG).show();
-                                    }
-                                }
-                        );
-                    }
+                    List<Message> messageList =  Message.MessageList(content.getJSONArray("messages"));
+                    messageListAdapter = new MessageListAdapter(context, messageList);
+                    messageRecycler.setLayoutManager(new LinearLayoutManager(context));
+                    messageRecycler.setAdapter(messageListAdapter);
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -120,6 +105,7 @@ public class ConversationListActivity extends AppCompatActivity {
             protected Map<String, String> getParams()  {
                 Map<String, String> params = new HashMap<>();
                 params.put(Resource.KEY_API_TOKEN, Resource.VALUE_API_TOKEN);
+                params.put("conversationId", "12");
                 return params;
             }
             @Override
@@ -131,5 +117,4 @@ public class ConversationListActivity extends AppCompatActivity {
         };
         requestQueue.add(jsonObjectRequest);
     }
-
 }
