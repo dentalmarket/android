@@ -37,6 +37,14 @@ public class MessageListAdapter extends RecyclerView.Adapter {
         this.userId = userId;
     }
 
+    public List<Message> getMessageList() {
+        return messageList;
+    }
+
+    public void setMessageList(List<Message> messageList) {
+        this.messageList = messageList;
+    }
+
     @Override
     public int getItemCount() {
         return messageList.size();

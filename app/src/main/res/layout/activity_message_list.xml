@@ -39,7 +39,7 @@
         app:layout_constraintLeft_toLeftOf="parent">
 
         <EditText
-            android:id="@+id/edittext_chatbox"
+            android:id="@+id/activity_messagelist_send_message_txt"
             android:hint="@string/enter_message"
             android:background="@android:color/transparent"
             android:layout_gravity="center"

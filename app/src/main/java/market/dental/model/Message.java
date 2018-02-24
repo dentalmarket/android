@@ -4,7 +4,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import market.dental.util.Resource;
@@ -22,6 +25,14 @@ public class Message {
     private String createdDate;
     private String updatedDate;
     private String deletedDate;
+
+    public Message (String userId , String message){
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        this.createdDate = df.format(new Date());
+        this.updatedDate = df.format(new Date());
+        this.message = message;
+        this.userId = userId;
+    }
 
     public Message(JSONObject messageJsonObject){
         try {

@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -22,6 +23,9 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -41,7 +45,10 @@ public class MessageListActivity extends AppCompatActivity {
     private RecyclerView messageRecycler;
     private RecyclerView.LayoutManager messageRecyclerLayoutManager;
     private Button sendMessage;
+    private EditText messageText;
+    private String receiverId;
     private int userId=-1;
+    private Message newMessage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +63,7 @@ public class MessageListActivity extends AppCompatActivity {
         messageRecyclerLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL , false);
         sharedPref = getSharedPreferences(getString(R.string.sp_dental_market), Context.MODE_PRIVATE);
         sendMessage = (Button) findViewById(R.id.activity_messagelist_send_message_btn);
+        messageText = (EditText)findViewById(R.id.activity_messagelist_send_message_txt);
 
         try {
             JSONObject userJsonObject = new JSONObject(sharedPref.getString(getString(R.string.sp_user_json_str) , ""));
@@ -65,6 +73,10 @@ public class MessageListActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
+        Intent intent = getIntent();
+        if(intent.hasExtra(Resource.KEY_MESSAGE_RECEIVER_ID) && intent.getStringExtra(Resource.KEY_MESSAGE_RECEIVER_ID).length()>0){
+            receiverId = intent.getStringExtra(Resource.KEY_MESSAGE_RECEIVER_ID);
+        }
 
         // *****************************************************************************************
         // *****************************************************************************************
@@ -107,12 +119,10 @@ public class MessageListActivity extends AppCompatActivity {
                     messageRecycler.setLayoutManager(new LinearLayoutManager(context));
                     messageRecycler.setAdapter(messageListAdapter);
 
-                    final Message testMessage = messageList.get(0);
                     sendMessage.setOnClickListener(new View.OnClickListener(){
                         @Override
                         public void onClick(View v) {
-                            messageListAdapter.addItem(testMessage);
-                            messageListAdapter.notifyDataSetChanged();
+                            sendMessage();
                         }
                     });
 
@@ -149,5 +159,65 @@ public class MessageListActivity extends AppCompatActivity {
             }
         };
         requestQueue.add(jsonObjectRequest);
+    }
+
+
+    // *********************************************************************************************
+    //                        AJAX - SEND MESSAGE
+    // *********************************************************************************************
+    public void sendMessage(){
+        final String message = messageText.getText().toString();
+        messageText.setText("");
+        if(message.length()>0){
+
+            StringRequest jsonObjectRequest = new StringRequest(Request.Method.POST,
+                    Resource.ajax_send_message, new Response.Listener<String>() {
+
+                @Override
+                public void onResponse(String responseString) {
+
+                    try {
+                        // TODO: result objesinin kontrolü YAPILACAK
+                        JSONObject response = new JSONObject(responseString);
+
+                        newMessage = new Message(String.valueOf(userId),message);
+                        sendMessage.setOnClickListener(new View.OnClickListener(){
+                            @Override
+                            public void onClick(View v) {
+                                messageListAdapter.addItem(newMessage);
+                                messageListAdapter.notifyDataSetChanged();
+                            }
+                        });
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        Log.i(Result.LOG_TAG_INFO.getResultText(),"ConversationListActivity >> JSONException >> 120");
+                    }
+                }
+
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    error.printStackTrace();
+                    Log.i(Result.LOG_TAG_INFO.getResultText(),"ConversationListActivity >> ERROR ON GET DATA >> 121");
+                }
+            }){
+                @Override
+                protected Map<String, String> getParams()  {
+                    Map<String, String> params = new HashMap<>();
+                    params.put(Resource.KEY_API_TOKEN, Resource.VALUE_API_TOKEN);
+                    params.put("receiver_id", receiverId);
+                    params.put("message", message);
+                    return params;
+                }
+                @Override
+                public Map<String, String> getHeaders() {
+                    Map<String,String> params = new HashMap<String, String>();
+                    params.put("Content-Type","application/x-www-form-urlencoded");
+                    return params;
+                }
+            };
+            requestQueue.add(jsonObjectRequest);
+        }
     }
 }

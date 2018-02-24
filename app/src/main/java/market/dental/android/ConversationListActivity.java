@@ -89,9 +89,9 @@ public class ConversationListActivity extends AppCompatActivity {
                                 new AdapterView.OnItemClickListener() {
                                     @Override
                                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                                        int conversationId = ((Conversation) parent.getItemAtPosition(position)).getId();
+                                        int receiverId = ((Conversation) parent.getItemAtPosition(position)).getUserId();
                                         Bundle bundle = new Bundle();
-                                        bundle.putString(Resource.KEY_CONVERSATION_ID, String.valueOf(conversationId));
+                                        bundle.putString(Resource.KEY_MESSAGE_RECEIVER_ID, String.valueOf(receiverId));
                                         Intent intent = new Intent(view.getContext(),MessageListActivity.class);
                                         intent.putExtras(bundle);
                                         view.getContext().startActivity(intent);
