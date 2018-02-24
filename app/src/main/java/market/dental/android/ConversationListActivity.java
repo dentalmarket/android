@@ -89,15 +89,12 @@ public class ConversationListActivity extends AppCompatActivity {
                                 new AdapterView.OnItemClickListener() {
                                     @Override
                                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-                                        //int productId = ((Product) parent.getItemAtPosition(position)).getId();
-                                        //Bundle bundle = new Bundle();
-                                        //bundle.putInt(Resource.KEY_PRODUCT_ID, productId);
+                                        int conversationId = ((Conversation) parent.getItemAtPosition(position)).getId();
+                                        Bundle bundle = new Bundle();
+                                        bundle.putString(Resource.KEY_CONVERSATION_ID, String.valueOf(conversationId));
                                         Intent intent = new Intent(view.getContext(),MessageListActivity.class);
-                                        //intent.putExtras(bundle);
+                                        intent.putExtras(bundle);
                                         view.getContext().startActivity(intent);
-
-                                        //Toast.makeText(view.getContext() , "Sohbetin mesajları açılacak ", Toast.LENGTH_LONG).show();
                                     }
                                 }
                         );

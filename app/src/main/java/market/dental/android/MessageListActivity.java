@@ -1,6 +1,7 @@
 package market.dental.android;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -103,9 +104,14 @@ public class MessageListActivity extends AppCompatActivity {
         }){
             @Override
             protected Map<String, String> getParams()  {
+                Intent intent = getIntent();
                 Map<String, String> params = new HashMap<>();
                 params.put(Resource.KEY_API_TOKEN, Resource.VALUE_API_TOKEN);
-                params.put("conversationId", "12");
+                if(intent.hasExtra(Resource.KEY_MESSAGE_RECEIVER_ID) && intent.getStringExtra(Resource.KEY_MESSAGE_RECEIVER_ID).length()>0){
+                    params.put("receiverId", intent.getStringExtra(Resource.KEY_MESSAGE_RECEIVER_ID));
+                }else if(intent.hasExtra(Resource.KEY_CONVERSATION_ID) && intent.getStringExtra(Resource.KEY_CONVERSATION_ID ).length()>0){
+                    params.put("conversationId", intent.getStringExtra(Resource.KEY_CONVERSATION_ID ));
+                }
                 return params;
             }
             @Override

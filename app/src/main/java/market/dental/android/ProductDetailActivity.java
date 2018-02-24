@@ -52,6 +52,7 @@ public class ProductDetailActivity extends AppCompatActivity {
     private TextView storeGsm;
     private TextView storeEmail;
     private TextView brandName;
+    private Button sendMessageBtn;
 
     private int productId;
     private String productDesc;
@@ -78,6 +79,7 @@ public class ProductDetailActivity extends AppCompatActivity {
         storeGsm = (TextView)findViewById(R.id.activity_product_detail_store_gsm);
         storeEmail = (TextView)findViewById(R.id.activity_product_detail_store_email);
         brandName = (TextView)findViewById(R.id.activity_product_detail_brand_name);
+        sendMessageBtn = (Button) findViewById(R.id.activity_product_detail_send_message_btn);
 
         // *****************************************************************************************
         //                              GET PRODUCT DETAIL
@@ -96,7 +98,7 @@ public class ProductDetailActivity extends AppCompatActivity {
                     // result objesinin content değeri alınır
                     JSONObject response = new JSONObject(responseString);
                     JSONObject content = response.getJSONObject("content");
-                    Store store = new Store(content.getJSONObject("store"));
+                    final Store store = new Store(content.getJSONObject("store"));
 
                     Product product = new Product(content);
 
@@ -122,6 +124,18 @@ public class ProductDetailActivity extends AppCompatActivity {
                     mRecyclerView.setLayoutManager(mRecyclerLayoutManager);
                     mRecyclerAdapter = new ProductsRecyclerAdapter(Product.ProductList(content.getJSONArray("similarProducts")));
                     mRecyclerView.setAdapter(mRecyclerAdapter);
+
+                    // SEND MESSAGE BUTTON EVENT
+                    sendMessageBtn.setOnClickListener(new View.OnClickListener(){
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent = new Intent(v.getContext(),MessageListActivity.class);
+                            Bundle bundle = new Bundle();
+                            bundle.putString(Resource.KEY_MESSAGE_RECEIVER_ID, String.valueOf(store.getId()));
+                            intent.putExtras(bundle);
+                            startActivity(intent);
+                        }
+                    });
                     
                 } catch (JSONException e) {
                     e.printStackTrace();
