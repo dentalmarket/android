@@ -67,6 +67,7 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:paddingBottom="50dp"
         android:id="@+id/activity_profile_main_panel"
         android:layout_below="@+id/activity_profile_top_panel">
 
@@ -315,15 +316,6 @@
                         android:hint="Yeni Şifre tekrar" />
                 </TableRow>
 
-
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                    <TextView
-                        android:layout_height="@dimen/activity_profile_text_height"
-                        android:text="" />
-                </TableRow>
-
             </TableLayout>
 
         </LinearLayout>
@@ -335,7 +327,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:background="@color/dental_market_text_title"
-        android:text="Kaydet" />
+        android:text="@string/save" />
 
 
 </RelativeLayout>

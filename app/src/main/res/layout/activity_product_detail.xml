@@ -1,218 +1,236 @@
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/activity_product_detail_scroll"
     tools:context="market.dental.android.ProductDetailActivity">
 
-    <RelativeLayout
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/activity_product_detail">
-
-        <ImageView
-            android:id="@+id/activity_product_detail_image"
-            android:layout_width="match_parent"
-            android:layout_height="120dp"
-            android:layout_gravity="center"
-            android:src="@android:drawable/ic_menu_report_image" />
-
-        <LinearLayout
-            android:id="@+id/activity_product_detail_product_linear_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_below="@+id/activity_product_detail_image">
-
-            <TextView
-                android:id="@+id/activity_product_detail_product_name"
-                android:gravity="left"
-                android:maxLines="2"
-                android:paddingTop="6dp"
-                android:paddingLeft="10dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@color/dental_market_text_title"
-                android:textSize="14dp"
-                android:text="@string/unknown_name"
-                />
-
-            <TextView
-                android:id="@+id/activity_product_detail_brand_name"
-                android:gravity="left"
-                android:maxLines="2"
-                android:paddingTop="6dp"
-                android:paddingLeft="10dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="14dp"
-                android:text="@string/unknown_name"
-                />
-
-            <TextView
-                android:id="@+id/activity_product_detail_price"
-                android:gravity="right"
-                android:maxLines="2"
-                android:paddingTop="6dp"
-                android:paddingRight="10dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="20dp"
-                android:textColor="@color/dental_market_text_price"
-                android:text="@string/unknown_name"
-                />
-        </LinearLayout>
+        android:layout_height="wrap_content"
+        android:id="@+id/activity_product_detail_scroll">
 
         <RelativeLayout
-            android:id="@+id/activity_product_detail_store_panel"
-            android:layout_below="@+id/activity_product_detail_product_linear_layout"
-            android:paddingTop="10dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent"
+            android:paddingBottom="50dp"
+            android:id="@+id/activity_product_detail">
 
-            <TextView
+            <ImageView
+                android:id="@+id/activity_product_detail_image"
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:background="#F8F6F8"
-                android:gravity="center_vertical"
-                android:paddingLeft="16dp"
-                android:id="@+id/activity_product_detail_title"
-                android:text="MAĞAZA BİLGİLERİ"
-                android:textStyle="bold"/>
+                android:layout_height="120dp"
+                android:layout_gravity="center"
+                android:src="@android:drawable/ic_menu_report_image" />
 
             <LinearLayout
-                android:layout_below="@+id/activity_product_detail_title"
+                android:id="@+id/activity_product_detail_product_linear_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:id="@+id/linearLayout">
+                android:layout_below="@+id/activity_product_detail_image">
 
-                <LinearLayout
+                <TextView
+                    android:id="@+id/activity_product_detail_product_name"
+                    android:gravity="left"
+                    android:maxLines="2"
+                    android:paddingTop="6dp"
+                    android:paddingLeft="10dp"
                     android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:paddingLeft="20dp"
-                    android:orientation="horizontal">
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:src="@drawable/ic_location_city_black_24dp"/>
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/dental_market_text_title"
+                    android:textSize="14dp"
+                    android:text="@string/unknown_name"
+                    />
 
-                    <TextView
-                        android:id="@+id/activity_product_detail_store_name"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:gravity="center"
-                        android:paddingLeft="16dp"
-                        android:text="@string/unknown_name" />
-                </LinearLayout>
-
-                <LinearLayout
+                <TextView
+                    android:id="@+id/activity_product_detail_brand_name"
+                    android:gravity="left"
+                    android:maxLines="2"
+                    android:paddingTop="6dp"
+                    android:paddingLeft="10dp"
                     android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:paddingLeft="20dp"
-                    android:orientation="horizontal">
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:src="@drawable/ic_phone_black_24dp"/>
+                    android:layout_height="wrap_content"
+                    android:textSize="14dp"
+                    android:text="@string/unknown_name"
+                    />
 
-                    <TextView
-                        android:id="@+id/activity_product_detail_store_phone"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:gravity="center"
-                        android:paddingLeft="16dp"
-                        android:autoLink="phone"
-                        android:linksClickable="true"
-                        android:text="@string/unknown_phone" />
-                </LinearLayout>
-
-                <LinearLayout
+                <TextView
+                    android:id="@+id/activity_product_detail_price"
+                    android:gravity="right"
+                    android:maxLines="2"
+                    android:paddingTop="6dp"
+                    android:paddingRight="10dp"
                     android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:paddingLeft="20dp"
-                    android:orientation="horizontal">
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:src="@drawable/ic_phone_black_24dp"/>
-
-                    <TextView
-                        android:id="@+id/activity_product_detail_store_gsm"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:gravity="center"
-                        android:paddingLeft="16dp"
-                        android:autoLink="phone"
-                        android:linksClickable="true"
-                        android:text="@string/unknown_phone" />
-                </LinearLayout>
-
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:paddingLeft="20dp"
-                    android:orientation="horizontal">
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:src="@drawable/ic_email_black_24dp"/>
-
-                    <TextView
-                        android:id="@+id/activity_product_detail_store_email"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:gravity="center"
-                        android:paddingLeft="16dp"
-                        android:autoLink="email"
-                        android:linksClickable="true"
-                        android:text="@string/unknown_mail" />
-                </LinearLayout>
-
+                    android:layout_height="wrap_content"
+                    android:textSize="20dp"
+                    android:textColor="@color/dental_market_text_price"
+                    android:text="@string/unknown_name"
+                    />
             </LinearLayout>
+
+            <RelativeLayout
+                android:id="@+id/activity_product_detail_store_panel"
+                android:layout_below="@+id/activity_product_detail_product_linear_layout"
+                android:paddingTop="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:background="#F8F6F8"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="16dp"
+                    android:id="@+id/activity_product_detail_title"
+                    android:text="MAĞAZA BİLGİLERİ"
+                    android:textStyle="bold"/>
+
+                <LinearLayout
+                    android:layout_below="@+id/activity_product_detail_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:id="@+id/linearLayout">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:paddingLeft="20dp"
+                        android:orientation="horizontal">
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:src="@drawable/ic_location_city_black_24dp"/>
+
+                        <TextView
+                            android:id="@+id/activity_product_detail_store_name"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:paddingLeft="16dp"
+                            android:text="@string/unknown_name" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:paddingLeft="20dp"
+                        android:orientation="horizontal">
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:src="@drawable/ic_phone_black_24dp"/>
+
+                        <TextView
+                            android:id="@+id/activity_product_detail_store_phone"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:paddingLeft="16dp"
+                            android:autoLink="phone"
+                            android:linksClickable="true"
+                            android:text="@string/unknown_phone" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:paddingLeft="20dp"
+                        android:orientation="horizontal">
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:src="@drawable/ic_phone_black_24dp"/>
+
+                        <TextView
+                            android:id="@+id/activity_product_detail_store_gsm"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:paddingLeft="16dp"
+                            android:autoLink="phone"
+                            android:linksClickable="true"
+                            android:text="@string/unknown_phone" />
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:paddingLeft="20dp"
+                        android:orientation="horizontal">
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:src="@drawable/ic_email_black_24dp"/>
+
+                        <TextView
+                            android:id="@+id/activity_product_detail_store_email"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:paddingLeft="16dp"
+                            android:autoLink="email"
+                            android:linksClickable="true"
+                            android:text="@string/unknown_mail" />
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </RelativeLayout>
+
+
+            <Button
+                android:id="@+id/activity_product_detail_product_desc_btn"
+                style="?android:textAppearanceSmall"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/activity_product_detail_store_panel"
+                android:layout_marginTop="16dp"
+                android:background="#F8F6F8"
+                android:drawableRight="@drawable/ic_keyboard_arrow_right_black_24dp"
+                android:gravity="left|center_vertical"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:text="@string/pdf_product_desc"
+                android:textColor="#6B6A6B"
+                android:textStyle="bold" />
+
+
+            <TextView
+                android:id="@+id/activity_product_detail_similar_products"
+                android:layout_below="@+id/activity_product_detail_product_desc_btn"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginTop="6dp"
+                android:layout_marginBottom="6dp"
+                android:background="#F8F6F8"
+                android:gravity="center_vertical"
+                android:paddingLeft="16dp"
+                android:text="BENZER ÜRÜNLER"
+                android:textStyle="bold"/>
+
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/activity_product_detail_similar_prod_recycler_view"
+                android:layout_below="@+id/activity_product_detail_similar_products"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+            </android.support.v7.widget.RecyclerView>
 
         </RelativeLayout>
 
+    </ScrollView>
 
-        <Button
-            android:id="@+id/activity_product_detail_product_desc_btn"
-            style="?android:textAppearanceSmall"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/activity_product_detail_store_panel"
-            android:layout_marginTop="16dp"
-            android:background="#F8F6F8"
-            android:drawableRight="@drawable/ic_keyboard_arrow_right_black_24dp"
-            android:gravity="left|center_vertical"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp"
-            android:text="@string/pdf_product_desc"
-            android:textColor="#6B6A6B"
-            android:textStyle="bold" />
+    <Button android:id="@+id/activity_product_detail_send_message_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@color/dental_market_text_title"
+        android:text="@string/send_message" />
 
-
-        <TextView
-            android:id="@+id/activity_product_detail_similar_products"
-            android:layout_below="@+id/activity_product_detail_product_desc_btn"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_marginTop="6dp"
-            android:layout_marginBottom="6dp"
-            android:background="#F8F6F8"
-            android:gravity="center_vertical"
-            android:paddingLeft="16dp"
-            android:text="BENZER ÜRÜNLER"
-            android:textStyle="bold"/>
-
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/activity_product_detail_similar_prod_recycler_view"
-            android:layout_below="@+id/activity_product_detail_similar_products"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-        </android.support.v7.widget.RecyclerView>
-
-    </RelativeLayout>
-</ScrollView>
+</RelativeLayout>

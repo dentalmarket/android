@@ -38,6 +38,8 @@
     <string name="mobile_phone">Cep Telefonu</string>
     <string name="action_sign_up">Kayıt Ol</string>
     <string name="action_sign_up_short">Kaydol</string>
+    <string name="send_message">Mesaj Yolla</string>
+    <string name="save">Kaydet</string>
 
     <!-- RIGHT-TOP MENU -->
     <string name="action_settings">Settings</string>
@@ -45,7 +47,6 @@
     <string name="right_menu_profile">Profil</string>
     <string name="right_menu_messages">Mesajlar</string>
     <string name="right_menu_logout">Çıkış</string>
-
 
     <!-- DRAWER MENU -->
     <string name="drawer_menu_dinamik_el_aksesuarlari">Dinamik El Aletleri Aks.</string>
