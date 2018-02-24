@@ -9,6 +9,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -38,6 +40,7 @@ public class MessageListActivity extends AppCompatActivity {
     private SharedPreferences sharedPref = null;
     private RecyclerView messageRecycler;
     private RecyclerView.LayoutManager messageRecyclerLayoutManager;
+    private Button sendMessage;
     private int userId=-1;
 
     @Override
@@ -52,6 +55,7 @@ public class MessageListActivity extends AppCompatActivity {
         messageRecycler = (RecyclerView) findViewById(R.id.reyclerview_message_list);
         messageRecyclerLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL , false);
         sharedPref = getSharedPreferences(getString(R.string.sp_dental_market), Context.MODE_PRIVATE);
+        sendMessage = (Button) findViewById(R.id.activity_messagelist_send_message_btn);
 
         try {
             JSONObject userJsonObject = new JSONObject(sharedPref.getString(getString(R.string.sp_user_json_str) , ""));
@@ -102,6 +106,15 @@ public class MessageListActivity extends AppCompatActivity {
                     messageListAdapter = new MessageListAdapter(context, messageList,userId);
                     messageRecycler.setLayoutManager(new LinearLayoutManager(context));
                     messageRecycler.setAdapter(messageListAdapter);
+
+                    final Message testMessage = messageList.get(0);
+                    sendMessage.setOnClickListener(new View.OnClickListener(){
+                        @Override
+                        public void onClick(View v) {
+                            messageListAdapter.addItem(testMessage);
+                            messageListAdapter.notifyDataSetChanged();
+                        }
+                    });
 
                 } catch (JSONException e) {
                     e.printStackTrace();

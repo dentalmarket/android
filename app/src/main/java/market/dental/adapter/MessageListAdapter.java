@@ -78,6 +78,9 @@ public class MessageListAdapter extends RecyclerView.Adapter {
         }
     }
 
+    public void addItem(Message newMessage){
+        this.messageList.add(newMessage);
+    }
 
     private class SentMessageHolder extends RecyclerView.ViewHolder {
         TextView messageText, timeText;
