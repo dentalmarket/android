@@ -29,8 +29,8 @@ public class Message {
                     messageJsonObject.getInt("id") : -1 ;
             this.conversationId = messageJsonObject.has("conversation_id") && !messageJsonObject.isNull("conversation_id")?
                     messageJsonObject.getString("conversation_id"):"";
-            this.userId = messageJsonObject.has("userId") && !messageJsonObject.isNull("userId")?
-                    messageJsonObject.getString("userId"):"";
+            this.userId = messageJsonObject.has("user_id") && !messageJsonObject.isNull("user_id")?
+                    messageJsonObject.getString("user_id"):"";
             this.message = messageJsonObject.has("message") && !messageJsonObject.isNull("message")?
                     messageJsonObject.getString("message"):"";
             this.createdDate = messageJsonObject.has("created_at") && !messageJsonObject.isNull("created_at")?

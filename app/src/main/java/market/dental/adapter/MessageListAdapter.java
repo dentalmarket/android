@@ -9,6 +9,10 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import market.dental.android.R;
@@ -24,11 +28,13 @@ public class MessageListAdapter extends RecyclerView.Adapter {
     private static final int VIEW_TYPE_MESSAGE_RECEIVED = 2;
     private Context context;
     private List<Message> messageList;
+    private int userId;
 
 
-    public MessageListAdapter(Context context, List<Message> messageList) {
+    public MessageListAdapter(Context context, List<Message> messageList , int userId) {
         this.context = context;
         this.messageList = messageList;
+        this.userId = userId;
     }
 
     @Override
@@ -38,10 +44,7 @@ public class MessageListAdapter extends RecyclerView.Adapter {
 
     @Override
     public int getItemViewType(int position) {
-
-        //UserMessage message = (UserMessage) mMessageList.get(position);
-        //if (message.getSender().getUserId().equals(SendBird.getCurrentUser().getUserId())) {
-        if(true){
+        if(messageList.get(position).getUserId().equals(String.valueOf(userId))){
             return VIEW_TYPE_MESSAGE_SENT;
         } else {
             return VIEW_TYPE_MESSAGE_RECEIVED;
@@ -87,7 +90,16 @@ public class MessageListAdapter extends RecyclerView.Adapter {
 
         public void bind(Message message) {
             messageText.setText(message.getMessage());
-            timeText.setText(message.getCreatedDate());
+            timeText.setText("");
+
+            try {
+                Date date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(message.getCreatedDate());
+                DateFormat df = new SimpleDateFormat("HH:mm");
+                String messageDate =  df.format(date);
+                timeText.setText(messageDate);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -105,7 +117,18 @@ public class MessageListAdapter extends RecyclerView.Adapter {
 
         public void bind(Message message) {
             messageText.setText(message.getMessage());
-            timeText.setText(message.getCreatedDate());
+            timeText.setText("");
+            nameText.setVisibility(View.GONE);
+            profileImage.setVisibility(View.GONE);
+
+            try {
+                Date date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(message.getCreatedDate());
+                DateFormat df = new SimpleDateFormat("HH:mm");
+                String messageDate =  df.format(date);
+                timeText.setText(messageDate);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
         }
     }
 

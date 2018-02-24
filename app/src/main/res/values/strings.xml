@@ -40,6 +40,7 @@
     <string name="action_sign_up_short">Kaydol</string>
     <string name="send_message">Mesaj Yolla</string>
     <string name="save">Kaydet</string>
+    <string name="enter_message">Bir mesaj yazın</string>
 
     <!-- RIGHT-TOP MENU -->
     <string name="action_settings">Settings</string>

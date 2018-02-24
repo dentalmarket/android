@@ -2,6 +2,7 @@ package market.dental.android;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -25,6 +26,7 @@ import java.util.Map;
 
 import market.dental.adapter.MessageListAdapter;
 import market.dental.model.Message;
+import market.dental.model.User;
 import market.dental.util.Resource;
 import market.dental.util.Result;
 
@@ -33,8 +35,10 @@ public class MessageListActivity extends AppCompatActivity {
     private MessageListAdapter messageListAdapter;
     private RequestQueue requestQueue;
     private Context context;
+    private SharedPreferences sharedPref = null;
     private RecyclerView messageRecycler;
     private RecyclerView.LayoutManager messageRecyclerLayoutManager;
+    private int userId=-1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +51,16 @@ public class MessageListActivity extends AppCompatActivity {
         requestQueue = Volley.newRequestQueue(this);
         messageRecycler = (RecyclerView) findViewById(R.id.reyclerview_message_list);
         messageRecyclerLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL , false);
+        sharedPref = getSharedPreferences(getString(R.string.sp_dental_market), Context.MODE_PRIVATE);
+
+        try {
+            JSONObject userJsonObject = new JSONObject(sharedPref.getString(getString(R.string.sp_user_json_str) , ""));
+            User user = new User(userJsonObject);
+            userId = user.getId();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
 
         // *****************************************************************************************
         // *****************************************************************************************
@@ -85,7 +99,7 @@ public class MessageListActivity extends AppCompatActivity {
                     JSONObject content = response.getJSONObject("content");
 
                     List<Message> messageList =  Message.MessageList(content.getJSONArray("messages"));
-                    messageListAdapter = new MessageListAdapter(context, messageList);
+                    messageListAdapter = new MessageListAdapter(context, messageList,userId);
                     messageRecycler.setLayoutManager(new LinearLayoutManager(context));
                     messageRecycler.setAdapter(messageListAdapter);
 
