@@ -32,6 +32,8 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
@@ -46,6 +48,7 @@ import market.dental.adapter.BoroughListAdapter;
 import market.dental.adapter.ViewPagerAdapter;
 import market.dental.model.Borough;
 import market.dental.model.Category;
+import market.dental.service.MyFirebaseInstanceIDService;
 import market.dental.util.Resource;
 import market.dental.util.Result;
 
@@ -134,7 +137,7 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace();
-                Log.i(Result.LOG_TAG_INFO.getResultText(),"MainActivity >> ERROR ON GET DATA >> 121");
+                Log.i(Result. LOG_TAG_INFO.getResultText(),"MainActivity >> ERROR ON GET DATA >> 121");
             }
         }){
             @Override
@@ -160,6 +163,9 @@ public class MainActivity extends AppCompatActivity
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.content_main , fragment);
         ft.commit();
+
+        String refreshedToken = FirebaseInstanceId.getInstance().getToken();
+        Log.i("DENTAL.MARKET", " >> " + refreshedToken);
     }
 
     @Override
