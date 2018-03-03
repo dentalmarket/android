@@ -22,14 +22,14 @@ public class Store {
         try {
             this.id = storeJsonObject.has("id")?
                     storeJsonObject.getInt("id") : -1 ;
-            this.name = storeJsonObject.has("store_name")?
-                    storeJsonObject.getString("store_name"):"";
-            this.phone = storeJsonObject.has("phone")?
-                    storeJsonObject.getString("phone"):"";
-            this.gsm = storeJsonObject.has("mobile_phone")?
-                    storeJsonObject.getString("mobile_phone"):"";
+            this.name = storeJsonObject.has("store_name")&& !storeJsonObject.isNull("store_name")?
+                    storeJsonObject.getString("store_name"):"-";
+            this.phone = storeJsonObject.has("phone")&& !storeJsonObject.isNull("phone") ?
+                    storeJsonObject.getString("phone"):"-";
+            this.gsm = storeJsonObject.has("mobile_phone")&& !storeJsonObject.isNull("mobile_phone") ?
+                    storeJsonObject.getString("mobile_phone"):"-";
             this.email = storeJsonObject.has("email")?
-                    storeJsonObject.getString("email"):"";
+                    storeJsonObject.getString("email"):"-";
             this.photo = storeJsonObject.has("photo")?
                     Resource.DOMAIN_NAME + "/" + storeJsonObject.getString("photo"):"";
 
