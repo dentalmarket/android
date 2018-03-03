@@ -51,6 +51,7 @@ import java.util.List;
 import java.util.Map;
 
 import market.dental.model.User;
+import market.dental.service.MyFirebaseInstanceIDService;
 import market.dental.util.Resource;
 import market.dental.util.Result;
 
@@ -390,6 +391,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         editor.putInt(getString(R.string.sp_user_id), dentalUser.getId());
         editor.putString(getString(R.string.sp_user_json_str), userJsonObject.toString());
         editor.commit();
+        // device_token update edilir
+        MyFirebaseInstanceIDService.callUpdateDeviceTokenAPI(this);
         finish();
     }
 

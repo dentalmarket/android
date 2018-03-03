@@ -12,6 +12,7 @@ public class Resource {
     public static String ajax_login = "https://dental.market/api/set/login";
     public static String ajax_register = "https://dental.market/api/set/register";
     public static String ajax_profile_update = "https://dental.market/api/set/updateProfile";
+    public static String ajax_update_device_token = "https://dental.market/api/set/updateDeviceToken";
     public static String ajax_logout = "https://dental.market/api/set/logout";
     public static String ajax_forgot_password = "https://dental.market/api/set/forgotPassword";
     public static String ajax_get_banner_images_url = "https://dental.market/api/get/banners";
