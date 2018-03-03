@@ -64,17 +64,6 @@ public class ProductsRecyclerAdapter extends RecyclerView.Adapter<ProductsRecycl
             ex.printStackTrace();
         }
 
-        holder.mButton.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(v.getContext(),ProductDetailActivity.class);
-                Bundle bundle = new Bundle();
-                bundle.putInt(Resource.KEY_PRODUCT_ID, products.get(mPosition).getId());
-                intent.putExtras(bundle);
-                v.getContext().startActivity(intent);
-            }
-        });
-
     }
 
     @Override
@@ -96,7 +85,11 @@ public class ProductsRecyclerAdapter extends RecyclerView.Adapter<ProductsRecycl
             itemView.setOnClickListener(new View.OnClickListener(){
                 @Override
                 public void onClick(View v){
-                    Log.i(Result.LOG_TAG_INFO.getResultText() , "CardView clicked event ");
+                    Intent intent = new Intent(v.getContext(),ProductDetailActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putInt(Resource.KEY_PRODUCT_ID, products.get(getAdapterPosition()).getId());
+                    intent.putExtras(bundle);
+                    v.getContext().startActivity(intent);
                 }
             });
         }
