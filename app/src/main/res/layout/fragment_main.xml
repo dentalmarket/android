@@ -157,5 +157,42 @@
             android:layout_height="wrap_content">
         </android.support.v7.widget.RecyclerView>
 
+
+        <LinearLayout
+            android:id="@+id/fragment_main_title_newest"
+            android:layout_below="@+id/fragment_main_discounted_products_recycler"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginTop="8dp"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:background="#2781BD"
+                android:paddingLeft="12dp"
+                android:paddingRight="12dp"
+                android:src="@drawable/ic_language_black_24dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/title_background_blue"
+                android:gravity="center_vertical"
+                android:paddingLeft="12dp"
+                android:textStyle="bold"
+                android:textSize="16dp"
+                android:text="En Yeni Ürünler" />
+
+        </LinearLayout>
+
+        <android.support.v7.widget.RecyclerView
+            android:layout_below="@+id/fragment_main_title_newest"
+            android:id="@+id/fragment_main_newest_products_recycler"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        </android.support.v7.widget.RecyclerView>
+
     </RelativeLayout>
 </ScrollView>

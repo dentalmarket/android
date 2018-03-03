@@ -68,6 +68,9 @@ public class MainFragment extends Fragment {
     private RecyclerView discountedProducts;
     private RecyclerView.Adapter discountedProductsAdapter;
     private RecyclerView.LayoutManager discountedProductsLayoutManager;
+    private RecyclerView newestProducts;
+    private RecyclerView.Adapter newestProductsAdapter;
+    private RecyclerView.LayoutManager newestProductsLayoutManager;
     private ViewPager viewPager;
     private ViewPagerAdapter viewPagerAdapter;
     private ImageView[] dots;
@@ -176,6 +179,10 @@ public class MainFragment extends Fragment {
         discountedProducts.setHasFixedSize(true);
         discountedProductsLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL , false);
 
+        newestProducts = (RecyclerView) view.findViewById(R.id.fragment_main_newest_products_recycler);
+        newestProducts.setHasFixedSize(true);
+        newestProductsLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL , false);
+
         StringRequest jsonObjectRequest = new StringRequest(Request.Method.POST,
                 Resource.ajax_get_products_homeproduct_url, new Response.Listener<String>() {
 
@@ -197,6 +204,10 @@ public class MainFragment extends Fragment {
                     discountedProducts.setLayoutManager(discountedProductsLayoutManager);
                     discountedProductsAdapter = new ProductsRecyclerAdapter(Product.ProductList(response.getJSONObject("content").getJSONObject("discounted").getJSONArray("products")));
                     discountedProducts.setAdapter(discountedProductsAdapter);
+
+                    newestProducts.setLayoutManager(newestProductsLayoutManager);
+                    newestProductsAdapter = new ProductsRecyclerAdapter(Product.ProductList(response.getJSONObject("content").getJSONObject("newest").getJSONArray("products")));
+                    newestProducts.setAdapter(newestProductsAdapter);
 
                 } catch (JSONException e) {
                     e.printStackTrace();
