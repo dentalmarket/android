@@ -31,13 +31,13 @@ public class Product {
             this.name = projectJsonObject.has("title")?
                     projectJsonObject.getString("title"):"";
             this.description = projectJsonObject.has("description") && !projectJsonObject.isNull("description")?
-                    projectJsonObject.getString("description"):"";
+                    projectJsonObject.getString("description"):"-";
             this.imageUrl = projectJsonObject.has("image")?
                     Resource.DOMAIN_NAME + "/" + projectJsonObject.getString("image"):"";
             this.price = projectJsonObject.has("price") && !projectJsonObject.isNull("price")?
-                    projectJsonObject.getString("price"):"";
+                    projectJsonObject.getString("price"):"-";
             this.salePrice = projectJsonObject.has("sale_price") && !projectJsonObject.isNull("sale_price")?
-                    projectJsonObject.getString("sale_price"):"0.00";
+                    projectJsonObject.getString("sale_price"):"-";
             this.currencyId = projectJsonObject.has("currency") && !projectJsonObject.isNull("currency")?
                     projectJsonObject.getInt("currency"):-1;
 

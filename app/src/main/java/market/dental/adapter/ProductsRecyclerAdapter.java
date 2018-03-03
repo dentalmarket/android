@@ -2,6 +2,7 @@ package market.dental.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -21,6 +22,7 @@ import java.util.List;
 import market.dental.android.ProductDetailActivity;
 import market.dental.android.ProductListActivity;
 import market.dental.android.R;
+import market.dental.model.Currency;
 import market.dental.model.Product;
 import market.dental.util.Resource;
 import market.dental.util.Result;
@@ -72,15 +74,21 @@ public class ProductsRecyclerAdapter extends RecyclerView.Adapter<ProductsRecycl
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        public TextView mTextView;
+        public TextView mTextView, productPrice;
         public ImageView mImageView;
         public Button mButton;
 
         public ViewHolder(View itemView) {
             super(itemView);
             mTextView = (TextView)itemView.findViewById(R.id.recycler_view_product_name);
+            productPrice = (TextView)itemView.findViewById(R.id.recycler_view_product_price);
             mImageView = (ImageView)itemView.findViewById(R.id.recycler_view_product_image);
             mButton = (Button) itemView.findViewById(R.id.recycler_view_button_product_detail);
+
+            Typeface font = Typeface.createFromAsset(context.getAssets(),"fonts/fontawesome-webfont.ttf");
+            productPrice.setTypeface(font);
+            productPrice.setText("" +products.get(mPosition).getSalePrice() + " " +
+                    Currency.getCurrencyString( context.getResources(),products.get(mPosition).getCurrencyId()));
 
             itemView.setOnClickListener(new View.OnClickListener(){
                 @Override

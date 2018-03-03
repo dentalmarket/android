@@ -30,6 +30,21 @@
             android:layout_gravity="center_horizontal"
             android:gravity="center" />
 
+        <TextView
+            android:id="@+id/recycler_view_product_price"
+            android:layout_gravity="left"
+            android:maxLines="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="left"
+            android:paddingTop="8dp"
+            android:textStyle="bold"
+            android:textColor="#31AC7A"
+            android:textSize="14dp"
+            android:text="Ürün fiyatı"/>
+
+
+        <!-- İleride kullanılmak istenirse button tutulmaktadır -->
         <Button
             android:id="@+id/recycler_view_button_product_detail"
             style="?android:textAppearanceSmall"
@@ -42,7 +57,8 @@
             android:paddingRight="20dp"
             android:text="@string/button_product_detail"
             android:textColor="#FFFFFF"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:visibility="gone"/>
 
     </LinearLayout>
 
