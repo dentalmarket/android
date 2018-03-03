@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -120,6 +121,10 @@ public class MessageListActivity extends AppCompatActivity {
                     messageListAdapter = new MessageListAdapter(context, messageList,userId);
                     messageRecycler.setLayoutManager(new LinearLayoutManager(context));
                     messageRecycler.setAdapter(messageListAdapter);
+                    // scroll to end of the message
+                    if(messageList.size() > 0){
+                        messageRecycler.getLayoutManager().scrollToPosition(messageList.size()-1);
+                    }
 
                     sendMessage.setOnClickListener(new View.OnClickListener(){
                         @Override
