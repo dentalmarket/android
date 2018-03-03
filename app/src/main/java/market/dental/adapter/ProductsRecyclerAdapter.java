@@ -57,6 +57,12 @@ public class ProductsRecyclerAdapter extends RecyclerView.Adapter<ProductsRecycl
         try {
             Product product = products.get(position);
             holder.mTextView.setText(product.getName());
+
+            Typeface font = Typeface.createFromAsset(context.getAssets(),"fonts/fontawesome-webfont.ttf");
+            holder.productPrice.setTypeface(font);
+            holder.productPrice.setText("" +products.get(position).getSalePrice() + " " +
+                    Currency.getCurrencyString( context.getResources(),products.get(position).getCurrencyId()));
+
             Picasso.with(context.getApplicationContext())
                     .load(product.getImageUrl())
                     .placeholder(R.mipmap.ic_launcher)
@@ -84,11 +90,6 @@ public class ProductsRecyclerAdapter extends RecyclerView.Adapter<ProductsRecycl
             productPrice = (TextView)itemView.findViewById(R.id.recycler_view_product_price);
             mImageView = (ImageView)itemView.findViewById(R.id.recycler_view_product_image);
             mButton = (Button) itemView.findViewById(R.id.recycler_view_button_product_detail);
-
-            Typeface font = Typeface.createFromAsset(context.getAssets(),"fonts/fontawesome-webfont.ttf");
-            productPrice.setTypeface(font);
-            productPrice.setText("" +products.get(mPosition).getSalePrice() + " " +
-                    Currency.getCurrencyString( context.getResources(),products.get(mPosition).getCurrencyId()));
 
             itemView.setOnClickListener(new View.OnClickListener(){
                 @Override

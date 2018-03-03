@@ -66,7 +66,6 @@ public class ProductDetailActivity extends AppCompatActivity {
         // Get productId
         Intent intent = getIntent();
         productId = intent.getIntExtra(Resource.KEY_PRODUCT_ID,-1);
-        //Toast.makeText(this,"" +productId , Toast.LENGTH_SHORT ).show();
 
         // Initialization
         RequestQueue rq = Volley.newRequestQueue(this);
