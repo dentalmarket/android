@@ -1,11 +1,13 @@
 package market.dental.android;
 
 import android.content.Intent;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -23,6 +25,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import market.dental.adapter.ProductListAdapter;
@@ -37,6 +40,7 @@ public class ProductListActivity extends AppCompatActivity {
     private int categoryId;
     private String searchKey;
     private RequestQueue requestQueue;
+    private boolean isLoading = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,10 +58,10 @@ public class ProductListActivity extends AppCompatActivity {
         productListAdapter = new ProductListAdapter(this);
 
         if(searchKey!=null && searchKey.length()>0){
-            this.getSearchedProducts();
+            this.getSearchedProducts(0);
             //Toast.makeText(this,  searchKey , Toast.LENGTH_SHORT).show();
         }else if(categoryId>0){
-            this.getCategoryProducts();
+            this.getCategoryProducts(0);
             //Toast.makeText(this, "" +  categoryId , Toast.LENGTH_SHORT).show();
         }
 
@@ -75,11 +79,12 @@ public class ProductListActivity extends AppCompatActivity {
     }
 
 
-    public void getCategoryProducts(){
+    public void getCategoryProducts(final int page){
+
         // *****************************************************************************************
         //                        AJAX - GET PRODUCTS BY CATEGORY
         // *****************************************************************************************
-
+        isLoading = true;
         StringRequest jsonObjectRequest = new StringRequest(Request.Method.POST,
                 Resource.ajax_get_products_by_category, new Response.Listener<String>() {
 
@@ -91,12 +96,32 @@ public class ProductListActivity extends AppCompatActivity {
                     JSONObject response = new JSONObject(responseString);
                     JSONObject content = response.getJSONObject("content");
 
-                    productListAdapter.setProductList(Product.ProductList(content.getJSONArray("data")));
+                    productListAdapter.addProductList(Product.ProductList(content.getJSONArray("data")));
+                    productListAdapter.setCurrentPage(content.getInt("current_page"));
                     ListView listView = findViewById(R.id.activity_product_list_main);
-                    listView.setAdapter(productListAdapter);
+                    if(listView.getAdapter()==null)
+                        listView.setAdapter(productListAdapter);
+                    else{
+                        productListAdapter.notifyDataSetChanged();
+                    }
 
-                    listView.setOnItemClickListener(
-                            new AdapterView.OnItemClickListener() {
+
+                    // -- EVENTS --
+                    listView.setOnScrollListener(new AbsListView.OnScrollListener() {
+                        @Override
+                        public void onScrollStateChanged(AbsListView view, int scrollState) {
+
+                        }
+
+                        @Override
+                        public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                            if(view.getLastVisiblePosition() == totalItemCount-1 && !isLoading){
+                                getCategoryProducts(productListAdapter.getCurrentPage()+1);
+                            }
+                        }
+                    });
+
+                    listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                                 @Override
                                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                                     int productId = ((Product) parent.getItemAtPosition(position)).getId();
@@ -108,9 +133,12 @@ public class ProductListActivity extends AppCompatActivity {
                                 }
                             }
                     );
+
+                    isLoading = false;
                 } catch (JSONException e) {
                     e.printStackTrace();
                     Log.i(Result.LOG_TAG_INFO.getResultText(),"ProductListActivity >> JSONException >> 120");
+                    isLoading = false;
                 }
             }
 
@@ -119,6 +147,7 @@ public class ProductListActivity extends AppCompatActivity {
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace();
                 Log.i(Result.LOG_TAG_INFO.getResultText(),"ProductListActivity >> ERROR ON GET DATA >> 121");
+                isLoading = false;
             }
         }){
             @Override
@@ -126,6 +155,7 @@ public class ProductListActivity extends AppCompatActivity {
                 Map<String, String> params = new HashMap<>();
                 params.put(Resource.KEY_API_TOKEN, Resource.VALUE_API_TOKEN);
                 params.put("catId", ""+categoryId);
+                params.put("page", String.valueOf(page));
                 return params;
             }
             @Override
@@ -139,11 +169,12 @@ public class ProductListActivity extends AppCompatActivity {
     }
 
 
-    public void getSearchedProducts(){
+    public void getSearchedProducts(final int page){
         // *****************************************************************************************
         //                        AJAX - GET PRODUCTS BY CATEGORY
         // *****************************************************************************************
 
+        isLoading = true;
         StringRequest jsonObjectRequest = new StringRequest(Request.Method.POST,
                 Resource.ajax_get_product_by_search_key, new Response.Listener<String>() {
 
@@ -155,9 +186,30 @@ public class ProductListActivity extends AppCompatActivity {
                     JSONObject response = new JSONObject(responseString);
                     JSONObject content = response.getJSONObject("content");
 
-                    productListAdapter.setProductList(Product.ProductList(content.getJSONArray("data")));
+                    productListAdapter.addProductList(Product.ProductList(content.getJSONArray("data")));
+                    productListAdapter.setCurrentPage(content.getInt("current_page"));
                     ListView listView = findViewById(R.id.activity_product_list_main);
-                    listView.setAdapter(productListAdapter);
+                    if(listView.getAdapter()==null)
+                        listView.setAdapter(productListAdapter);
+                    else{
+                        productListAdapter.notifyDataSetChanged();
+                    }
+
+
+                    // -- EVENTS --
+                    listView.setOnScrollListener(new AbsListView.OnScrollListener() {
+                        @Override
+                        public void onScrollStateChanged(AbsListView view, int scrollState) {
+
+                        }
+
+                        @Override
+                        public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                            if(view.getLastVisiblePosition() == totalItemCount-1 && !isLoading){
+                                getSearchedProducts(productListAdapter.getCurrentPage()+1);
+                            }
+                        }
+                    });
 
                     listView.setOnItemClickListener(
                             new AdapterView.OnItemClickListener() {
@@ -172,9 +224,12 @@ public class ProductListActivity extends AppCompatActivity {
                                 }
                             }
                     );
+
+                    isLoading = false;
                 } catch (JSONException e) {
                     e.printStackTrace();
                     Log.i(Result.LOG_TAG_INFO.getResultText(),"ProductListActivity >> JSONException >> 122");
+                    isLoading = false;
                 }
             }
 
@@ -183,6 +238,7 @@ public class ProductListActivity extends AppCompatActivity {
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace();
                 Log.i(Result.LOG_TAG_INFO.getResultText(),"ProductListActivity >> ERROR ON GET DATA >> 123");
+                isLoading = false;
             }
         }){
             @Override
@@ -190,6 +246,7 @@ public class ProductListActivity extends AppCompatActivity {
                 Map<String, String> params = new HashMap<>();
                 params.put(Resource.KEY_API_TOKEN, Resource.VALUE_API_TOKEN);
                 params.put("title", searchKey);
+                params.put("page", String.valueOf(page));
                 return params;
             }
             @Override
@@ -201,6 +258,5 @@ public class ProductListActivity extends AppCompatActivity {
         };
         requestQueue.add(jsonObjectRequest);
     }
-
 
 }

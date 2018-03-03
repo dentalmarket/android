@@ -29,16 +29,30 @@ public class ProductListAdapter extends ArrayAdapter {
 
     private Context context;
     private List<Product> productList;
+    private int currentPage;
 
     public ProductListAdapter(@NonNull Context context) {
         super(context, R.layout.activity_product_list_main_items);
         this.context  = context;
+        this.currentPage = 1;
+        this.productList = new ArrayList<>();
     }
 
     public void setProductList(List<Product> productList){
         this.productList = productList;
     }
 
+    public void addProductList(List<Product> productList){
+        this.productList.addAll(productList);
+    }
+
+    public int getCurrentPage() {
+        return currentPage;
+    }
+
+    public void setCurrentPage(int currentPage) {
+        this.currentPage = currentPage;
+    }
 
     @Override
     public int getCount(){
