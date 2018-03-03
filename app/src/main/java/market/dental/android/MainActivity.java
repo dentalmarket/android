@@ -164,8 +164,6 @@ public class MainActivity extends AppCompatActivity
         ft.replace(R.id.content_main , fragment);
         ft.commit();
 
-        String refreshedToken = FirebaseInstanceId.getInstance().getToken();
-        Log.i("DENTAL.MARKET", " >> " + refreshedToken);
     }
 
     @Override

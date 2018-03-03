@@ -25,6 +25,7 @@ import org.json.JSONObject;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -115,6 +116,7 @@ public class MessageListActivity extends AppCompatActivity {
                     JSONObject content = response.getJSONObject("content");
 
                     List<Message> messageList =  Message.MessageList(content.getJSONArray("messages"));
+                    Collections.reverse(messageList);
                     messageListAdapter = new MessageListAdapter(context, messageList,userId);
                     messageRecycler.setLayoutManager(new LinearLayoutManager(context));
                     messageRecycler.setAdapter(messageListAdapter);

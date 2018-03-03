@@ -9,6 +9,23 @@
     android:paddingTop="8dp">
 
     <TextView
+        android:id="@+id/item_message_sent_newdate"
+        android:text="21/11/2017"
+        android:background="@drawable/rounded_rectangle_blue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:maxWidth="240dp"
+        android:textSize="14sp"
+        android:padding="8dp"
+        android:textColor="#4D626C"
+        android:gravity="center_vertical"
+        android:layout_marginTop="4dp"
+        app:layout_constraintTop_toBottomOf="parent"
+        app:layout_constraintLeft_toRightOf="parent"
+        app:layout_constraintRight_toLeftOf="parent"
+        android:layout_marginLeft="8dp" />
+
+    <TextView
         android:id="@+id/item_message_sent_message_body"
         android:text="hello, hello!"
         android:background="@drawable/rounded_rectangle_green"
@@ -19,7 +36,7 @@
         android:textColor="#ffffff"
         android:layout_marginRight="8dp"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/item_message_sent_newdate" />
 
     <TextView
         android:id="@+id/item_message_sent_message_time"
