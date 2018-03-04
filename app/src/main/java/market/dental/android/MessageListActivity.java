@@ -5,16 +5,19 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.support.design.widget.Snackbar;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -77,7 +80,24 @@ public class MessageListActivity extends AppCompatActivity {
                     messageRecycler.getLayoutManager().scrollToPosition(messageListAdapter.getMessageList().size()-1);
                 }
             }else{
-                Toast.makeText(context, "Farklı bir kişiden mesaj geldi" , Toast.LENGTH_LONG).show();
+                final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), intent.getExtras().getString("fromName"), Snackbar.LENGTH_INDEFINITE);
+                final String fromId = intent.getExtras().getString("fromId");
+                snack.setAction("AÇ", new View.OnClickListener(){
+                    @Override
+                    public void onClick(View view) {
+                        Bundle bundle = new Bundle();
+                        bundle.putString(Resource.KEY_MESSAGE_RECEIVER_ID, fromId);
+                        Intent intent = new Intent(view.getContext(),MessageListActivity.class);
+                        intent.putExtras(bundle);
+                        view.getContext().startActivity(intent);
+                        finish();
+                    }
+                });
+                View view = snack.getView();
+                FrameLayout.LayoutParams params =(FrameLayout.LayoutParams)view.getLayoutParams();
+                params.gravity = Gravity.TOP;
+                view.setLayoutParams(params);
+                snack.show();
             }
         }
     };
