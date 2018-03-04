@@ -218,13 +218,11 @@ public class MessageListActivity extends AppCompatActivity {
                         JSONObject response = new JSONObject(responseString);
 
                         newMessage = new Message(String.valueOf(userId),message);
-                        sendMessage.setOnClickListener(new View.OnClickListener(){
-                            @Override
-                            public void onClick(View v) {
-                                messageListAdapter.addItem(newMessage);
-                                messageListAdapter.notifyDataSetChanged();
-                            }
-                        });
+                        messageListAdapter.addItem(newMessage);
+                        messageListAdapter.notifyDataSetChanged();
+                        if(messageListAdapter.getMessageList().size() > 0){
+                            messageRecycler.getLayoutManager().scrollToPosition(messageListAdapter.getMessageList().size()-1);
+                        }
 
                     } catch (JSONException e) {
                         e.printStackTrace();
