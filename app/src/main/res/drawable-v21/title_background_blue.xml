@@ -6,6 +6,7 @@
 
         </shape>
     </item>
+    <!--
     <item android:gravity="bottom">
         <shape android:shape="line">
 
@@ -19,4 +20,5 @@
 
         </shape>
     </item>
+    -->
 </layer-list>
