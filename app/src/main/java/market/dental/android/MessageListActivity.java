@@ -73,6 +73,9 @@ public class MessageListActivity extends AppCompatActivity {
                 newMessage = new Message(intent.getExtras().getString("fromId"),intent.getExtras().getString("notification"));
                 messageListAdapter.addItem(newMessage);
                 messageListAdapter.notifyDataSetChanged();
+                if(messageListAdapter.getMessageList().size() > 0){
+                    messageRecycler.getLayoutManager().scrollToPosition(messageListAdapter.getMessageList().size()-1);
+                }
             }else{
                 Toast.makeText(context, "Farklı bir kişiden mesaj geldi" , Toast.LENGTH_LONG).show();
             }
