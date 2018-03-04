@@ -27,7 +27,7 @@
             android:resource="@drawable/ic_launcher" />
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_color"
-            android:resource="@color/colorAccent" />
+            android:resource="@color/cardview_dark_background" />
 
         <activity
             android:name=".LoginActivity"
