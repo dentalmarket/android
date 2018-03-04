@@ -33,6 +33,7 @@ public class Resource {
     public static String STATIC_ANDROID_API_TOKEN = "izcfpXu74i6YgIxSG712AEaohc0FfYpC";
     public static String VALUE_API_TOKEN = "";
     public static String KEY_API_TOKEN = "api_token";
+    public static String KEY_LOCAL_BROADCAST = "KEY_LOCAL_BROADCAST";
     public static String KEY_PRODUCT_ID = "KEY_PRODUCT_ID";
     public static String KEY_PRODUCT_DESC = "KEY_PRODUCT_DESC";
     public static String KEY_CATEGORY_ID = "KEY_CATEGORY_ID";

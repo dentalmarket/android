@@ -10,6 +10,7 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import android.app.job.JobParameters;
@@ -24,10 +25,17 @@ import com.google.firebase.messaging.RemoteMessage;
 
 import market.dental.android.MainActivity;
 import market.dental.android.R;
+import market.dental.util.Resource;
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
+    private LocalBroadcastManager broadcaster;
     private static final String TAG = "MyFirebaseMsgService";
+
+    @Override
+    public void onCreate() {
+        broadcaster = LocalBroadcastManager.getInstance(this);
+    }
 
     /**
      * Called when message is received.
@@ -55,13 +63,22 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         if (remoteMessage.getData().size() > 0) {
             Log.d(TAG, "Message data payload: " + remoteMessage.getData());
 
-            if (/* Check if data needs to be processed by long running job */ true) {
+            Intent intent = new Intent(Resource.KEY_LOCAL_BROADCAST);
+            intent.putExtra("fromId", remoteMessage.getData().get("fromId"));
+            intent.putExtra("fromName", remoteMessage.getData().get("fromName"));
+            intent.putExtra("notification", remoteMessage.getNotification().getBody());
+            broadcaster.sendBroadcast(intent);
+
+/*
+            // Check if data needs to be processed by long running job
+            if (true) {
                 // For long-running tasks (10 seconds or more) use Firebase Job Dispatcher.
                 scheduleJob();
             } else {
                 // Handle message within 10 seconds
                 handleNow();
             }
+*/
 
         }
 

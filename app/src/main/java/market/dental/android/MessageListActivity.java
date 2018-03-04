@@ -1,8 +1,11 @@
 package market.dental.android;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,6 +16,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -51,6 +55,29 @@ public class MessageListActivity extends AppCompatActivity {
     private String receiverId;
     private int userId=-1;
     private Message newMessage;
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        LocalBroadcastManager.getInstance(this).registerReceiver((mMessageReceiver),
+                new IntentFilter(Resource.KEY_LOCAL_BROADCAST)
+        );
+    }
+
+    private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+            // Karşıdaki kullanıcı broadcast değerindeki kişi ise mesaj direk eklenir
+            if(receiverId.equals(intent.getExtras().getString("fromId"))){
+                newMessage = new Message(intent.getExtras().getString("fromId"),intent.getExtras().getString("notification"));
+                messageListAdapter.addItem(newMessage);
+                messageListAdapter.notifyDataSetChanged();
+            }else{
+                Toast.makeText(context, "Farklı bir kişiden mesaj geldi" , Toast.LENGTH_LONG).show();
+            }
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
