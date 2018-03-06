@@ -9,11 +9,8 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.view.menu.MenuView;
 import android.util.Log;
-import android.view.SubMenu;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -23,18 +20,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.google.firebase.iid.FirebaseInstanceId;
-import com.google.firebase.messaging.FirebaseMessaging;
-import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -44,11 +36,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import market.dental.adapter.BoroughListAdapter;
-import market.dental.adapter.ViewPagerAdapter;
-import market.dental.model.Borough;
 import market.dental.model.Category;
-import market.dental.service.MyFirebaseInstanceIDService;
 import market.dental.util.Resource;
 import market.dental.util.Result;
 
@@ -70,8 +58,6 @@ public class MainActivity extends AppCompatActivity
 
         // Initialization
         requestQueue = Volley.newRequestQueue(this);
-        Resource.setDefaultAPITOKEN();
-
 
         // *****************************************************************************************
         //                              VIEW OPERATIONS
@@ -102,9 +88,6 @@ public class MainActivity extends AppCompatActivity
         progressDialogBuilder.setCancelable(false);
         progressDialogBuilder.setView(getLayoutInflater().inflate(R.layout.dialog_progressbar,null));
         progressDialog = progressDialogBuilder.create();
-
-        SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.sp_dental_market), Context.MODE_PRIVATE);
-        sharedPreferences.edit().clear().commit();
 
 
         // *****************************************************************************************
@@ -232,27 +215,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onResume(){
         super.onResume();
-        setSettingMenuItem();
-    }
 
-
-    public void setSettingMenuItem(){
-        SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.sp_dental_market), Context.MODE_PRIVATE);
-        int userSessionID = sharedPreferences.getInt(getString(R.string.sp_user_id) , -1);
-
-        if(menu!=null){
-            if(userSessionID != -1){
-                menu.findItem(R.id.right_menu_login).setVisible(false);
-                menu.findItem(R.id.right_menu_profile).setVisible(true);
-                menu.findItem(R.id.right_menu_messages).setVisible(true);
-                menu.findItem(R.id.right_menu_logout).setVisible(true);
-            }else{
-                menu.findItem(R.id.right_menu_login).setVisible(true);
-                menu.findItem(R.id.right_menu_profile).setVisible(false);
-                menu.findItem(R.id.right_menu_messages).setVisible(false);
-                menu.findItem(R.id.right_menu_logout).setVisible(false);
-            }
-        }
     }
 
 
@@ -274,6 +237,7 @@ public class MainActivity extends AppCompatActivity
 
             @Override
             public void onResponse(String responseString) {
+                boolean closeActivityFlag = false;
                 try {
 
                     JSONObject response = new JSONObject(responseString);
@@ -286,14 +250,17 @@ public class MainActivity extends AppCompatActivity
                         editor.remove(getString(R.string.sp_user_id));
                         editor.commit();
 
-                        // update View
-                        onResume();
+                        // redirect to login page
+                        closeActivityFlag = true;
                     }
 
                 } catch (JSONException e) {
                     e.printStackTrace();
+
                 } finally {
                     progressDialog.dismiss();
+                    if(closeActivityFlag)
+                        finish();
                 }
             }
         }, new Response.ErrorListener() {

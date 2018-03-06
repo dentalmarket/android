@@ -57,6 +57,7 @@
             android:gravity="center"
             android:orientation="horizontal">
 
+            <!--
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
@@ -64,7 +65,7 @@
                 android:paddingLeft="12dp"
                 android:paddingRight="12dp"
                 android:src="@drawable/ic_language_black_24dp" />
-
+            -->
             <TextView
                 android:id="@+id/activity_product_detail_store_name"
                 android:layout_width="match_parent"
@@ -94,6 +95,7 @@
             android:gravity="center"
             android:orientation="horizontal">
 
+            <!--
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
@@ -101,7 +103,7 @@
                 android:paddingLeft="12dp"
                 android:paddingRight="12dp"
                 android:src="@drawable/ic_language_black_24dp" />
-
+            -->
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -130,6 +132,7 @@
             android:gravity="center"
             android:orientation="horizontal">
 
+            <!--
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
@@ -137,7 +140,7 @@
                 android:paddingLeft="12dp"
                 android:paddingRight="12dp"
                 android:src="@drawable/ic_language_black_24dp" />
-
+            -->
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -167,6 +170,7 @@
             android:gravity="center"
             android:orientation="horizontal">
 
+            <!--
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
@@ -174,7 +178,7 @@
                 android:paddingLeft="12dp"
                 android:paddingRight="12dp"
                 android:src="@drawable/ic_language_black_24dp" />
-
+            -->
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

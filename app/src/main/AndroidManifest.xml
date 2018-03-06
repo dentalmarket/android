@@ -31,7 +31,8 @@
 
         <activity
             android:name=".LoginActivity"
-            android:label="Giriş" />
+            android:label="Giriş"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".ForgotPasswordActivity"
             android:label="Şifremi Unuttum" />

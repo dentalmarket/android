@@ -80,9 +80,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         // Initialization
+        Resource.setDefaultAPITOKEN();
         context = this;
         requestQueue = Volley.newRequestQueue(this);
         sharedPref = getSharedPreferences(getString(R.string.sp_dental_market), Context.MODE_PRIVATE);
@@ -129,6 +129,13 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 goToRegisterActivity();
             }
         });
+
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        showProgress(false);
 
     }
 
@@ -393,17 +400,11 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         editor.commit();
         // device_token update edilir
         MyFirebaseInstanceIDService.callUpdateDeviceTokenAPI(this);
-        finish();
+
+        //redirect main activity
+        Intent i = new Intent(this,MainActivity.class);
+        startActivity(i);
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        switch (id){
-            case android.R.id.home:
-                finish();
-        }
-        return super.onOptionsItemSelected(item);
-    }
 }
 
