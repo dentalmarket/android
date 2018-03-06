@@ -9,7 +9,7 @@ import android.widget.Toast;
 
 import market.dental.util.Resource;
 
-public class ProductDescriptionActivity extends AppCompatActivity {
+public class ProductDescriptionActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

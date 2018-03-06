@@ -45,7 +45,7 @@ import market.dental.model.User;
 import market.dental.util.Resource;
 import market.dental.util.Result;
 
-public class MessageListActivity extends AppCompatActivity {
+public class MessageListActivity extends BaseActivity {
 
     private MessageListAdapter messageListAdapter;
     private RequestQueue requestQueue;
@@ -59,48 +59,44 @@ public class MessageListActivity extends AppCompatActivity {
     private int userId=-1;
     private Message newMessage;
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        LocalBroadcastManager.getInstance(this).registerReceiver((mMessageReceiver),
-                new IntentFilter(Resource.KEY_LOCAL_BROADCAST)
-        );
+    public MessageListActivity() {
+        super.messageReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+
+                // Karşıdaki kullanıcı broadcast değerindeki kişi ise mesaj direk eklenir
+                if(receiverId.equals(intent.getExtras().getString("fromId"))){
+                    newMessage = new Message(intent.getExtras().getString("fromId"),intent.getExtras().getString("notification"));
+                    messageListAdapter.addItem(newMessage);
+                    messageListAdapter.notifyDataSetChanged();
+                    if(messageListAdapter.getMessageList().size() > 0){
+                        messageRecycler.getLayoutManager().scrollToPosition(messageListAdapter.getMessageList().size()-1);
+                    }
+                }else{
+                    final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), intent.getExtras().getString("fromName"), Snackbar.LENGTH_INDEFINITE);
+                    final String fromId = intent.getExtras().getString("fromId");
+                    snack.setAction("AÇ", new View.OnClickListener(){
+                        @Override
+                        public void onClick(View view) {
+                            Bundle bundle = new Bundle();
+                            bundle.putString(Resource.KEY_MESSAGE_RECEIVER_ID, fromId);
+                            Intent intent = new Intent(view.getContext(),MessageListActivity.class);
+                            intent.putExtras(bundle);
+                            view.getContext().startActivity(intent);
+                            finish();
+                        }
+                    });
+                    View view = snack.getView();
+                    FrameLayout.LayoutParams params =(FrameLayout.LayoutParams)view.getLayoutParams();
+                    params.gravity = Gravity.TOP;
+                    view.setLayoutParams(params);
+                    snack.show();
+                }
+            }
+        };
     }
 
-    private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
 
-            // Karşıdaki kullanıcı broadcast değerindeki kişi ise mesaj direk eklenir
-            if(receiverId.equals(intent.getExtras().getString("fromId"))){
-                newMessage = new Message(intent.getExtras().getString("fromId"),intent.getExtras().getString("notification"));
-                messageListAdapter.addItem(newMessage);
-                messageListAdapter.notifyDataSetChanged();
-                if(messageListAdapter.getMessageList().size() > 0){
-                    messageRecycler.getLayoutManager().scrollToPosition(messageListAdapter.getMessageList().size()-1);
-                }
-            }else{
-                final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), intent.getExtras().getString("fromName"), Snackbar.LENGTH_INDEFINITE);
-                final String fromId = intent.getExtras().getString("fromId");
-                snack.setAction("AÇ", new View.OnClickListener(){
-                    @Override
-                    public void onClick(View view) {
-                        Bundle bundle = new Bundle();
-                        bundle.putString(Resource.KEY_MESSAGE_RECEIVER_ID, fromId);
-                        Intent intent = new Intent(view.getContext(),MessageListActivity.class);
-                        intent.putExtras(bundle);
-                        view.getContext().startActivity(intent);
-                        finish();
-                    }
-                });
-                View view = snack.getView();
-                FrameLayout.LayoutParams params =(FrameLayout.LayoutParams)view.getLayoutParams();
-                params.gravity = Gravity.TOP;
-                view.setLayoutParams(params);
-                snack.show();
-            }
-        }
-    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -43,7 +43,7 @@ import market.dental.model.User;
 import market.dental.util.Resource;
 import market.dental.util.Result;
 
-public class ProfileActivity extends AppCompatActivity {
+public class ProfileActivity extends BaseActivity {
 
     private SharedPreferences sharedPref = null;
     private RequestQueue requestQueue;

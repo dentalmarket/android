@@ -38,7 +38,7 @@ import market.dental.model.Store;
 import market.dental.util.Resource;
 import market.dental.util.Result;
 
-public class ProductDetailActivity extends AppCompatActivity {
+public class ProductDetailActivity extends BaseActivity {
 
     private RecyclerView mRecyclerView;
     private RecyclerView.LayoutManager mRecyclerLayoutManager;

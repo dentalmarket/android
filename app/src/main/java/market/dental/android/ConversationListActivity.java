@@ -31,7 +31,7 @@ import market.dental.model.Conversation;
 import market.dental.util.Resource;
 import market.dental.util.Result;
 
-public class ConversationListActivity extends AppCompatActivity {
+public class ConversationListActivity extends BaseActivity {
 
     private ConversationListAdapter conversationListAdapter;
     private RequestQueue requestQueue;

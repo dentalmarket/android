@@ -40,7 +40,7 @@ import market.dental.model.Category;
 import market.dental.util.Resource;
 import market.dental.util.Result;
 
-public class MainActivity extends AppCompatActivity
+public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener,
                     MainFragment.OnFragmentInteractionListener{
 

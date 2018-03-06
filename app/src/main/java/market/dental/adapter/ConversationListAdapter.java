@@ -59,14 +59,14 @@ public class ConversationListAdapter extends ArrayAdapter {
         TextView cenversationDate = customView.findViewById(R.id.activity_conversation_list_item_date);
         cenversationDate.setText(conversationList.get(position).getLastMessageDate().substring(0,conversationList.get(position).getLastMessageDate().indexOf(" ")));
 
-/*
-        ImageView imageView = customView.findViewById(R.id.activity_conversation_list_item_image);
-        Picasso.with(context)
-                .load(conversationList.get(position).getUserPhoto())
-                .placeholder(R.mipmap.ic_launcher)
-                .error(R.mipmap.ic_launcher)
-                .into(imageView);
-*/
+        if(conversationList.get(position).getUserPhoto().length()>0){
+            ImageView imageView = customView.findViewById(R.id.activity_conversation_list_item_image);
+            Picasso.with(context)
+                    .load(conversationList.get(position).getUserPhoto())
+                    .placeholder(R.drawable.ic_person_24dp)
+                    .error(R.drawable.ic_person_24dp)
+                    .into(imageView);
+        }
         return customView;
     }
 

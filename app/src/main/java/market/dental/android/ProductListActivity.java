@@ -34,7 +34,7 @@ import market.dental.model.Product;
 import market.dental.util.Resource;
 import market.dental.util.Result;
 
-public class ProductListActivity extends AppCompatActivity {
+public class ProductListActivity extends BaseActivity {
 
     private ProductListAdapter productListAdapter;
     private int categoryId;
