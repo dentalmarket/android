@@ -1,5 +1,6 @@
 package market.dental.android;
 
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -9,6 +10,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.TaskStackBuilder;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.View;
@@ -37,6 +39,7 @@ import java.util.List;
 import java.util.Map;
 
 import market.dental.model.Category;
+import market.dental.model.Conversation;
 import market.dental.util.Resource;
 import market.dental.util.Result;
 

@@ -35,27 +35,27 @@ public class BaseActivity extends AppCompatActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
 
-        final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), intent.getExtras().getString("fromName" ) , Snackbar.LENGTH_LONG);
-        final String fromId = intent.getExtras().getString("fromId");
-        View snackView = snack.getView();
-        TextView textView = (TextView) snackView.findViewById(android.support.design.R.id.snackbar_text);
-        textView.setMaxLines(5);
-        FrameLayout.LayoutParams params =(FrameLayout.LayoutParams)snackView.getLayoutParams();
-        params.gravity = Gravity.TOP;
-        snackView.setLayoutParams(params);
+            final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), intent.getExtras().getString("fromName" ) , Snackbar.LENGTH_LONG);
+            final String fromId = intent.getExtras().getString("fromId");
+            View snackView = snack.getView();
+            TextView textView = (TextView) snackView.findViewById(android.support.design.R.id.snackbar_text);
+            textView.setMaxLines(5);
+            FrameLayout.LayoutParams params =(FrameLayout.LayoutParams)snackView.getLayoutParams();
+            params.gravity = Gravity.TOP;
+            snackView.setLayoutParams(params);
 
-        snack.setAction("AÇ", new View.OnClickListener(){
-            @Override
-            public void onClick(View view) {
-                Bundle bundle = new Bundle();
-                bundle.putString(Resource.KEY_MESSAGE_RECEIVER_ID, fromId);
-                Intent intent = new Intent(view.getContext(),MessageListActivity.class);
-                intent.putExtras(bundle);
-                view.getContext().startActivity(intent);
-            }
-        });
-        snack.setDuration(5000);
-        snack.show();
+            snack.setAction("AÇ", new View.OnClickListener(){
+                @Override
+                public void onClick(View view) {
+                    Bundle bundle = new Bundle();
+                    bundle.putString(Resource.KEY_MESSAGE_RECEIVER_ID, fromId);
+                    Intent intent = new Intent(view.getContext(),MessageListActivity.class);
+                    intent.putExtras(bundle);
+                    view.getContext().startActivity(intent);
+                }
+            });
+            snack.setDuration(5000);
+            snack.show();
         }
     };
 

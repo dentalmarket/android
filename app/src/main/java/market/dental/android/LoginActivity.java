@@ -35,6 +35,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -262,9 +263,10 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     showProgress(false);
-                    Toast.makeText( context, "Beklenmeyen Hata" , Toast.LENGTH_LONG).show();
                     error.printStackTrace();
-                    Log.i(Result.LOG_TAG_INFO.getResultText(),"LoginActivity >> ERROR ON GET DATA >> 121");
+                    NetworkResponse networkResponse = error.networkResponse;
+                    Log.i(Result.LOG_TAG_INFO.getResultText() , ">> Login.Response.ErrorListener");
+                    Log.i(Result.LOG_TAG_INFO.getResultText() , ">> Login.StausCode >> " + networkResponse.statusCode);
                 }
             }){
                 @Override

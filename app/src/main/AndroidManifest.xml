@@ -57,7 +57,12 @@
             android:label="Kayıt" />
         <activity
             android:name=".ConversationListActivity"
-            android:label="@string/title_activity_conversation_list" />
+            android:label="@string/title_activity_conversation_list"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity" />
+        </activity>
         <activity
             android:name=".MessageListActivity"
             android:label="@string/title_activity_message_list" />

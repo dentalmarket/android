@@ -20,7 +20,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 
 import market.dental.model.User;
 import market.dental.util.Resource;
@@ -43,6 +45,24 @@ public class SplashActivity extends AppCompatActivity {
         requestQueue = Volley.newRequestQueue(this);
         Resource.VALUE_API_TOKEN = sharedPref.getString(Resource.KEY_API_TOKEN , "");
 
+        /*
+        Intent intent = getIntent();
+        StringBuilder str = new StringBuilder();
+        Bundle bundle = getIntent().getExtras();
+        if (bundle != null) {
+            Set<String> keys = bundle.keySet();
+            Iterator<String> it = keys.iterator();
+            while (it.hasNext()) {
+                String key = it.next();
+                str.append(key);
+                str.append(":");
+                str.append(bundle.get(key));
+                str.append("\n\r");
+                Log.i(Result.LOG_TAG_INFO.getResultText() , ">> Extras >> " + str);
+            }
+        }
+        */
+
         Thread myThread = new Thread(){
             @Override
             public void run(){
@@ -50,6 +70,8 @@ public class SplashActivity extends AppCompatActivity {
                     sleep(1500);
 
                     if(sharedPref.getString(Resource.KEY_API_TOKEN , "").length() == 0){ // API_TOKEN NULL
+                        redirectLoginActivity();
+                    }else if(sharedPref.getString(Resource.KEY_API_TOKEN , "").equals(Resource.STATIC_ANDROID_API_TOKEN)){ //static android API TOKEN ise
                         redirectLoginActivity();
                     }else{ // API_TOKEN ile device_token update edilmeye çalışılır
                         tryToSendDeviceTokenToServer(context);
@@ -76,6 +98,12 @@ public class SplashActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    protected void redirectConversationListActivity(){
+        Intent intent = new Intent(getApplicationContext() , ConversationListActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+    }
+
     /**
      *
      * Uygulama açılırken divece_token update edilmeye çalışılır. Eğer device_token update edilemez
@@ -93,11 +121,10 @@ public class SplashActivity extends AppCompatActivity {
             public void onResponse(String responseString) {
 
                 try {
-
                     // CHECK TOKEN VALID OR NOT
                     JSONObject response = new JSONObject(responseString);
                     if(Result.SUCCESS.checkResult(new Result(response))){
-                        JSONObject content = response.getJSONObject("content");
+                        JSONObject content = response.getJSONObject("content").getJSONObject("user");
                         User dentalUser = new User(content);
                         SharedPreferences.Editor editor = sharedPref.edit();
                         editor.putString(Resource.KEY_API_TOKEN,Resource.VALUE_API_TOKEN);
