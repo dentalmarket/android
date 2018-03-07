@@ -237,7 +237,7 @@ public class MainActivity extends BaseActivity
 
             @Override
             public void onResponse(String responseString) {
-                boolean closeActivityFlag = false;
+
                 try {
 
                     JSONObject response = new JSONObject(responseString);
@@ -251,7 +251,9 @@ public class MainActivity extends BaseActivity
                         editor.commit();
 
                         // redirect to login page
-                        closeActivityFlag = true;
+                        Intent intent = new Intent(context,LoginActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(intent);
                     }
 
                 } catch (JSONException e) {
@@ -259,8 +261,6 @@ public class MainActivity extends BaseActivity
 
                 } finally {
                     progressDialog.dismiss();
-                    if(closeActivityFlag)
-                        finish();
                 }
             }
         }, new Response.ErrorListener() {

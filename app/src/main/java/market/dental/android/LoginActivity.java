@@ -402,8 +402,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         MyFirebaseInstanceIDService.callUpdateDeviceTokenAPI(this);
 
         //redirect main activity
-        Intent i = new Intent(this,MainActivity.class);
-        startActivity(i);
+        Intent intent = new Intent(this,MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
     }
 
 }
