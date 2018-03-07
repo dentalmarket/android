@@ -41,6 +41,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -82,10 +83,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         setContentView(R.layout.activity_login);
 
         // Initialization
-        Resource.setDefaultAPITOKEN();
         context = this;
-        requestQueue = Volley.newRequestQueue(this);
         sharedPref = getSharedPreferences(getString(R.string.sp_dental_market), Context.MODE_PRIVATE);
+        requestQueue = Volley.newRequestQueue(this);
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
 
@@ -395,8 +395,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         User dentalUser = new User(userJsonObject);
         Resource.VALUE_API_TOKEN = dentalUser.getApi_token();
         SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putInt(getString(R.string.sp_user_id), dentalUser.getId());
+        editor.putString(Resource.KEY_API_TOKEN,Resource.VALUE_API_TOKEN);
         editor.putString(getString(R.string.sp_user_json_str), userJsonObject.toString());
+        editor.putInt(getString(R.string.sp_user_id), dentalUser.getId());
         editor.commit();
         // device_token update edilir
         MyFirebaseInstanceIDService.callUpdateDeviceTokenAPI(this);

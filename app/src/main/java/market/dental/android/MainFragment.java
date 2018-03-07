@@ -113,7 +113,7 @@ public class MainFragment extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
 
-        getActivity().setTitle("Generic fragment");
+        getActivity().setTitle("Anasayfa");
     }
 
     @Override
