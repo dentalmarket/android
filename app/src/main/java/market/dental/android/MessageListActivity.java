@@ -140,7 +140,9 @@ public class MessageListActivity extends BaseActivity {
         int id = item.getItemId();
         switch (id){
             case android.R.id.home:
-                finish();
+                Intent intent = new Intent(getApplicationContext() , ConversationListActivity.class);
+                startActivity(intent);
+                break;
         }
         return super.onOptionsItemSelected(item);
     }

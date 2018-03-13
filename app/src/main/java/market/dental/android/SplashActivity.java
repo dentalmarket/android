@@ -45,24 +45,6 @@ public class SplashActivity extends AppCompatActivity {
         requestQueue = Volley.newRequestQueue(this);
         Resource.VALUE_API_TOKEN = sharedPref.getString(Resource.KEY_API_TOKEN , "");
 
-        /*
-        Intent intent = getIntent();
-        StringBuilder str = new StringBuilder();
-        Bundle bundle = getIntent().getExtras();
-        if (bundle != null) {
-            Set<String> keys = bundle.keySet();
-            Iterator<String> it = keys.iterator();
-            while (it.hasNext()) {
-                String key = it.next();
-                str.append(key);
-                str.append(":");
-                str.append(bundle.get(key));
-                str.append("\n\r");
-                Log.i(Result.LOG_TAG_INFO.getResultText() , ">> Extras >> " + str);
-            }
-        }
-        */
-
         Thread myThread = new Thread(){
             @Override
             public void run(){
@@ -83,6 +65,8 @@ public class SplashActivity extends AppCompatActivity {
             }
         };
         myThread.start();
+
+
     }
 
     protected void redirectLoginActivity(){
@@ -98,9 +82,10 @@ public class SplashActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    protected void redirectConversationListActivity(){
-        Intent intent = new Intent(getApplicationContext() , ConversationListActivity.class);
+    protected void redirectConversationListActivity(Bundle bundle){
+        Intent intent = new Intent(getApplicationContext() , MessageListActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        intent.putExtras(bundle);
         startActivity(intent);
     }
 
@@ -131,7 +116,16 @@ public class SplashActivity extends AppCompatActivity {
                         editor.putString(getString(R.string.sp_user_json_str), content.toString());
                         editor.putInt(getString(R.string.sp_user_id), dentalUser.getId());
                         editor.commit();
-                        redirectMainActivity();
+
+                        // Eğer kullanıcı gelen mesaj bildirimine tıklıyorsa bildirimin içeriğine
+                        // bakılarak gerekirse mesajlarım sayfasına yönlendirilir
+                        Bundle bundle = getIntent().getExtras();
+                        if (bundle != null && bundle.getString("fromId").length()>0) {
+                            bundle.putString(Resource.KEY_MESSAGE_RECEIVER_ID, bundle.getString("fromId").toString());
+                            redirectConversationListActivity(bundle);
+                        }else{
+                            redirectMainActivity();
+                        }
 
                     // INVALID TOKEN
                     }else{

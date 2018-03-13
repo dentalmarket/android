@@ -59,7 +59,9 @@ public class ConversationListActivity extends BaseActivity {
         int id = item.getItemId();
         switch (id){
             case android.R.id.home:
-                finish();
+                Intent intent = new Intent(getApplicationContext() , MainActivity.class);
+                startActivity(intent);
+                break;
         }
         return super.onOptionsItemSelected(item);
     }
