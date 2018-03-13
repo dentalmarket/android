@@ -16,6 +16,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -30,6 +31,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -400,18 +402,24 @@ public class ProfileActivity extends BaseActivity {
             @Override
             public void onResponse(String responseString) {
                 try {
-                    // TODO: result objesinin kontrolü YAPILACAK
+
                     JSONObject response = new JSONObject(responseString);
-                    JSONObject userJsonObject = response.getJSONObject("content").getJSONObject("user");
-                    String responseMessage = response.getJSONObject("content").getString("message");
+                    if(Result.SUCCESS.checkResult(new Result(response))){
+                        JSONObject userJsonObject = response.getJSONObject("content").getJSONObject("user");
+                        String responseMessage = response.getJSONObject("content").getString("message");
 
-                    setUserSession(userJsonObject);
-                    updateView();
+                        setUserSession(userJsonObject);
+                        updateView();
 
-                    if(localError.length()>0){
-                        Toast.makeText(context, localError , Toast.LENGTH_LONG).show();
+                        if(localError.length()>0) {
+                            Toast.makeText(context, localError, Toast.LENGTH_LONG).show();
+                        }
+
+                        Toast.makeText(context, responseMessage, Toast.LENGTH_LONG).show();
+
                     }else{
-                        Toast.makeText(context, responseMessage , Toast.LENGTH_LONG).show();
+                        Toast.makeText(context, "Beklenmeyen Hata", Toast.LENGTH_LONG).show();
+                        Log.i(Result.LOG_TAG_INFO.getResultText(),"" + this.getClass() + " >> JSONException >> ajaxUpdateProfile");
                     }
 
                 } catch (JSONException e) {
@@ -427,6 +435,11 @@ public class ProfileActivity extends BaseActivity {
                 progressDialog.dismiss();
                 error.printStackTrace();
                 Log.i(Result.LOG_TAG_INFO.getResultText(),"" + this.getClass() + " >> ERROR ON GET DATA >> ajaxUpdateProfile");
+
+                NetworkResponse networkResponse = error.networkResponse;
+                if(networkResponse!=null){
+                    Log.i(Result.LOG_TAG_INFO.getResultText() , "" + this.getClass() + " >> Login.StausCode >> " + networkResponse.statusCode);
+                }
             }
         }){
             @Override
@@ -436,12 +449,16 @@ public class ProfileActivity extends BaseActivity {
                 params.put(Resource.KEY_API_TOKEN, Resource.VALUE_API_TOKEN);
                 params.put("first_name", activity_profile_content_name.getText().toString());
                 params.put("last_name", activity_profile_content_lastname.getText().toString());
-                params.put("city", String.valueOf(selectedCity.getId()));
-                params.put("district", String.valueOf(selectedBorough.getId()));
                 params.put("phone", activity_profile_phone.getText().toString());
                 params.put("mobile_phone", activity_profile_mobile_phone.getText().toString());
                 params.put("job", professionTextView.getText().toString());
                 params.put("birthday", birthdayText.getText().toString());
+
+                if(selectedCity!=null)
+                    params.put("city", String.valueOf(selectedCity.getId()));
+
+                if(selectedBorough!=null)
+                    params.put("district", String.valueOf(selectedBorough.getId()));
 
                 // Şifre Değişikliği Durumu
                 if(activity_profile_password_new.getText().toString().length() > 0 &&
