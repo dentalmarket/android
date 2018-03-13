@@ -37,6 +37,7 @@ public class Result <T> implements Serializable{
     public static Result FAILURE_PROCESS_CASTING;
     public static Result FAILURE_PROCESS_CONTENTTYPE;
     public static Result FAILURE_CHECKER_DATE;
+    public static Result FAILURE_USER_CONFIRM;
     public static Result LOG_TAG_INFO;
 
     static{
@@ -189,6 +190,7 @@ public class Result <T> implements Serializable{
         FAILURE_PROCESS_CASTING     = new Result("GUPPY.610", "FAILURE_PROCESS_CASTING");
         FAILURE_PROCESS_CONTENTTYPE = new Result("GUPPY.611", "FAILURE_PROCESS_CONTENTTYPE");
         FAILURE_CHECKER_DATE        = new Result("GUPPY.740", "FAILURE_CHECKER_DATE");
+        FAILURE_USER_CONFIRM        = new Result("GUPPY.702", "User not confirmed.");               // dental.market standartına göre eklendi
         LOG_TAG_INFO                = new Result("TAG.001", "INFO_DENTAL_MARKET");
     }
 

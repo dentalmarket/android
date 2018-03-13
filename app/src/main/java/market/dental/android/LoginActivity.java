@@ -248,15 +248,22 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 @Override
                 public void onResponse(String responseString) {
                     try {
-                        // TODO: result objesinin kontrolü YAPILACAK
+
                         JSONObject response = new JSONObject(responseString);
-                        JSONObject content = response.getJSONObject("content");
-                        setUserSessionAndFinish(content);
+                        if(Result.SUCCESS.checkResult(new Result(response))){
+                            JSONObject content = response.getJSONObject("content");
+                            setUserSessionAndFinish(content);
+                        } else if(Result.FAILURE_USER_CONFIRM.checkResult(new Result(response))){
+                            Toast.makeText(context,response.getString("content"),Toast.LENGTH_LONG).show();
+                        }else {
+                            Toast.makeText(context,"Beklenmedik hata",Toast.LENGTH_LONG).show();
+                        }
 
                     } catch (JSONException e) {
-                        showProgress(false);
                         e.printStackTrace();
                         Log.i(Result.LOG_TAG_INFO.getResultText(),"LoginActivity >> JSONException >> 120");
+                    } finally {
+                        showProgress(false);
                     }
                 }
             }, new Response.ErrorListener() {
