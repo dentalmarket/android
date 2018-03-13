@@ -53,6 +53,9 @@ public class RegisterActivity extends AppCompatActivity {
     private TextView boroughTextView;
     private TextView cityTextView;
     private TextView professionTextView;
+    private TextView registerJob;
+    private EditText registerPhone;
+    private EditText registerMobilePhone;
     private boolean cityListRequestSuccess = false;
     private boolean professionListRequestSuccess = false;
 
@@ -67,14 +70,23 @@ public class RegisterActivity extends AppCompatActivity {
 
         context = this;
         requestQueue = Volley.newRequestQueue(context);
-        professionListAdapter = new ProfessionListAdapter(context);
-        cityListAdapter = new CityListAdapter(context);
-        boroughTextView = findViewById(R.id.activity_register_borough);
 
         AlertDialog.Builder progressDialogBuilder = new AlertDialog.Builder(this);
         progressDialogBuilder.setCancelable(false);
         progressDialogBuilder.setView(getLayoutInflater().inflate(R.layout.dialog_progressbar,null));
         progressDialog = progressDialogBuilder.create();
+
+        // KULLANICI SADECE MAIL ADRESİ İLE KAYIT OLMASI İSTENDİ
+/*
+        professionListAdapter = new ProfessionListAdapter(context);
+        cityListAdapter = new CityListAdapter(context);
+        boroughTextView = findViewById(R.id.activity_register_borough);
+        cityTextView = findViewById(R.id.activity_register_city);
+        professionTextView = findViewById(R.id.activity_register_job);
+        registerJob = (TextView)findViewById(R.id.activity_register_job);
+        registerPhone = (EditText)findViewById(R.id.activity_register_phone);
+        registerMobilePhone = (EditText)findViewById(R.id.activity_register_mobile_phone);
+
         progressDialog.show();
 
         // *****************************************************************************************
@@ -172,6 +184,7 @@ public class RegisterActivity extends AppCompatActivity {
             }
         };
         requestQueue.add(request);
+*/
 
     }
 
@@ -269,7 +282,6 @@ public class RegisterActivity extends AppCompatActivity {
 
 
     public void citySetOnClickListener(){
-        cityTextView = findViewById(R.id.activity_register_city);
         cityTextView.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
@@ -290,7 +302,6 @@ public class RegisterActivity extends AppCompatActivity {
 
 
     public void professionSetOnClickListener(){
-        professionTextView = findViewById(R.id.activity_register_job);
         professionTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -366,21 +377,20 @@ public class RegisterActivity extends AppCompatActivity {
             }){
                 @Override
                 protected Map<String, String> getParams()  {
-                    String cityId = String.valueOf(selectedCity==null ? -1 : selectedCity.getId());
-                    String boroughId = String.valueOf(selectedBorough==null ? -1 : selectedBorough.getId());
-
                     Map<String, String> params = new HashMap<>();
                     params.put(Resource.KEY_API_TOKEN, Resource.VALUE_API_TOKEN);
                     params.put("type", "1");
                     params.put("email", ((EditText)findViewById(R.id.activity_register_email)).getText().toString());
                     params.put("password", password);
-                    params.put("first_name", ((EditText)findViewById(R.id.activity_register_name)).getText().toString());
-                    params.put("last_name", ((EditText)findViewById(R.id.activity_register_lastname)).getText().toString());
-                    params.put("job", ((TextView)findViewById(R.id.activity_register_job)).getText().toString());
-                    params.put("city", cityId);
-                    params.put("district", boroughId);
-                    params.put("phone", ((EditText)findViewById(R.id.activity_register_phone)).getText().toString());
-                    params.put("mobile_phone", ((EditText)findViewById(R.id.activity_register_mobile_phone)).getText().toString());
+                    //String cityId = String.valueOf(selectedCity==null ? -1 : selectedCity.getId());
+                    //String boroughId = String.valueOf(selectedBorough==null ? -1 : selectedBorough.getId());
+                    //params.put("first_name", ((EditText)findViewById(R.id.activity_register_name)).getText().toString());
+                    //params.put("last_name", ((EditText)findViewById(R.id.activity_register_lastname)).getText().toString());
+                    //params.put("job", (registerJob).getText().toString());
+                    //params.put("city", cityId);
+                    //params.put("district", boroughId);
+                    //params.put("phone", (registerPhone).getText().toString());
+                    //params.put("mobile_phone", (registerMobilePhone).getText().toString());
                     return params;
                 }
                 @Override

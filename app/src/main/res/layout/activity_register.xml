@@ -42,6 +42,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+            <!--
             <EditText
                 android:id="@+id/activity_register_name"
                 style="@style/DentalMarket.RegisterEditText"
@@ -53,6 +54,7 @@
                 style="@style/DentalMarket.RegisterEditText"
                 android:hint="@string/surname"
                 android:inputType="text"/>
+            -->
 
             <EditText
                 android:id="@+id/activity_register_email"
@@ -72,6 +74,8 @@
                 android:hint="@string/password_check"
                 android:inputType="textPassword"/>
 
+            <!-- İstek üzerine bu alanlar kaldırıldı -->
+            <!--
             <TextView
                 android:id="@+id/activity_register_job"
                 style="@style/DentalMarket.RegisterEditText"
@@ -106,6 +110,8 @@
                 android:id="@+id/activity_register_terms"
                 style="@style/DentalMarket.Register.TermsTextView"
                 android:text="@string/terms_warning" />
+
+            -->
 
             <Button
                 android:id="@+id/activity_register_sign_up_button"

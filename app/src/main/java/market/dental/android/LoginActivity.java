@@ -266,7 +266,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                     error.printStackTrace();
                     NetworkResponse networkResponse = error.networkResponse;
                     Log.i(Result.LOG_TAG_INFO.getResultText() , ">> Login.Response.ErrorListener");
-                    Log.i(Result.LOG_TAG_INFO.getResultText() , ">> Login.StausCode >> " + networkResponse.statusCode);
+                    if(networkResponse!=null){
+                        Log.i(Result.LOG_TAG_INFO.getResultText() , ">> Login.StausCode >> " + networkResponse.statusCode);
+                    }
                 }
             }){
                 @Override
