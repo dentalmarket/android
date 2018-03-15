@@ -79,34 +79,43 @@ public class ConversationListActivity extends BaseActivity {
             public void onResponse(String responseString) {
 
                 try {
-                    // TODO: result objesinin kontrolü YAPILACAK
+
                     JSONObject response = new JSONObject(responseString);
-                    JSONObject content = response.getJSONObject("content");
+                    if(Result.SUCCESS.checkResult(new Result(response))){
+                        JSONObject content = response.getJSONObject("content");
 
-                    conversationListAdapter.setConversationList(Conversation.ConversationList(content.getJSONArray("conversations")));
-
-                    if(conversationListAdapter.getCount() > 0){
-                        placeHolder.setVisibility(View.GONE);
-                        ListView listView = findViewById(R.id.activity_conversation_list_main);
-                        listView.setAdapter(conversationListAdapter);
-                        listView.setOnItemClickListener(
-                                new AdapterView.OnItemClickListener() {
-                                    @Override
-                                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                                        int receiverId = ((Conversation) parent.getItemAtPosition(position)).getUserId();
-                                        Bundle bundle = new Bundle();
-                                        bundle.putString(Resource.KEY_MESSAGE_RECEIVER_ID, String.valueOf(receiverId));
-                                        Intent intent = new Intent(view.getContext(),MessageListActivity.class);
-                                        intent.putExtras(bundle);
-                                        view.getContext().startActivity(intent);
+                        conversationListAdapter.setConversationList(Conversation.ConversationList(content.getJSONArray("conversations")));
+                        if(conversationListAdapter.getCount() > 0){
+                            placeHolder.setVisibility(View.GONE);
+                            ListView listView = findViewById(R.id.activity_conversation_list_main);
+                            listView.setAdapter(conversationListAdapter);
+                            listView.setOnItemClickListener(
+                                    new AdapterView.OnItemClickListener() {
+                                        @Override
+                                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                            int receiverId = ((Conversation) parent.getItemAtPosition(position)).getUserId();
+                                            Bundle bundle = new Bundle();
+                                            bundle.putString(Resource.KEY_MESSAGE_RECEIVER_ID, String.valueOf(receiverId));
+                                            Intent intent = new Intent(view.getContext(),MessageListActivity.class);
+                                            intent.putExtras(bundle);
+                                            view.getContext().startActivity(intent);
+                                        }
                                     }
-                                }
-                        );
+                            );
+                        }
+
+                    }else if(Result.FAILURE_TOKEN.checkResult(new Result(response))){
+                        redirectLoginActivity();
                     }
 
                 } catch (JSONException e) {
                     e.printStackTrace();
                     Log.i(Result.LOG_TAG_INFO.getResultText(),"ConversationListActivity >> JSONException >> 120");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Log.i(Result.LOG_TAG_INFO.getResultText(),"Exception");
+
+                    redirectLoginActivity();
                 }
             }
 
@@ -115,6 +124,8 @@ public class ConversationListActivity extends BaseActivity {
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace();
                 Log.i(Result.LOG_TAG_INFO.getResultText(),"ConversationListActivity >> ERROR ON GET DATA >> 121");
+
+                redirectLoginActivity();
             }
         }){
             @Override

@@ -14,6 +14,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.crashlytics.android.Crashlytics;
 import com.google.firebase.iid.FirebaseInstanceId;
 
 import org.json.JSONException;
@@ -120,7 +121,7 @@ public class SplashActivity extends AppCompatActivity {
                         // Eğer kullanıcı gelen mesaj bildirimine tıklıyorsa bildirimin içeriğine
                         // bakılarak gerekirse mesajlarım sayfasına yönlendirilir
                         Bundle bundle = getIntent().getExtras();
-                        if (bundle != null && bundle.getString("fromId").length()>0) {
+                        if (bundle!=null && bundle.getString("fromId")!=null && bundle.getString("fromId").length()>0) {
                             bundle.putString(Resource.KEY_MESSAGE_RECEIVER_ID, bundle.getString("fromId").toString());
                             redirectConversationListActivity(bundle);
                         }else{
@@ -136,16 +137,27 @@ public class SplashActivity extends AppCompatActivity {
                     e.printStackTrace();
                     Log.i(Result.LOG_TAG_INFO.getResultText(),"JSONException");
                     redirectLoginActivity();
+                } catch (Exception e) {
+                    e.printStackTrace();
+
+                    Log.i(Result.LOG_TAG_INFO.getResultText(),"Exception");
+                    Crashlytics.log( 1 , Result.LOG_TAG_INFO.getResultText(), "Exception");
+                    redirectLoginActivity();
                 }
             }
 
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                NetworkResponse networkResponse = error.networkResponse;
+
                 error.printStackTrace();
                 Log.i(Result.LOG_TAG_INFO.getResultText() , ">> Response.ErrorListener");
-                Log.i(Result.LOG_TAG_INFO.getResultText() , ">> StausCode >> " + networkResponse.statusCode);
+
+                NetworkResponse networkResponse = error.networkResponse;
+                if(networkResponse!=null){
+                    Log.i(Result.LOG_TAG_INFO.getResultText() , ">> Login.StatusCode >> " + networkResponse.statusCode);
+                }
+
                 redirectLoginActivity();
             }
         }){

@@ -15,6 +15,6 @@
         android:textColor="#EEA642"
         android:textStyle="bold"
         android:textSize="16dp"
-        android:text="Anasayfa" />
+        android:text="Menü" />
 
 </LinearLayout>

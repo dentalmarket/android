@@ -37,7 +37,7 @@
                     android:id="@+id/activity_profile_header_name"
                     android:layout_width="match_parent"
                     android:layout_height="20dp"
-                    android:text="Beraat Aldemir"/>
+                    android:text="-"/>
             </TableRow>
 
             <TableRow
@@ -47,7 +47,7 @@
                     android:id="@+id/activity_profile_header_mail"
                     android:layout_width="match_parent"
                     android:layout_height="20dp"
-                    android:text="berat@gmail.com"/>
+                    android:text="-"/>
             </TableRow>
 
             <TableRow
@@ -57,7 +57,7 @@
                     android:id="@+id/activity_profile_header_rate"
                     android:layout_width="match_parent"
                     android:layout_height="20dp"
-                    android:text="8.7 / 10"/>
+                    android:text="- / 10"/>
             </TableRow>
         </TableLayout>
 

@@ -63,4 +63,10 @@ public class BaseActivity extends AppCompatActivity {
         return messageReceiver;
     }
 
+    public void redirectLoginActivity(){
+        Resource.setDefaultAPITOKEN();
+        Intent intent = new Intent(getApplicationContext() , LoginActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+    }
 }
