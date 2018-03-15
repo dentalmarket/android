@@ -3,7 +3,7 @@ package market.dental.android;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.AlertDialog;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -13,18 +13,15 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.squareup.picasso.Picasso;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -39,7 +36,6 @@ import market.dental.util.Resource;
 import market.dental.util.Result;
 
 public class ProductDetailActivity extends BaseActivity {
-
     private RecyclerView mRecyclerView;
     private RecyclerView.LayoutManager mRecyclerLayoutManager;
     private RecyclerView.Adapter mRecyclerAdapter;
@@ -53,6 +49,7 @@ public class ProductDetailActivity extends BaseActivity {
     private TextView storeEmail;
     private TextView brandName;
     private Button sendMessageBtn;
+    private AlertDialog progressDialog;
 
     private int productId;
     private String productDesc;
@@ -80,6 +77,12 @@ public class ProductDetailActivity extends BaseActivity {
         brandName = (TextView)findViewById(R.id.activity_product_detail_brand_name);
         sendMessageBtn = (Button) findViewById(R.id.activity_product_detail_send_message_btn);
 
+        AlertDialog.Builder progressDialogBuilder = new AlertDialog.Builder(this);
+        progressDialogBuilder.setCancelable(false);
+        progressDialogBuilder.setView(getLayoutInflater().inflate(R.layout.dialog_progressbar,null));
+        progressDialog = progressDialogBuilder.create();
+        progressDialog.show();
+
         // *****************************************************************************************
         //                              GET PRODUCT DETAIL
         // *****************************************************************************************
@@ -93,59 +96,68 @@ public class ProductDetailActivity extends BaseActivity {
             public void onResponse(String responseString) {
 
                 try {
-                    // TODO: result objesinin kontrolü YAPILACAK
-                    // result objesinin content değeri alınır
+
                     JSONObject response = new JSONObject(responseString);
-                    JSONObject content = response.getJSONObject("content");
-                    final Store store = new Store(content.getJSONObject("store"));
+                    if(Result.SUCCESS.checkResult(new Result(response))){
+                        JSONObject content = response.getJSONObject("content");
+                        final Store store = new Store(content.getJSONObject("store"));
 
-                    Product product = new Product(content);
+                        Product product = new Product(content);
 
-                    productDesc = product.getDescription();
+                        productDesc = product.getDescription();
 
-                    Typeface font = Typeface.createFromAsset(getAssets(),"fonts/fontawesome-webfont.ttf");
-                    pdProductPrice.setTypeface(font);
-                    pdProductPrice.setText(product.getSalePrice() + " "  + Currency.getCurrencyString( getResources(),product.getCurrencyId()));
-                    pdProductName.setText((String) product.getName());
-                    Picasso.with(productDetailContext)
-                            .load(product.getImageUrl())
-                            .placeholder(R.mipmap.ic_launcher)
-                            .error(R.mipmap.ic_launcher)
-                            .into(pdImageView);
+                        Typeface font = Typeface.createFromAsset(getAssets(),"fonts/fontawesome-webfont.ttf");
+                        pdProductPrice.setTypeface(font);
+                        pdProductPrice.setText(product.getSalePrice() + " "  + Currency.getCurrencyString( getResources(),product.getCurrencyId()));
+                        pdProductName.setText((String) product.getName());
+                        Picasso.with(productDetailContext)
+                                .load(product.getImageUrl())
+                                .placeholder(R.mipmap.ic_launcher)
+                                .error(R.mipmap.ic_launcher)
+                                .into(pdImageView);
 
-                    brandName.setText(product.getBrand().getName());
+                        brandName.setText(product.getBrand().getName());
 
-                    storeName.setText(store.getName());
-                    storePhone.setText(store.getPhone());
-                    storeGsm.setText(store.getGsm());
-                    storeEmail.setText(store.getEmail());
+                        storeName.setText(store.getName());
+                        storePhone.setText(store.getPhone());
+                        storeGsm.setText(store.getGsm());
+                        storeEmail.setText(store.getEmail());
 
-                    mRecyclerView.setLayoutManager(mRecyclerLayoutManager);
-                    mRecyclerAdapter = new ProductsRecyclerAdapter(Product.ProductList(content.getJSONArray("similarProducts")));
-                    mRecyclerView.setAdapter(mRecyclerAdapter);
+                        mRecyclerView.setLayoutManager(mRecyclerLayoutManager);
+                        mRecyclerAdapter = new ProductsRecyclerAdapter(Product.ProductList(content.getJSONArray("similarProducts")));
+                        mRecyclerView.setAdapter(mRecyclerAdapter);
 
-                    // SEND MESSAGE BUTTON EVENT
-                    sendMessageBtn.setOnClickListener(new View.OnClickListener(){
-                        @Override
-                        public void onClick(View v) {
-                            Intent intent = new Intent(v.getContext(),MessageListActivity.class);
-                            Bundle bundle = new Bundle();
-                            bundle.putString(Resource.KEY_MESSAGE_RECEIVER_ID, String.valueOf(store.getId()));
-                            intent.putExtras(bundle);
-                            startActivity(intent);
-                        }
-                    });
+                        // SEND MESSAGE BUTTON EVENT
+                        sendMessageBtn.setOnClickListener(new View.OnClickListener(){
+                            @Override
+                            public void onClick(View v) {
+                                Intent intent = new Intent(v.getContext(),MessageListActivity.class);
+                                Bundle bundle = new Bundle();
+                                bundle.putString(Resource.KEY_MESSAGE_RECEIVER_ID, String.valueOf(store.getId()));
+                                intent.putExtras(bundle);
+                                startActivity(intent);
+                            }
+                        });
+                    } else if(Result.FAILURE_TOKEN.checkResult(new Result(response))){
+                        redirectLoginActivity();
+                    }
                     
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    Log.i(Result.LOG_TAG_INFO.getResultText(),"ProductListActivity >> JSONException >> 120");
+                    Log.i(Result.LOG_TAG_INFO.getResultText(),"ProductDetail >> JSONException >> 120");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Log.i(Result.LOG_TAG_INFO.getResultText(),"ProductDetail >> Exception");
+                } finally {
+                    progressDialog.dismiss();
                 }
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace();
-                Log.i(Result.LOG_TAG_INFO.getResultText(),"ProductListActivity >> ERROR ON GET DATA >> 121");
+                Log.i(Result.LOG_TAG_INFO.getResultText(),"ProductDetail >> ERROR ON GET DATA >> 121");
+                redirectLoginActivity();
             }
         }){
             @Override
