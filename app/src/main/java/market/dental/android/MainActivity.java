@@ -1,24 +1,18 @@
 package market.dental.android;
 
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.app.TaskStackBuilder;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
-import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -30,7 +24,6 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -39,7 +32,6 @@ import java.util.List;
 import java.util.Map;
 
 import market.dental.model.Category;
-import market.dental.model.Conversation;
 import market.dental.util.Resource;
 import market.dental.util.Result;
 
@@ -95,21 +87,29 @@ public class MainActivity extends BaseActivity
             @Override
             public void onResponse(String responseString) {
                 try {
-                    // TODO: result objesinin kontrolü YAPILACAK
-                    JSONObject response = new JSONObject(responseString);
-                    JSONObject content = response.getJSONObject("content");
 
-                    if(content.has("subCategories")) {
-                        List<Category> categoryList = Category.CategoryList(content.getJSONArray("subCategories"));
-                        for(Category category : categoryList){
-                            MenuItem menuItem = navigationViewMenu.add(R.id.activity_main_drawer_main_group, category.getId(), Menu.NONE,category.getName() );
-                            menuItem.setIcon(R.drawable.ic_menu_black_18dp);
+                    JSONObject response = new JSONObject(responseString);
+                    if(Result.SUCCESS.checkResult(new Result(response))){
+                        JSONObject content = response.getJSONObject("content");
+                        if(content.has("subCategories")) {
+                            List<Category> categoryList = Category.CategoryList(content.getJSONArray("subCategories"));
+                            for(Category category : categoryList){
+                                MenuItem menuItem = navigationViewMenu.add(R.id.activity_main_drawer_main_group, category.getId(), Menu.NONE,category.getName() );
+                                menuItem.setIcon(R.drawable.ic_menu_black_18dp);
+                            }
                         }
+
+                    }else if(Result.FAILURE_TOKEN.checkResult(new Result(response))){
+                        redirectLoginActivity();
                     }
 
                 } catch (JSONException e) {
                     e.printStackTrace();
                     Log.i(Result.LOG_TAG_INFO.getResultText(),"MainActivity >> JSONException >> 120");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Log.i(Result.LOG_TAG_INFO.getResultText(),"Exception");
+                    redirectLoginActivity();
                 }
             }
         }, new Response.ErrorListener() {
@@ -117,6 +117,7 @@ public class MainActivity extends BaseActivity
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace();
                 Log.i(Result. LOG_TAG_INFO.getResultText(),"MainActivity >> ERROR ON GET DATA >> 121");
+                redirectLoginActivity();
             }
         }){
             @Override
@@ -165,9 +166,6 @@ public class MainActivity extends BaseActivity
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         Intent intent;
         switch (id){
@@ -211,7 +209,6 @@ public class MainActivity extends BaseActivity
     @Override
     public void onResume(){
         super.onResume();
-
     }
 
 
@@ -254,7 +251,9 @@ public class MainActivity extends BaseActivity
 
                 } catch (JSONException e) {
                     e.printStackTrace();
-
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Log.i(Result.LOG_TAG_INFO.getResultText(),"Exception");
                 } finally {
                     progressDialog.dismiss();
                 }
@@ -264,6 +263,7 @@ public class MainActivity extends BaseActivity
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace();
                 progressDialog.dismiss();
+                redirectLoginActivity();
             }
         }){
             @Override
