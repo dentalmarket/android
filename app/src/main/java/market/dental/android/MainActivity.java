@@ -3,6 +3,9 @@ package market.dental.android;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -23,6 +26,8 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -93,9 +98,29 @@ public class MainActivity extends BaseActivity
                         JSONObject content = response.getJSONObject("content");
                         if(content.has("subCategories")) {
                             List<Category> categoryList = Category.CategoryList(content.getJSONArray("subCategories"));
-                            for(Category category : categoryList){
-                                MenuItem menuItem = navigationViewMenu.add(R.id.activity_main_drawer_main_group, category.getId(), Menu.NONE,category.getName() );
-                                menuItem.setIcon(R.drawable.ic_menu_black_18dp);
+                            for(final Category category : categoryList){
+
+                                final MenuItem menuItem = navigationViewMenu.add(R.id.activity_main_drawer_main_group, category.getId(), Menu.NONE,category.getName() );
+                                final Target target = new Target() {
+                                    @Override
+                                    public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom loadedFrom) {
+                                        BitmapDrawable mBitmapDrawable = new BitmapDrawable(getResources(), bitmap);
+                                        // mBitmapDrawable.setBounds(0,0,24,24);
+                                        menuItem.setIcon(mBitmapDrawable);
+                                    }
+
+                                    @Override
+                                    public void onBitmapFailed(Drawable drawable) {
+                                        menuItem.setIcon(R.drawable.ic_menu_black_18dp);
+                                    }
+
+                                    @Override
+                                    public void onPrepareLoad(Drawable drawable) {
+                                        menuItem.setIcon(R.drawable.ic_menu_black_18dp);
+                                    }
+                                };
+
+                                Picasso.with(context).load(category.getIcon().replaceFirst("http" , "https")).into(target);
                             }
                         }
 
