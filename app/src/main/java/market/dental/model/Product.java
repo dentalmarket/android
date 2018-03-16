@@ -37,7 +37,7 @@ public class Product {
             this.price = projectJsonObject.has("price") && !projectJsonObject.isNull("price")?
                     projectJsonObject.getString("price"):"-";
             this.salePrice = projectJsonObject.has("sale_price") && !projectJsonObject.isNull("sale_price")?
-                    projectJsonObject.getString("sale_price"):"-";
+                    String.format("%.2f", projectJsonObject.getDouble("sale_price")):"-";
             this.currencyId = projectJsonObject.has("currency") && !projectJsonObject.isNull("currency")?
                     projectJsonObject.getInt("currency"):-1;
 

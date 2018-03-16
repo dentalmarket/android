@@ -117,6 +117,7 @@ public class MainActivity extends BaseActivity
                                     @Override
                                     public void onPrepareLoad(Drawable drawable) {
                                         menuItem.setIcon(R.drawable.ic_menu_black_18dp);
+                                        Log.i(Result.LOG_TAG_INFO.getResultText(), "onPrepareLoad >> " + category.getIcon());
                                     }
                                 };
 
