@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.drawable.ColorDrawable;
+import android.net.ConnectivityManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
@@ -12,37 +13,58 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
+import market.dental.application.DentalMarketApplication;
 import market.dental.model.Message;
+import market.dental.receiver.ConnectionReceiver;
 import market.dental.util.Resource;
+import market.dental.util.Result;
 
 /**
  * Created by kemalsamikaraca on 6.03.2018.
  */
 
-public class BaseActivity extends AppCompatActivity {
+public class BaseActivity extends AppCompatActivity implements ConnectionReceiver.ConnectionReceiverListener {
 
+    public BroadcastReceiver getMessageReceiver(){
+        return messageReceiver;
+    }
 
     @Override
     protected void onStart() {
         super.onStart();
+
         LocalBroadcastManager.getInstance(this).registerReceiver((messageReceiver),
                 new IntentFilter(Resource.KEY_LOCAL_BROADCAST)
         );
-
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.dental_market_main)));
-
-        Window window = getWindow();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            window.setStatusBarColor(ContextCompat.getColor(this,R.color.dental_market_main_t50));
-        }
     }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        //check the network connectivity when activity is created
+        checkConnection();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        // register connection status listener
+        DentalMarketApplication.getInstance().setConnectionListener(this);
+
+        //check the network connectivity when activity is resumed
+        checkConnection();
+    }
+
+
 
     public BroadcastReceiver messageReceiver = new BroadcastReceiver() {
         @Override
@@ -72,14 +94,34 @@ public class BaseActivity extends AppCompatActivity {
         }
     };
 
-    public BroadcastReceiver getMessageReceiver(){
-        return messageReceiver;
-    }
+
 
     public void redirectLoginActivity(){
         Resource.setDefaultAPITOKEN();
         Intent intent = new Intent(getApplicationContext() , LoginActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
+    }
+
+
+
+    @Override
+    public void onNetworkConnectionChanged(boolean isConnected) {
+        if(!isConnected) {
+
+            //show a No Internet Alert or Dialog
+
+        }else{
+
+            // dismiss the dialog or refresh the activity
+        }
+    }
+
+    private void checkConnection() {
+        boolean isConnected = ConnectionReceiver.isConnected();
+        if(!isConnected) {
+            //show a No Internet Alert or Dialog
+            Log.i(Result.LOG_TAG_INFO.getResultText(),"Internet connection ERROR");
+        }
     }
 }

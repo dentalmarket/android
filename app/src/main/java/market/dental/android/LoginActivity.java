@@ -137,7 +137,6 @@ public class LoginActivity extends BaseActivity implements LoaderCallbacks<Curso
     public void onResume(){
         super.onResume();
         showProgress(false);
-
     }
 
     private void goToForgotPasswordActivity(){
