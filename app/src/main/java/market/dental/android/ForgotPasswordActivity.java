@@ -27,7 +27,7 @@ import java.util.Map;
 import market.dental.util.Resource;
 import market.dental.util.Result;
 
-public class ForgotPasswordActivity extends AppCompatActivity {
+public class ForgotPasswordActivity extends BaseActivity {
 
     private RequestQueue requestQueue;
     private AlertDialog progressDialog;

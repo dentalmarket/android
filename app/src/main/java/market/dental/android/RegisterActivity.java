@@ -40,7 +40,7 @@ import market.dental.model.Profession;
 import market.dental.util.Resource;
 import market.dental.util.Result;
 
-public class RegisterActivity extends AppCompatActivity {
+public class RegisterActivity extends BaseActivity {
 
     private List<Profession> professionList = new ArrayList<>();
     private List<City> cityList = new ArrayList<>();

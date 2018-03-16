@@ -89,7 +89,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
-                    android:background="#D3BD98"
+                    android:background="@color/dental_market_main"
                     android:text="@string/action_sign_in"
                     android:textColor="#FFFFFF"
                     android:textStyle="bold" />

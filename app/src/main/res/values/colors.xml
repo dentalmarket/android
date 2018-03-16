@@ -6,7 +6,9 @@
     <color name="colorWhite">#FFFFFF</color>
 
     <!-- DENTAL MARKET THEME COLOR -->
-    <color name="dental_market_text_title">#e3d6bf</color>
+    <color name="dental_market_main_t50">#80D3BD98</color>
+    <color name="dental_market_main">#D3BD98</color>
+    <color name="dental_market_text_title">#D3BD98</color>
     <color name="dental_market_text_price">#31AC7A</color>
     <color name="dental_market_blue">#0000FF</color>
 </resources>
