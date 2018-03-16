@@ -120,7 +120,12 @@ public class MainActivity extends BaseActivity
                                     }
                                 };
 
-                                Picasso.with(context).load(category.getIcon().replaceFirst("http" , "https")).into(target);
+                                if(category.getIcon()!=null && category.getIcon().contains("http")){
+                                    Picasso.with(context).load(category.getIcon().replaceFirst("http" , "https")).into(target);
+                                }else{
+                                    Picasso.with(context).load("https://dental.market/assets/images/categories/1506941351.png").into(target);
+                                }
+
                             }
                         }
 

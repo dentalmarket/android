@@ -20,7 +20,6 @@ public class ProductDescriptionActivity extends BaseActivity {
         // Get productId
         Intent intent = getIntent();
         String productDesc = intent.getStringExtra(Resource.KEY_PRODUCT_DESC);
-        Toast.makeText(this,"Ürün Açıklaması" , Toast.LENGTH_LONG).show();
 
         WebView webView = findViewById(R.id.activity_product_description_web_view);
         webView.loadDataWithBaseURL("null", productDesc,"text/html", "UTF-8",null);
