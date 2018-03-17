@@ -150,8 +150,10 @@ public class BaseActivity extends AppCompatActivity implements ConnectionReceive
     }
 
     public void volleyOnErrorResponse(VolleyError error , StringBuilder errorMessage){
-        try{
+        // print error to stackTrace
+        error.printStackTrace();
 
+        try{
             NetworkResponse networkResponse = error.networkResponse;
             if(networkResponse!=null && networkResponse.data!=null){
                 errorMessage.append("\n" + this.getClass().getName() + " >> " + "volleyOnErrorResponse" + " >>  networkResponse.statusCode:" +networkResponse.statusCode);

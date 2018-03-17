@@ -146,7 +146,6 @@ public class ProfileActivity extends BaseActivity {
             public void onErrorResponse(VolleyError error) {
                 professionListRequestSuccess = true;
                 closeProgressDialog(progressDialog);
-                error.printStackTrace();
 
                 StringBuilder errorMessage = new StringBuilder(this.getClass().getName() + " >> " + Resource.ajax_get_professions + " >> ERROR ON GET DATA ");
                 volleyOnErrorResponse(error , errorMessage);
@@ -177,18 +176,23 @@ public class ProfileActivity extends BaseActivity {
             @Override
             public void onResponse(String responseString) {
                 try {
-                    // TODO: result objesinin kontrolü YAPILACAK
                     JSONObject response = new JSONObject(responseString);
-                    JSONArray content = response.getJSONArray("content");
+                    if(Result.SUCCESS.checkResult(new Result(response))){
+                        cityList = City.getCityList(response.getJSONArray("content"));
+                        cityListAdapter = new CityListAdapter(context);
+                        cityListAdapter.setCityList(cityList);
+                        citySetOnClickListener();
+                    }else if(Result.FAILURE_TOKEN.checkResult(new Result(response))){
+                        redirectLoginActivity();
+                    }else {
+                        Toast.makeText(context, "Şehir listesi getirilirken beklenilmeyen bir durum ile karşılaşıldı" , Toast.LENGTH_LONG).show();
+                        Crashlytics.log(Log.INFO , Result.LOG_TAG_INFO.getResultText() , this.getClass().getName() + " >> " + Resource.ajax_get_city_list + " >> responseString = " + responseString);
+                    }
 
-                    cityList = City.getCityList(content);
-                    cityListAdapter = new CityListAdapter(context);
-                    cityListAdapter.setCityList(cityList);
-                    citySetOnClickListener();
-
-                } catch (JSONException e) {
+                } catch (Exception e) {
                     e.printStackTrace();
-                    Log.i(Result.LOG_TAG_INFO.getResultText(),"" + this.getClass() + " >> JSONException >> ajax_get_city_list");
+                    Toast.makeText(context, "Şehir listesi getirilirken beklenilmeyen bir hata ile karşılaşıldı" , Toast.LENGTH_LONG).show();
+                    Crashlytics.log(Log.ERROR ,Result.LOG_TAG_INFO.getResultText(),this.getClass().getName() + " >> " + Resource.ajax_get_city_list + " >> Exception");
                 } finally {
                     cityListRequestSuccess = true;
                     closeProgressDialog(progressDialog);
@@ -199,8 +203,9 @@ public class ProfileActivity extends BaseActivity {
             public void onErrorResponse(VolleyError error) {
                 cityListRequestSuccess = true;
                 closeProgressDialog(progressDialog);
-                error.printStackTrace();
-                Log.i(Result.LOG_TAG_INFO.getResultText(),"" + this.getClass() + " >> ERROR ON GET DATA >> ajax_get_city_list");
+
+                StringBuilder errorMessage = new StringBuilder(this.getClass().getName() + " >> " + Resource.ajax_get_city_list + " >> ERROR ON GET DATA ");
+                volleyOnErrorResponse(error , errorMessage);
             }
         }){
             @Override
