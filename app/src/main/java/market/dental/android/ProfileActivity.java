@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -23,15 +22,16 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.crashlytics.android.Crashlytics;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -118,19 +118,24 @@ public class ProfileActivity extends BaseActivity {
             @Override
             public void onResponse(String responseString) {
                 try {
-                    // TODO: result objesinin kontrolü YAPILACAK
+
                     JSONObject response = new JSONObject(responseString);
-                    JSONArray content = response.getJSONArray("content");
+                    if(Result.SUCCESS.checkResult(new Result(response))){
+                        professionList = Profession.ProfessionList(response.getJSONArray("content"));
+                        professionListAdapter = new ProfessionListAdapter(context);
+                        professionListAdapter.setProfessionList(professionList);
+                        professionSetOnClickListener();
+                    }else if(Result.FAILURE_TOKEN.checkResult(new Result(response))){
+                        redirectLoginActivity();
+                    }else {
+                        Toast.makeText(context, "Meslek listesi getirilirken beklenilmeyen bir durum ile karşılaşıldı" , Toast.LENGTH_LONG).show();
+                        Crashlytics.log(Log.INFO , Result.LOG_TAG_INFO.getResultText() , this.getClass().getName() + " >> " + Resource.ajax_get_professions + " >> responseString = " + responseString);
+                    }
 
-                    professionList = Profession.ProfessionList(content);
-                    professionListAdapter = new ProfessionListAdapter(context);
-                    professionListAdapter.setProfessionList(professionList);
-                    professionSetOnClickListener();
-
-                } catch (JSONException e) {
+                } catch (Exception e) {
                     e.printStackTrace();
-                    Log.i(Result.LOG_TAG_INFO.getResultText(),"" + this.getClass() + " >> JSONException >> ajax_get_professions");
-
+                    Toast.makeText(context, "Meslek listesi getirilirken beklenilmeyen bir hata ile karşılaşıldı" , Toast.LENGTH_LONG).show();
+                    Crashlytics.log(Log.ERROR ,Result.LOG_TAG_INFO.getResultText(),this.getClass().getName() + " >> " + Resource.ajax_get_professions + " >> Exception");
                 } finally {
                     professionListRequestSuccess = true;
                     closeProgressDialog(progressDialog);
@@ -142,7 +147,9 @@ public class ProfileActivity extends BaseActivity {
                 professionListRequestSuccess = true;
                 closeProgressDialog(progressDialog);
                 error.printStackTrace();
-                Log.i(Result.LOG_TAG_INFO.getResultText(),"" + this.getClass() + " >> ERROR ON GET DATA >> ajax_get_professions");
+
+                StringBuilder errorMessage = new StringBuilder(this.getClass().getName() + " >> " + Resource.ajax_get_professions + " >> ERROR ON GET DATA ");
+                volleyOnErrorResponse(error , errorMessage);
             }
         }){
             @Override

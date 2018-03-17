@@ -20,7 +20,14 @@ import android.view.Window;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
+import com.android.volley.NetworkResponse;
+import com.android.volley.VolleyError;
+import com.crashlytics.android.Crashlytics;
 import com.google.firebase.analytics.FirebaseAnalytics;
+
+import org.json.JSONObject;
+
+import java.io.UnsupportedEncodingException;
 
 import market.dental.application.DentalMarketApplication;
 import market.dental.model.Message;
@@ -140,5 +147,32 @@ public class BaseActivity extends AppCompatActivity implements ConnectionReceive
             //show a No Internet Alert or Dialog
             Log.i(Result.LOG_TAG_INFO.getResultText(),"Internet connection ERROR");
         }
+    }
+
+    public void volleyOnErrorResponse(VolleyError error , StringBuilder errorMessage){
+        try{
+
+            NetworkResponse networkResponse = error.networkResponse;
+            if(networkResponse!=null && networkResponse.data!=null){
+                errorMessage.append("\n" + this.getClass().getName() + " >> " + "volleyOnErrorResponse" + " >>  networkResponse.statusCode:" +networkResponse.statusCode);
+                JSONObject response = new JSONObject(new String(error.networkResponse.data,"UTF-8"));
+                if(Result.FAILURE_TOKEN.checkResult(new Result(response))){
+                    redirectLoginActivity();
+                }else{
+                    errorMessage.append("\n" + this.getClass().getName() + " >> " + "volleyOnErrorResponse" + " >> UNEXPECTED ERROR");
+                }
+            }
+
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+            errorMessage.append("\n" + this.getClass().getName() + " >> " + "volleyOnErrorResponse" + " >> UnsupportedEncodingException");
+
+        } catch (Exception e){
+            e.printStackTrace();
+            errorMessage.append("\n" + this.getClass().getName() + " >> " + "volleyOnErrorResponse" + " >> Exception");
+        } finally {
+            Crashlytics.log(Log.ERROR ,Result.LOG_TAG_INFO.getResultText() ,errorMessage.toString());
+        }
+
     }
 }
