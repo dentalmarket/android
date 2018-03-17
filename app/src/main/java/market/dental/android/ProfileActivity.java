@@ -331,28 +331,33 @@ public class ProfileActivity extends BaseActivity {
             @Override
             public void onResponse(String responseString) {
                 try {
-                    // TODO: result objesinin kontrolü YAPILACAK
                     JSONObject response = new JSONObject(responseString);
-                    JSONArray content = response.getJSONArray("content");
+                    if(Result.SUCCESS.checkResult(new Result(response))){
+                        boroughList = Borough.getBoroughList(response.getJSONArray("content"));
+                        BoroughListAdapter boroughListAdapter = new BoroughListAdapter(context,boroughList);
+                        boroughSetOnClickListener(boroughListAdapter);
 
-                    boroughList = Borough.getBoroughList(content);
-                    BoroughListAdapter boroughListAdapter = new BoroughListAdapter(context,boroughList);
-                    boroughSetOnClickListener(boroughListAdapter);
-
-                    if(userBoroughId!=null){
-                        boroughLoop:
-                        for(Borough borough:boroughList){
-                            if(String.valueOf(borough.getId()).equals(userBoroughId)){
-                                selectedBorough = borough;
-                                boroughEditText.setText(selectedBorough.getName());
-                                break boroughLoop;
+                        if(userBoroughId!=null){
+                            boroughLoop:
+                            for(Borough borough:boroughList){
+                                if(String.valueOf(borough.getId()).equals(userBoroughId)){
+                                    selectedBorough = borough;
+                                    boroughEditText.setText(selectedBorough.getName());
+                                    break boroughLoop;
+                                }
                             }
                         }
+                    }else if(Result.FAILURE_TOKEN.checkResult(new Result(response))){
+                        redirectLoginActivity();
+                    }else {
+                        Toast.makeText(context, "İlçe listesi getirilirken beklenilmeyen bir durum ile karşılaşıldı" , Toast.LENGTH_LONG).show();
+                        Crashlytics.log(Log.INFO , Result.LOG_TAG_INFO.getResultText() , this.getClass().getName() + " >> " + Resource.ajax_get_borough_list + " >> responseString = " + responseString);
                     }
 
-                } catch (JSONException e) {
+                } catch (Exception e) {
                     e.printStackTrace();
-                    Log.i(Result.LOG_TAG_INFO.getResultText(),"" + this.getClass() + " >> JSONException >> 124");
+                    Toast.makeText(context, "İlçe listesi getirilirken beklenilmeyen bir hata ile karşılaşıldı" , Toast.LENGTH_LONG).show();
+                    Crashlytics.log(Log.ERROR ,Result.LOG_TAG_INFO.getResultText(),this.getClass().getName() + " >> " + Resource.ajax_get_borough_list + " >> Exception");
                 } finally {
                     progressDialog.dismiss();
                 }
@@ -360,8 +365,8 @@ public class ProfileActivity extends BaseActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                error.printStackTrace();
-                Log.i(Result.LOG_TAG_INFO.getResultText(),"" + this.getClass() + " >> ERROR ON GET DATA >> 125");
+                StringBuilder errorMessage = new StringBuilder(this.getClass().getName() + " >> " + Resource.ajax_get_borough_list + " >> ERROR ON GET DATA ");
+                volleyOnErrorResponse(error , errorMessage);
             }
         }){
             @Override
