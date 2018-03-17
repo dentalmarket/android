@@ -434,14 +434,17 @@ public class ProfileActivity extends BaseActivity {
 
                         Toast.makeText(context, responseMessage, Toast.LENGTH_LONG).show();
 
+                    }else if(Result.FAILURE_TOKEN.checkResult(new Result(response))){
+                        redirectLoginActivity();
                     }else{
-                        Toast.makeText(context, "Beklenmeyen Hata", Toast.LENGTH_LONG).show();
-                        Log.i(Result.LOG_TAG_INFO.getResultText(),"" + this.getClass() + " >> JSONException >> ajaxUpdateProfile");
+                        Toast.makeText(context, "Bilgiler güncellenirken beklenilmeyen bir durum ile karşılaşıldı" , Toast.LENGTH_LONG).show();
+                        Crashlytics.log(Log.INFO , Result.LOG_TAG_INFO.getResultText() , this.getClass().getName() + " >> " + Resource.ajax_profile_update + " >> responseString = " + responseString);
                     }
 
-                } catch (JSONException e) {
+                } catch (Exception e) {
                     e.printStackTrace();
-                    Log.i(Result.LOG_TAG_INFO.getResultText(),"" + this.getClass() + " >> JSONException >> ajaxUpdateProfile");
+                    Toast.makeText(context, "Bilgiler güncellenirken beklenilmeyen bir hata ile karşılaşıldı" , Toast.LENGTH_LONG).show();
+                    Crashlytics.log(Log.ERROR ,Result.LOG_TAG_INFO.getResultText(),this.getClass().getName() + " >> " + Resource.ajax_profile_update + " >> Exception");
                 } finally {
                     progressDialog.dismiss();
                 }
@@ -450,13 +453,8 @@ public class ProfileActivity extends BaseActivity {
             @Override
             public void onErrorResponse(VolleyError error) {
                 progressDialog.dismiss();
-                error.printStackTrace();
-                Log.i(Result.LOG_TAG_INFO.getResultText(),"" + this.getClass() + " >> ERROR ON GET DATA >> ajaxUpdateProfile");
-
-                NetworkResponse networkResponse = error.networkResponse;
-                if(networkResponse!=null){
-                    Log.i(Result.LOG_TAG_INFO.getResultText() , "" + this.getClass() + " >> Login.StausCode >> " + networkResponse.statusCode);
-                }
+                StringBuilder errorMessage = new StringBuilder(this.getClass().getName() + " >> " + Resource.ajax_profile_update + " >> ERROR ON GET DATA ");
+                volleyOnErrorResponse(error , errorMessage);
             }
         }){
             @Override
@@ -546,9 +544,10 @@ public class ProfileActivity extends BaseActivity {
                 }
             }
 
-        } catch (JSONException e) {
+        } catch (Exception e){
             e.printStackTrace();
-            Log.i(Result.LOG_TAG_INFO.getResultText(),"" + this.getClass() + " >> JSONException >> updateView");
+            Crashlytics.log(Log.ERROR ,Result.LOG_TAG_INFO.getResultText(),this.getClass().getName() + " >> Exception >> updateView");
+            Toast.makeText(context, "Sayfa düzenlenirken hata ile karşılaşıldı", Toast.LENGTH_LONG).show();
         }
     }
 }
