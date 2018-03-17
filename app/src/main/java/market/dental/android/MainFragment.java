@@ -19,23 +19,21 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.crashlytics.android.Crashlytics;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -46,15 +44,6 @@ import market.dental.model.Product;
 import market.dental.util.Resource;
 import market.dental.util.Result;
 
-
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link MainFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link MainFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class MainFragment extends Fragment {
 
     private Timer timer;
@@ -138,6 +127,9 @@ public class MainFragment extends Fragment {
                 } catch (JSONException e) {
                     e.printStackTrace();
                     Log.i(Result.LOG_TAG_INFO.getResultText(),"MainActivity >> JSONException >> 120");
+                } catch (Exception e){
+                    e.printStackTrace();
+                    Crashlytics.log(Log.INFO ,Result.LOG_TAG_INFO.getResultText(), Resource.ajax_get_banner_images_url );
                 }
             }
         }, new Response.ErrorListener() {
@@ -189,29 +181,38 @@ public class MainFragment extends Fragment {
             @Override
             public void onResponse(String responseString) {
                 try {
-
-                    // TODO: result objesinin kontrolü YAPILACAK
+                    
                     JSONObject response = new JSONObject(responseString);
+                    if(Result.SUCCESS.checkResult(new Result(response))){
+                        mRecyclerView.setLayoutManager(mRecyclerLayoutManager);
+                        mRecyclerAdapter = new ProductsRecyclerAdapter(Product.ProductList(response.getJSONObject("content").getJSONObject("featured").getJSONArray("products")));
+                        mRecyclerView.setAdapter(mRecyclerAdapter);
 
-                    mRecyclerView.setLayoutManager(mRecyclerLayoutManager);
-                    mRecyclerAdapter = new ProductsRecyclerAdapter(Product.ProductList(response.getJSONObject("content").getJSONObject("featured").getJSONArray("products")));
-                    mRecyclerView.setAdapter(mRecyclerAdapter);
+                        chosenProducts.setLayoutManager(chosenProductsLayoutManager);
+                        chosenProductsAdapter = new ProductsRecyclerAdapter(Product.ProductList(response.getJSONObject("content").getJSONObject("chosen").getJSONArray("products")));
+                        chosenProducts.setAdapter(chosenProductsAdapter);
 
-                    chosenProducts.setLayoutManager(chosenProductsLayoutManager);
-                    chosenProductsAdapter = new ProductsRecyclerAdapter(Product.ProductList(response.getJSONObject("content").getJSONObject("chosen").getJSONArray("products")));
-                    chosenProducts.setAdapter(chosenProductsAdapter);
+                        discountedProducts.setLayoutManager(discountedProductsLayoutManager);
+                        discountedProductsAdapter = new ProductsRecyclerAdapter(Product.ProductList(response.getJSONObject("content").getJSONObject("discounted").getJSONArray("products")));
+                        discountedProducts.setAdapter(discountedProductsAdapter);
 
-                    discountedProducts.setLayoutManager(discountedProductsLayoutManager);
-                    discountedProductsAdapter = new ProductsRecyclerAdapter(Product.ProductList(response.getJSONObject("content").getJSONObject("discounted").getJSONArray("products")));
-                    discountedProducts.setAdapter(discountedProductsAdapter);
+                        newestProducts.setLayoutManager(newestProductsLayoutManager);
+                        newestProductsAdapter = new ProductsRecyclerAdapter(Product.ProductList(response.getJSONObject("content").getJSONObject("newest").getJSONArray("products")));
+                        newestProducts.setAdapter(newestProductsAdapter);
+                    }else if(Result.FAILURE_TOKEN.checkResult(new Result(response))){
+                        Resource.setDefaultAPITOKEN();
+                        Intent intent = new Intent(getActivity().getApplicationContext() , LoginActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(intent);
+                    } else {
+                        Toast.makeText(getContext(), "Beklenmedik bir durum ile karşılaşıldı" , Toast.LENGTH_LONG).show();
+                        Crashlytics.log(Log.INFO , Result.LOG_TAG_INFO.getResultText() , "MainFragment >> " + Resource.ajax_get_products_homeproduct_url + " >> responseString = " + responseString);
+                    }
 
-                    newestProducts.setLayoutManager(newestProductsLayoutManager);
-                    newestProductsAdapter = new ProductsRecyclerAdapter(Product.ProductList(response.getJSONObject("content").getJSONObject("newest").getJSONArray("products")));
-                    newestProducts.setAdapter(newestProductsAdapter);
-
-                } catch (JSONException e) {
+                } catch (Exception e){
                     e.printStackTrace();
-                    Log.i(Result.LOG_TAG_INFO.getResultText(),"MainActivity >> JSONException >> 122");
+                    Toast.makeText(getContext(), "Beklenmedik bir hata ile karşılaşıldı" , Toast.LENGTH_LONG).show();
+                    Crashlytics.log(Log.ERROR , Result.LOG_TAG_INFO.getResultText() , "MainFragment >> " + Resource.ajax_get_products_homeproduct_url + " >> response error");
                 }
             }
 
@@ -219,7 +220,7 @@ public class MainFragment extends Fragment {
             @Override
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace();
-                Log.i(Result.LOG_TAG_INFO.getResultText(),"MainActivity >> ERROR ON GET DATA >> 123");
+                Crashlytics.log(Log.ERROR , Result.LOG_TAG_INFO.getResultText() , "MainActivity >> onErrorResponse");
             }
         }){
             @Override

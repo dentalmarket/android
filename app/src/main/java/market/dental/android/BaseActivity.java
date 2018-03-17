@@ -20,6 +20,8 @@ import android.view.Window;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
+import com.google.firebase.analytics.FirebaseAnalytics;
+
 import market.dental.application.DentalMarketApplication;
 import market.dental.model.Message;
 import market.dental.receiver.ConnectionReceiver;
@@ -32,14 +34,26 @@ import market.dental.util.Result;
 
 public class BaseActivity extends AppCompatActivity implements ConnectionReceiver.ConnectionReceiverListener {
 
+    private FirebaseAnalytics firebaseAnalytics;
+
+    /***********************************************************************************************
+     ***********************************************************************************************
+     **                             ENCAPSULATION
+     ***********************************************************************************************
+     **********************************************************************************************/
     public BroadcastReceiver getMessageReceiver(){
         return messageReceiver;
     }
 
+
+    /***********************************************************************************************
+     ***********************************************************************************************
+     **                             ACTIVITY METHODS
+     ***********************************************************************************************
+     **********************************************************************************************/
     @Override
     protected void onStart() {
         super.onStart();
-
         LocalBroadcastManager.getInstance(this).registerReceiver((messageReceiver),
                 new IntentFilter(Resource.KEY_LOCAL_BROADCAST)
         );
@@ -48,6 +62,8 @@ public class BaseActivity extends AppCompatActivity implements ConnectionReceive
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        firebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
         //check the network connectivity when activity is created
         checkConnection();
@@ -64,6 +80,16 @@ public class BaseActivity extends AppCompatActivity implements ConnectionReceive
         checkConnection();
     }
 
+    @Override
+    public void onNetworkConnectionChanged(boolean isConnected) {
+        if(!isConnected) {
+
+            //show a No Internet Alert or Dialog
+        }else{
+
+            // dismiss the dialog or refresh the activity
+        }
+    }
 
 
     public BroadcastReceiver messageReceiver = new BroadcastReceiver() {
@@ -96,25 +122,16 @@ public class BaseActivity extends AppCompatActivity implements ConnectionReceive
 
 
 
+    /***********************************************************************************************
+     ***********************************************************************************************
+     **                             UTIL METHODS
+     ***********************************************************************************************
+     **********************************************************************************************/
     public void redirectLoginActivity(){
         Resource.setDefaultAPITOKEN();
         Intent intent = new Intent(getApplicationContext() , LoginActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
-    }
-
-
-
-    @Override
-    public void onNetworkConnectionChanged(boolean isConnected) {
-        if(!isConnected) {
-
-            //show a No Internet Alert or Dialog
-
-        }else{
-
-            // dismiss the dialog or refresh the activity
-        }
     }
 
     private void checkConnection() {
