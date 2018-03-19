@@ -28,7 +28,7 @@ public class Product {
         try {
             this.id = projectJsonObject.has("product_id")?
                     projectJsonObject.getInt("product_id") : -1 ;
-            this.name = projectJsonObject.has("title")?
+            this.name = projectJsonObject.has("title") && !projectJsonObject.isNull("title")?
                     projectJsonObject.getString("title"):"";
             this.description = projectJsonObject.has("description") && !projectJsonObject.isNull("description")?
                     projectJsonObject.getString("description"):"-";

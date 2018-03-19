@@ -33,6 +33,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -50,6 +51,7 @@ public class MainActivity extends BaseActivity
     private AlertDialog progressDialog;
     private RequestQueue requestQueue;
     private Context context;
+    private HashSet<Target> targetList = new HashSet<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -120,6 +122,8 @@ public class MainActivity extends BaseActivity
                                     }
                                 };
 
+                                // GarbageCollector yüzünden atılmasın diye liste içerisine yerleştirildi
+                                targetList.add(target);
                                 if(category.getIcon()!=null && category.getIcon().contains("http")){
                                     Picasso.with(context).load(category.getIcon().replaceFirst("http" , "https")).into(target);
                                 }else{
