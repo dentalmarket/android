@@ -121,12 +121,19 @@ public class MainFragment extends Fragment {
             @Override
             public void onResponse(String responseString) {
                 try {
-                    // TODO: result objesinin kontrolü YAPILACAK
                     JSONObject response = new JSONObject(responseString);
-                    onResponseBannerImages(response.getJSONArray("content"));
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    Log.i(Result.LOG_TAG_INFO.getResultText(),"MainActivity >> JSONException >> 120");
+                    if(Result.SUCCESS.checkResult(new Result(response))){
+                        onResponseBannerImages(response.getJSONArray("content"));
+                    }else if(Result.FAILURE_TOKEN.checkResult(new Result(response))){
+                        Resource.setDefaultAPITOKEN();
+                        Intent intent = new Intent(getActivity().getApplicationContext() , LoginActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(intent);
+                    } else {
+                        Toast.makeText(getContext(), "Beklenmedik bir durum ile karşılaşıldı" , Toast.LENGTH_LONG).show();
+                        Crashlytics.log(Log.INFO , Result.LOG_TAG_INFO.getResultText() , "MainFragment >> " + Resource.ajax_get_banner_images_url + " >> responseString = " + responseString);
+                    }
+
                 } catch (Exception e){
                     e.printStackTrace();
                     Crashlytics.log(Log.INFO ,Result.LOG_TAG_INFO.getResultText(), Resource.ajax_get_banner_images_url );
@@ -136,7 +143,7 @@ public class MainFragment extends Fragment {
             @Override
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace();
-                Log.i(Result.LOG_TAG_INFO.getResultText(),"MainActivity >> ERROR ON GET DATA >> 121");
+                Crashlytics.log(Log.ERROR , Result.LOG_TAG_INFO.getResultText() , "MainActivity >> onErrorResponse");
             }
         }){
             @Override
