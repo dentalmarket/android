@@ -19,6 +19,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -26,6 +27,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.crashlytics.android.Crashlytics;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
@@ -137,13 +139,10 @@ public class MainActivity extends BaseActivity
                         redirectLoginActivity();
                     }
 
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    Log.i(Result.LOG_TAG_INFO.getResultText(),"MainActivity >> JSONException >> 120");
                 } catch (Exception e) {
                     e.printStackTrace();
-                    Log.i(Result.LOG_TAG_INFO.getResultText(),"Exception");
-                    redirectLoginActivity();
+                    Toast.makeText(context, "Beklenmedik bir hata ile karşılaşıldı" , Toast.LENGTH_LONG).show();
+                    Crashlytics.log(Log.ERROR , Result.LOG_TAG_INFO.getResultText() , this.getClass().getName() + " >> " + Resource.ajax_get_categories + " >> Exception");
                 }
             }
         }, new Response.ErrorListener() {
@@ -225,18 +224,113 @@ public class MainActivity extends BaseActivity
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
+    public boolean onNavigationItemSelected(final MenuItem item) {
 
-        int id = item.getItemId();
+        final int id = item.getItemId();
 
-        Bundle bundle = new Bundle();
-        bundle.putInt(Resource.KEY_CATEGORY_ID, id);
-        Intent intent = new Intent(this,ProductListActivity.class);
-        intent.putExtras(bundle);
-        startActivity(intent);
+        // *****************************************************************************************
+        //                          AJAX - GET SUBCATEGORIES
+        // *****************************************************************************************
+        StringRequest request = new StringRequest(Request.Method.POST,
+                Resource.ajax_get_categories, new Response.Listener<String>() {
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
+            @Override
+            public void onResponse(String responseString) {
+                try {
+
+                    JSONObject response = new JSONObject(responseString);
+                    if(Result.SUCCESS.checkResult(new Result(response))){
+                        JSONObject content = response.getJSONObject("content");
+                        if(content.has("subCategories")) {
+                            List<Category> categoryList = Category.CategoryList(content.getJSONArray("subCategories"));
+                            if(categoryList.size() > 0){
+
+                                // Menü temizlenir
+                                navigationViewMenu.clear();
+
+                                // Üst kategory için menu gerekiyor ise eklenir
+                                if(id!=-1){
+                                    MenuItem menuItem = navigationViewMenu.add(R.id.activity_main_drawer_main_group, -1, Menu.NONE, "Üst Kategori" );
+                                    menuItem.setIcon(R.drawable.menu_item_arrow_up_black_24dp);
+                                }
+
+                                // Kategori menüsü eklenir
+                                for(final Category category : categoryList){
+                                    final MenuItem menuItem = navigationViewMenu.add(R.id.activity_main_drawer_main_group, category.getId(), Menu.NONE,category.getName() );
+                                    final Target target = new Target() {
+                                        @Override
+                                        public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom loadedFrom) {
+                                            BitmapDrawable mBitmapDrawable = new BitmapDrawable(getResources(), bitmap);
+                                            // mBitmapDrawable.setBounds(0,0,24,24);
+                                            menuItem.setIcon(mBitmapDrawable);
+                                        }
+
+                                        @Override
+                                        public void onBitmapFailed(Drawable drawable) {
+                                            menuItem.setIcon(R.drawable.ic_menu_black_18dp);
+                                        }
+
+                                        @Override
+                                        public void onPrepareLoad(Drawable drawable) {
+                                            menuItem.setIcon(R.drawable.ic_menu_black_18dp);
+                                        }
+                                    };
+
+                                    // GarbageCollector yüzünden atılmasın diye liste içerisine yerleştirildi
+                                    targetList.add(target);
+                                    if(category.getIcon()!=null && category.getIcon().contains("http")){
+                                        Picasso.with(context).load(category.getIcon().replaceFirst("http" , "https")).into(target);
+                                    }else{
+                                        Picasso.with(context).load("https://dental.market/assets/images/categories/1506941351.png").into(target);
+                                    }
+
+                                }
+                            }else{
+                                Bundle bundle = new Bundle();
+                                bundle.putInt(Resource.KEY_CATEGORY_ID, id);
+                                Intent intent = new Intent(context,ProductListActivity.class);
+                                intent.putExtras(bundle);
+                                startActivity(intent);
+
+                                DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+                                drawer.closeDrawer(GravityCompat.START);
+                            }
+                        }
+
+                    }else if(Result.FAILURE_TOKEN.checkResult(new Result(response))){
+                        redirectLoginActivity();
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Toast.makeText(context, "Beklenmedik bir hata ile karşılaşıldı" , Toast.LENGTH_LONG).show();
+                    Crashlytics.log(Log.ERROR , Result.LOG_TAG_INFO.getResultText() , this.getClass().getName() + " >> " + Resource.ajax_get_categories + " >> Exception");
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+                Log.i(Result. LOG_TAG_INFO.getResultText(),"MainActivity >> ERROR ON GET DATA >> 121");
+                redirectLoginActivity();
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams()  {
+                Map<String, String> params = new HashMap<>();
+                params.put(Resource.KEY_API_TOKEN, Resource.VALUE_API_TOKEN);
+                params.put("parentId", String.valueOf(id));
+                return params;
+            }
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String,String> params = new HashMap<String, String>();
+                params.put("Content-Type","application/x-www-form-urlencoded");
+                return params;
+            }
+        };
+        requestQueue.add(request);
+
         return true;
     }
 

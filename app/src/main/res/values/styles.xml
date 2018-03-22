@@ -20,6 +20,7 @@
     <style name="AppTheme.NavigationItem">
         <!-- Customize your theme here. -->
         <item name="android:textSize">10dp</item>
+        <item name="android:background">#DD263238</item>
     </style>
 
     <style name="DialogTheme" parent="Theme.AppCompat.Light.Dialog.MinWidth">
