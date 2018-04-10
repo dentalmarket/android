@@ -199,4 +199,24 @@ public class ProductDetailActivity extends BaseActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+    @Override
+    public void onDestroy() {
+        mRecyclerView = null;
+        mRecyclerLayoutManager = null;
+        mRecyclerAdapter = null;
+        productDetailContext = null;
+        pdImageView=null;
+        pdProductName=null;
+        pdProductPrice=null;
+        storeName=null;
+        storePhone=null;
+        storeGsm=null;
+        storeEmail=null;
+        brandName=null;
+        sendMessageBtn=null;
+        progressDialog = null;
+        productDesc=null;
+        super.onDestroy();
+    }
 }

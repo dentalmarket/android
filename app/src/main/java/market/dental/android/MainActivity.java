@@ -205,12 +205,12 @@ public class MainActivity extends BaseActivity
                                     if(category.getIcon()!=null && category.getIcon().contains("http")){
                                         Picasso.with(context)
                                                 .load(category.getIcon().replaceFirst("http" , "https"))
-                                                .memoryPolicy(MemoryPolicy.NO_CACHE,MemoryPolicy.NO_STORE)
+                                                //.memoryPolicy(MemoryPolicy.NO_CACHE,MemoryPolicy.NO_STORE)
                                                 .into(target);
                                     }else{
                                         Picasso.with(context)
                                                 .load("https://dental.market/assets/images/categories/1506941351.png")
-                                                .memoryPolicy(MemoryPolicy.NO_CACHE,MemoryPolicy.NO_STORE)
+                                                //.memoryPolicy(MemoryPolicy.NO_CACHE,MemoryPolicy.NO_STORE)
                                                 .into(target);
                                     }
 

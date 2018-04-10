@@ -156,8 +156,8 @@ public class ProductListAdapter extends ArrayAdapter {
                     .load(productList.get(position).getImageUrl())
                     .placeholder(R.mipmap.ic_launcher)
                     .error(R.mipmap.ic_launcher)
-                    .memoryPolicy(MemoryPolicy.NO_CACHE,MemoryPolicy.NO_STORE)
-                    .networkPolicy(NetworkPolicy.NO_CACHE,NetworkPolicy.NO_STORE)
+                    //.memoryPolicy(MemoryPolicy.NO_CACHE,MemoryPolicy.NO_STORE)
+                    //.networkPolicy(NetworkPolicy.NO_CACHE,NetworkPolicy.NO_STORE)
                     .into(imageView);
 
         }
