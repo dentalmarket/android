@@ -9,6 +9,7 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
@@ -28,6 +29,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.crashlytics.android.Crashlytics;
+import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
@@ -45,7 +47,8 @@ import market.dental.util.Result;
 
 public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener,
-                    MainFragment.OnFragmentInteractionListener{
+                    MainFragment.OnFragmentInteractionListener,
+                    ProductListFragment.OnFragmentInteractionListener{
 
     private Menu menu;
     private Menu navigationViewMenu;
@@ -86,97 +89,7 @@ public class MainActivity extends BaseActivity
         progressDialogBuilder.setView(getLayoutInflater().inflate(R.layout.dialog_progressbar,null));
         progressDialog = progressDialogBuilder.create();
 
-
-        // *****************************************************************************************
-        //                          AJAX - GET CATEGORIES
-        // *****************************************************************************************
-        StringRequest request = new StringRequest(Request.Method.POST,
-                Resource.ajax_get_categories, new Response.Listener<String>() {
-
-            @Override
-            public void onResponse(String responseString) {
-                try {
-
-                    JSONObject response = new JSONObject(responseString);
-                    if(Result.SUCCESS.checkResult(new Result(response))){
-                        JSONObject content = response.getJSONObject("content");
-                        if(content.has("subCategories")) {
-                            List<Category> categoryList = Category.CategoryList(content.getJSONArray("subCategories"));
-                            for(final Category category : categoryList){
-
-                                final MenuItem menuItem = navigationViewMenu.add(R.id.activity_main_drawer_main_group, category.getId(), Menu.NONE,category.getName() );
-                                final Target target = new Target() {
-                                    @Override
-                                    public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom loadedFrom) {
-                                        BitmapDrawable mBitmapDrawable = new BitmapDrawable(getResources(), bitmap);
-                                        // mBitmapDrawable.setBounds(0,0,24,24);
-                                        menuItem.setIcon(mBitmapDrawable);
-                                    }
-
-                                    @Override
-                                    public void onBitmapFailed(Drawable drawable) {
-                                        menuItem.setIcon(R.drawable.ic_menu_black_18dp);
-                                    }
-
-                                    @Override
-                                    public void onPrepareLoad(Drawable drawable) {
-                                        menuItem.setIcon(R.drawable.ic_menu_black_18dp);
-                                    }
-                                };
-
-                                // GarbageCollector yüzünden atılmasın diye liste içerisine yerleştirildi
-                                targetList.add(target);
-                                if(category.getIcon()!=null && category.getIcon().contains("http")){
-                                    Picasso.with(context).load(category.getIcon().replaceFirst("http" , "https")).into(target);
-                                }else{
-                                    Picasso.with(context).load("https://dental.market/assets/images/categories/1506941351.png").into(target);
-                                }
-
-                            }
-                        }
-
-                    }else if(Result.FAILURE_TOKEN.checkResult(new Result(response))){
-                        redirectLoginActivity();
-                    }
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    Toast.makeText(context, "Beklenmedik bir hata ile karşılaşıldı" , Toast.LENGTH_LONG).show();
-                    Crashlytics.log(Log.ERROR , Result.LOG_TAG_INFO.getResultText() , this.getClass().getName() + " >> " + Resource.ajax_get_categories + " >> Exception");
-                }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                error.printStackTrace();
-                Log.i(Result. LOG_TAG_INFO.getResultText(),"MainActivity >> ERROR ON GET DATA >> 121");
-                redirectLoginActivity();
-            }
-        }){
-            @Override
-            protected Map<String, String> getParams()  {
-                Map<String, String> params = new HashMap<>();
-                params.put(Resource.KEY_API_TOKEN, Resource.VALUE_API_TOKEN);
-                return params;
-            }
-            @Override
-            public Map<String, String> getHeaders() {
-                Map<String,String> params = new HashMap<String, String>();
-                params.put("Content-Type","application/x-www-form-urlencoded");
-                return params;
-            }
-        };
-        requestQueue.add(request);
-
-
-        // *****************************************************************************************
-        //                          FRAGMENT
-        // *****************************************************************************************
-        Fragment fragment = new MainFragment();
-        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.content_main , fragment);
-        ft.commit();
-
+        getCategoryList(-1);
     }
 
     @Override
@@ -226,7 +139,16 @@ public class MainActivity extends BaseActivity
     @Override
     public boolean onNavigationItemSelected(final MenuItem item) {
 
-        final int id = item.getItemId();
+        getCategoryList(item.getItemId());
+        return true;
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+    }
+
+    public void getCategoryList(final int categoryId){
 
         // *****************************************************************************************
         //                          AJAX - GET SUBCATEGORIES
@@ -247,16 +169,17 @@ public class MainActivity extends BaseActivity
 
                                 // Menü temizlenir
                                 navigationViewMenu.clear();
+                                targetList.clear();
 
                                 // Üst kategory için menu gerekiyor ise eklenir
-                                if(id!=-1){
+                                if(categoryId!=-1){
                                     MenuItem menuItem = navigationViewMenu.add(R.id.activity_main_drawer_main_group, -1, Menu.NONE, "Üst Kategori" );
                                     menuItem.setIcon(R.drawable.menu_item_arrow_up_black_24dp);
                                 }
 
                                 // Kategori menüsü eklenir
                                 for(final Category category : categoryList){
-                                    final MenuItem menuItem = navigationViewMenu.add(R.id.activity_main_drawer_main_group, category.getId(), Menu.NONE,category.getName() );
+                                    final MenuItem menuItem = navigationViewMenu.add(R.id.activity_main_drawer_main_group, category.getId(), Menu.NONE,category.getName());
                                     final Target target = new Target() {
                                         @Override
                                         public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom loadedFrom) {
@@ -278,24 +201,35 @@ public class MainActivity extends BaseActivity
 
                                     // GarbageCollector yüzünden atılmasın diye liste içerisine yerleştirildi
                                     targetList.add(target);
+
                                     if(category.getIcon()!=null && category.getIcon().contains("http")){
-                                        Picasso.with(context).load(category.getIcon().replaceFirst("http" , "https")).into(target);
+                                        Picasso.with(context)
+                                                .load(category.getIcon().replaceFirst("http" , "https"))
+                                                .memoryPolicy(MemoryPolicy.NO_CACHE,MemoryPolicy.NO_STORE)
+                                                .into(target);
                                     }else{
-                                        Picasso.with(context).load("https://dental.market/assets/images/categories/1506941351.png").into(target);
+                                        Picasso.with(context)
+                                                .load("https://dental.market/assets/images/categories/1506941351.png")
+                                                .memoryPolicy(MemoryPolicy.NO_CACHE,MemoryPolicy.NO_STORE)
+                                                .into(target);
                                     }
 
                                 }
-                            }else{
-                                Bundle bundle = new Bundle();
-                                bundle.putInt(Resource.KEY_CATEGORY_ID, id);
-                                Intent intent = new Intent(context,ProductListActivity.class);
-                                intent.putExtras(bundle);
-                                startActivity(intent);
-
-                                DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-                                drawer.closeDrawer(GravityCompat.START);
                             }
                         }
+
+
+                        Bundle bundle = new Bundle();
+                        bundle.putInt(Resource.KEY_CATEGORY_ID, categoryId);
+
+                        Fragment fragment = ( (categoryId!=-1) ?
+                                ProductListFragment.newInstance() : MainFragment.newInstance() );
+                        fragment.setArguments(bundle);
+                        getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                        getSupportFragmentManager()
+                                .beginTransaction()
+                                .replace(R.id.content_main , fragment)
+                                .commit();
 
                     }else if(Result.FAILURE_TOKEN.checkResult(new Result(response))){
                         redirectLoginActivity();
@@ -319,7 +253,7 @@ public class MainActivity extends BaseActivity
             protected Map<String, String> getParams()  {
                 Map<String, String> params = new HashMap<>();
                 params.put(Resource.KEY_API_TOKEN, Resource.VALUE_API_TOKEN);
-                params.put("parentId", String.valueOf(id));
+                params.put("parentId", String.valueOf(categoryId));
                 return params;
             }
             @Override
@@ -330,13 +264,6 @@ public class MainActivity extends BaseActivity
             }
         };
         requestQueue.add(request);
-
-        return true;
-    }
-
-    @Override
-    public void onResume(){
-        super.onResume();
     }
 
 

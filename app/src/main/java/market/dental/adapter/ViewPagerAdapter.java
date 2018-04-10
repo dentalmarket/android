@@ -12,10 +12,15 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.crashlytics.android.Crashlytics;
+import com.squareup.picasso.MemoryPolicy;
+import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import market.dental.android.R;
 import market.dental.util.Resource;
@@ -72,7 +77,10 @@ public class ViewPagerAdapter extends PagerAdapter {
                     .load( Resource.DOMAIN_NAME + "/" +((JSONObject)images.get(position)).getString("image"))
                     .placeholder(R.mipmap.ic_launcher)
                     .error(R.mipmap.ic_launcher)
+                    .memoryPolicy(MemoryPolicy.NO_CACHE,MemoryPolicy.NO_STORE)
+                    .networkPolicy(NetworkPolicy.NO_CACHE,NetworkPolicy.NO_STORE)
                     .into(image);
+
         }catch (Exception ex){
             ex.printStackTrace();
         }
@@ -86,4 +94,5 @@ public class ViewPagerAdapter extends PagerAdapter {
     public void destroyItem(ViewGroup container, int position, Object object){
         ((ViewPager) container).removeView((View)object);
     }
+
 }

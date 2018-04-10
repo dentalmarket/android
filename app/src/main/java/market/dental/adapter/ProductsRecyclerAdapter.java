@@ -5,27 +5,24 @@ import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.squareup.picasso.MemoryPolicy;
+import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.List;
 
 import market.dental.android.ProductDetailActivity;
-import market.dental.android.ProductListActivity;
 import market.dental.android.R;
 import market.dental.model.Currency;
 import market.dental.model.Product;
 import market.dental.util.Resource;
-import market.dental.util.Result;
 
 /**
  * Created by kemalsamikaraca on 14.01.2018.
@@ -67,7 +64,10 @@ public class ProductsRecyclerAdapter extends RecyclerView.Adapter<ProductsRecycl
                     .load(product.getImageUrl())
                     .placeholder(R.mipmap.ic_launcher)
                     .error(R.mipmap.ic_launcher)
+                    .memoryPolicy(MemoryPolicy.NO_CACHE,MemoryPolicy.NO_STORE)
+                    .networkPolicy(NetworkPolicy.NO_CACHE,NetworkPolicy.NO_STORE)
                     .into(holder.mImageView);
+
         } catch (Exception ex){
             ex.printStackTrace();
         }
