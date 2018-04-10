@@ -49,6 +49,7 @@
     <string name="right_menu_profile">Profil</string>
     <string name="right_menu_messages">Mesajlar</string>
     <string name="right_menu_recent_products">İncelediğim Ürünler</string>
+    <string name="right_menu_share">Paylaş</string>
     <string name="right_menu_logout">Çıkış</string>
 
     <!-- DRAWER MENU -->
