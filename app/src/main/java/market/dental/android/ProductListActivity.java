@@ -1,6 +1,8 @@
 package market.dental.android;
 
 import android.content.Intent;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -9,6 +11,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -19,17 +23,21 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.crashlytics.android.Crashlytics;
 import com.squareup.picasso.Picasso;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Timer;
 
 import market.dental.adapter.ProductListAdapter;
 import market.dental.adapter.ProductsRecyclerAdapter;
+import market.dental.adapter.ViewPagerAdapter;
 import market.dental.model.Product;
 import market.dental.util.Resource;
 import market.dental.util.Result;
@@ -41,12 +49,17 @@ public class ProductListActivity extends BaseActivity {
     private String searchKey;
     private RequestQueue requestQueue;
     private boolean isLoading = false;
+    private View view;
+    private ViewPager viewPager;
+    private ViewPagerAdapter viewPagerAdapter;
+    private ImageView[] dots;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product_list);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        view = findViewById(android.R.id.content);
 
         // Get Params
         Intent intent = getIntent();
@@ -92,52 +105,71 @@ public class ProductListActivity extends BaseActivity {
             public void onResponse(String responseString) {
 
                 try {
-                    // TODO: result objesinin kontrolü YAPILACAK
+
                     JSONObject response = new JSONObject(responseString);
-                    JSONObject content = response.getJSONObject("content");
+                    if(Result.SUCCESS.checkResult(new Result(response))){
 
-                    productListAdapter.addProductList(Product.ProductList(content.getJSONArray("data")));
-                    productListAdapter.setCurrentPage(content.getInt("current_page"));
-                    ListView listView = findViewById(R.id.activity_product_list_main);
-                    if(listView.getAdapter()==null)
-                        listView.setAdapter(productListAdapter);
-                    else{
-                        productListAdapter.notifyDataSetChanged();
-                    }
-
-
-                    // -- EVENTS --
-                    listView.setOnScrollListener(new AbsListView.OnScrollListener() {
-                        @Override
-                        public void onScrollStateChanged(AbsListView view, int scrollState) {
-
+                        JSONObject content = response.getJSONObject("content");
+                        productListAdapter.addProductList(Product.ProductList(content.getJSONArray("data")));
+                        productListAdapter.setCurrentPage(content.getInt("current_page"));
+                        productListAdapter.setImages(content.getJSONArray("category_sliders"));
+                        if(productListAdapter.getImages().length()>0){
+                            // list view size 1 arttırılır. ilk eleman product yerine resim (category_sliders)
+                            // yerleştirileceğinden null olarak set edilir
+                            productListAdapter.getProductList().add(0,null);
                         }
 
-                        @Override
-                        public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-                            if(view.getLastVisiblePosition() == totalItemCount-1 && !isLoading){
-                                getCategoryProducts(productListAdapter.getCurrentPage()+1);
+                        ListView listView = findViewById(R.id.activity_product_list_main);
+                        if(listView.getAdapter()==null)
+                            listView.setAdapter(productListAdapter);
+                        else{
+                            productListAdapter.notifyDataSetChanged();
+                        }
+
+
+                        // -- EVENTS --
+                        listView.setOnScrollListener(new AbsListView.OnScrollListener() {
+                            @Override
+                            public void onScrollStateChanged(AbsListView view, int scrollState) {
+
                             }
-                        }
-                    });
 
-                    listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                                @Override
-                                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                                    int productId = ((Product) parent.getItemAtPosition(position)).getId();
-                                    Bundle bundle = new Bundle();
-                                    bundle.putInt(Resource.KEY_PRODUCT_ID, productId);
-                                    Intent intent = new Intent(view.getContext(),ProductDetailActivity.class);
-                                    intent.putExtras(bundle);
-                                    view.getContext().startActivity(intent);
+                            @Override
+                            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                                if(view.getLastVisiblePosition() == totalItemCount-1 && !isLoading){
+                                    getCategoryProducts(productListAdapter.getCurrentPage()+1);
                                 }
                             }
-                    );
+                        });
 
-                    isLoading = false;
-                } catch (JSONException e) {
+                        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                    @Override
+                                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                        int productId = ((Product) parent.getItemAtPosition(position)).getId();
+                                        Bundle bundle = new Bundle();
+                                        bundle.putInt(Resource.KEY_PRODUCT_ID, productId);
+                                        Intent intent = new Intent(view.getContext(),ProductDetailActivity.class);
+                                        intent.putExtras(bundle);
+                                        view.getContext().startActivity(intent);
+                                    }
+                                }
+                        );
+
+                        isLoading = false;
+
+                    }else if(Result.FAILURE_TOKEN.checkResult(new Result(response))){
+                        Resource.setDefaultAPITOKEN();
+                        Intent intent = new Intent(getApplicationContext() , LoginActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(intent);
+                    } else {
+                        Toast.makeText(getApplicationContext(), "Beklenmedik bir durum ile karşılaşıldı" , Toast.LENGTH_LONG).show();
+                        Crashlytics.log(Log.INFO , Result.LOG_TAG_INFO.getResultText() , this.getClass().getName() + " >> " + Resource.ajax_get_products_by_category + " >> responseString = " + responseString);
+                    }
+
+                } catch (Exception e) {
                     e.printStackTrace();
-                    Log.i(Result.LOG_TAG_INFO.getResultText(),"ProductListActivity >> JSONException >> 120");
+                    Crashlytics.log(Log.INFO ,Result.LOG_TAG_INFO.getResultText(), Resource.ajax_get_products_by_category );
                     isLoading = false;
                 }
             }
@@ -146,7 +178,7 @@ public class ProductListActivity extends BaseActivity {
             @Override
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace();
-                Log.i(Result.LOG_TAG_INFO.getResultText(),"ProductListActivity >> ERROR ON GET DATA >> 121");
+                Crashlytics.log(Log.ERROR , Result.LOG_TAG_INFO.getResultText() , this.getClass().getName() + " >> " + "onErrorResponse");
                 isLoading = false;
             }
         }){
@@ -171,7 +203,7 @@ public class ProductListActivity extends BaseActivity {
 
     public void getSearchedProducts(final int page){
         // *****************************************************************************************
-        //                        AJAX - GET PRODUCTS BY CATEGORY
+        //                        AJAX - GET PRODUCTS BY SEARCH KEY
         // *****************************************************************************************
 
         isLoading = true;

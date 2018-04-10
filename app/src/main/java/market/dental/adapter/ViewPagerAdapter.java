@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.crashlytics.android.Crashlytics;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
@@ -73,7 +74,7 @@ public class ViewPagerAdapter extends PagerAdapter {
                     .error(R.mipmap.ic_launcher)
                     .into(image);
         }catch (Exception ex){
-
+            ex.printStackTrace();
         }
 
         container.addView(itemView);

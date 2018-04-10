@@ -24,6 +24,8 @@ public class Product {
     private int currencyId;
     private Brand brand;
 
+    public Product (){}
+
     public Product(JSONObject projectJsonObject){
         try {
             this.id = projectJsonObject.has("product_id")?
