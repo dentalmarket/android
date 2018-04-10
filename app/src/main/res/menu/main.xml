@@ -22,6 +22,12 @@
         app:showAsAction="never" />
 
     <item
+        android:id="@+id/right_menu_recent"
+        android:orderInCategory="100"
+        android:title="@string/right_menu_recent_products"
+        app:showAsAction="never" />
+
+    <item
         android:id="@+id/right_menu_logout"
         android:orderInCategory="100"
         android:title="@string/right_menu_logout"

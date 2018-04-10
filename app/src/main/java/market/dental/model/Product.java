@@ -65,6 +65,19 @@ public class Product {
         return productList;
     }
 
+    public static List<Product> ProductListWithExt(JSONArray projectJsonArray){
+
+        List<Product> productList = new ArrayList<Product>();
+        for(int i=0; i<projectJsonArray.length(); i++){
+            try {
+                productList.add(new Product( ((JSONObject) projectJsonArray.get(i)).getJSONObject("product") ));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        return productList;
+    }
+
     public String getDescription() {
         return description;
     }

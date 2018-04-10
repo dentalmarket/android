@@ -49,6 +49,7 @@ public class ProductListFragment extends Fragment {
     private ProductListAdapter productListAdapter;
     private int categoryId;
     private String searchKey;
+    private boolean recentProducts = false;
     private boolean isLoading = false;
     private OnFragmentInteractionListener mListener;
 
@@ -65,6 +66,7 @@ public class ProductListFragment extends Fragment {
         if (getArguments() != null) {
             categoryId = getArguments().getInt(Resource.KEY_CATEGORY_ID,-1);
             searchKey = getArguments().getString(Resource.SHAREDPREF_SEARCH_KEY);
+            recentProducts = getArguments().getBoolean(Resource.KEY_GET_RECENT_PRODUCTS);
         }
 
         getActivity().setTitle("Ürünler");
@@ -79,7 +81,10 @@ public class ProductListFragment extends Fragment {
         requestQueue = Volley.newRequestQueue(getActivity().getApplicationContext());
         productListAdapter = new ProductListAdapter(getActivity());
 
-        if(searchKey!=null && searchKey.length()>0){
+        if(recentProducts){
+            getActivity().setTitle(getArguments().getString(Resource.KEY_FRAGMENT_TITLE));
+            this.getRecentProducts(0);
+        }else if(searchKey!=null && searchKey.length()>0){
             this.getSearchedProducts(0);
             //Toast.makeText(this,  searchKey , Toast.LENGTH_SHORT).show();
         }else if(categoryId>0){
@@ -270,17 +275,16 @@ public class ProductListFragment extends Fragment {
                         });
 
                         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                                                            @Override
-                                                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                                                                int productId = ((Product) parent.getItemAtPosition(position)).getId();
-                                                                Bundle bundle = new Bundle();
-                                                                bundle.putInt(Resource.KEY_PRODUCT_ID, productId);
-                                                                Intent intent = new Intent(view.getContext(),ProductDetailActivity.class);
-                                                                intent.putExtras(bundle);
-                                                                view.getContext().startActivity(intent);
-                                                            }
-                                                        }
-                        );
+                            @Override
+                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                int productId = ((Product) parent.getItemAtPosition(position)).getId();
+                                Bundle bundle = new Bundle();
+                                bundle.putInt(Resource.KEY_PRODUCT_ID, productId);
+                                Intent intent = new Intent(view.getContext(),ProductDetailActivity.class);
+                                intent.putExtras(bundle);
+                                view.getContext().startActivity(intent);
+                            }
+                        });
 
                         isLoading = false;
 
@@ -326,6 +330,104 @@ public class ProductListFragment extends Fragment {
         };
         requestQueue.add(jsonObjectRequest);
     }
+
+
+    public void getRecentProducts(final int page){
+
+        // *****************************************************************************************
+        //                        GET PRODUCTS - USER HISTORY
+        // *****************************************************************************************
+        isLoading = true;
+        StringRequest jsonObjectRequest = new StringRequest(Request.Method.POST,
+                Resource.ajax_get_products_by_user_history, new Response.Listener<String>() {
+
+            @Override
+            public void onResponse(String responseString) {
+
+                try {
+                    JSONObject response = new JSONObject(responseString);
+                    if(Result.SUCCESS.checkResult(new Result(response))){
+
+                        JSONObject content = response.getJSONObject("content");
+                        productListAdapter.addProductList(Product.ProductListWithExt(content.getJSONArray("data")));
+                        productListAdapter.setCurrentPage(content.getInt("current_page"));
+
+                        ListView listView = view.findViewById(R.id.activity_product_list_main);
+                        if(listView.getAdapter()==null)
+                            listView.setAdapter(productListAdapter);
+                        else{
+                            productListAdapter.notifyDataSetChanged();
+                        }
+
+                        // -- EVENTS --
+                        listView.setOnScrollListener(new AbsListView.OnScrollListener() {
+                            @Override
+                            public void onScrollStateChanged(AbsListView view, int scrollState) {}
+
+                            @Override
+                            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                                if(view.getLastVisiblePosition() == totalItemCount-1 && !isLoading){
+                                    getCategoryProducts(productListAdapter.getCurrentPage()+1);
+                                }
+                            }
+                        });
+
+                        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                int productId = ((Product) parent.getItemAtPosition(position)).getId();
+                                Bundle bundle = new Bundle();
+                                bundle.putInt(Resource.KEY_PRODUCT_ID, productId);
+                                Intent intent = new Intent(view.getContext(),ProductDetailActivity.class);
+                                intent.putExtras(bundle);
+                                view.getContext().startActivity(intent);
+                            }
+                        });
+
+                        isLoading = false;
+
+                    }else if(Result.FAILURE_TOKEN.checkResult(new Result(response))){
+                        Resource.setDefaultAPITOKEN();
+                        Intent intent = new Intent(getActivity().getApplicationContext() , LoginActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(intent);
+                    } else {
+                        Toast.makeText(getActivity().getApplicationContext(), "Beklenmedik bir durum ile karşılaşıldı" , Toast.LENGTH_LONG).show();
+                        Crashlytics.log(Log.INFO , Result.LOG_TAG_INFO.getResultText() , this.getClass().getName() + " >> " + Resource.ajax_get_products_by_user_history + " >> responseString = " + responseString);
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Crashlytics.log(Log.INFO ,Result.LOG_TAG_INFO.getResultText(), Resource.ajax_get_products_by_user_history );
+                    isLoading = false;
+                }
+            }
+
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+                Crashlytics.log(Log.ERROR , Result.LOG_TAG_INFO.getResultText() , this.getClass().getName() + " >> " + "onErrorResponse");
+                isLoading = false;
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams()  {
+                Map<String, String> params = new HashMap<>();
+                params.put(Resource.KEY_API_TOKEN, Resource.VALUE_API_TOKEN);
+                params.put("page", String.valueOf(page));
+                return params;
+            }
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String,String> params = new HashMap<String, String>();
+                params.put("Content-Type","application/x-www-form-urlencoded");
+                return params;
+            }
+        };
+        requestQueue.add(jsonObjectRequest);
+    }
+
 
     @Override
     public void onDestroy() {

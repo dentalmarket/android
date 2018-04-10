@@ -295,10 +295,12 @@ public class MainFragment extends Fragment {
                 @Override
                 public void run() {
 
-                if(viewPager.getCurrentItem()+1==viewPagerAdapter.getCount()){
-                    viewPager.setCurrentItem(0);
-                }else{
-                    viewPager.setCurrentItem(viewPager.getCurrentItem()+1);
+                if(viewPager!=null){
+                    if(viewPager.getCurrentItem()+1==viewPagerAdapter.getCount()){
+                        viewPager.setCurrentItem(0);
+                    }else{
+                        viewPager.setCurrentItem(viewPager.getCurrentItem()+1);
+                    }
                 }
 
                 }

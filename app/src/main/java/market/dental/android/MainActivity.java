@@ -127,6 +127,18 @@ public class MainActivity extends BaseActivity
                 intent = new Intent(this,ConversationListActivity.class);
                 startActivity(intent);
                 break;
+            case R.id.right_menu_recent:
+                Bundle bundle = new Bundle();
+                bundle.putBoolean(Resource.KEY_GET_RECENT_PRODUCTS, true);
+                bundle.putString(Resource.KEY_FRAGMENT_TITLE, "İncelediğim Ürünler");
+
+                Fragment fragment = ProductListFragment.newInstance();
+                fragment.setArguments(bundle);
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.content_main , fragment)
+                        .commit();
+                break;
             case R.id.right_menu_logout:
                 userLogout();
                 break;
