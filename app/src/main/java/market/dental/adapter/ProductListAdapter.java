@@ -96,18 +96,21 @@ public class ProductListAdapter extends ArrayAdapter {
     @Override
     public View getView(int position, View view, ViewGroup viewgroup){
 
-        LayoutInflater inflater = LayoutInflater.from(getContext());
-        View customView;
+        /**
+         * reklam ürün için ayrıca view oluşturularak listview içerisine konulur
+         */
+        if(position==0 && images!=null && images.length()>0){
 
-        // sadece ilk sayfanın ilk elemanı için reklamlı ürün varsa yerleştirilir
-        if(position==0 && currentPage==1 && images!=null && images.length()>0){
+            // listview içerisinde 2 farklı view olacağından farklı view olması durumunda yenisi oluşturulur
+            if(view==null || view.findViewById(R.id.layout_view_pager)==null){
+                view = LayoutInflater.from(getContext()).inflate(R.layout.view_pager_layout,viewgroup,false);
+            }
 
-            customView = inflater.inflate(R.layout.view_pager_layout,viewgroup,false);
-            viewPager = (ViewPager)customView.findViewById(R.id.layout_view_pager);
+            viewPager = (ViewPager)view.findViewById(R.id.layout_view_pager);
             viewPagerAdapter = new ViewPagerAdapter((Activity) context,images);
             viewPager.setAdapter(viewPagerAdapter);
 
-            LinearLayout sliderDotsPanel = (LinearLayout)customView.findViewById(R.id.layout_view_pager_dots);
+            LinearLayout sliderDotsPanel = (LinearLayout)view.findViewById(R.id.layout_view_pager_dots);
             final ImageView[] dots = new ImageView[viewPagerAdapter.getCount()];
             for(int i=0; i<viewPagerAdapter.getCount(); i++){
                 dots[i] = new ImageView(context);
@@ -142,20 +145,24 @@ public class ProductListAdapter extends ArrayAdapter {
 
         }else{
 
-            customView = inflater.inflate(R.layout.activity_product_list_main_items,viewgroup,false);
-            TextView textView = customView.findViewById(R.id.activity_product_list_item_product_name);
+            // listview içerisinde 2 farklı view olacağından farklı view olması durumunda yenisi oluşturulur
+            if(view==null || view.findViewById(R.id.activity_product_list_item_product_brand)==null){
+                view = LayoutInflater.from(getContext()).inflate(R.layout.activity_product_list_main_items,viewgroup,false);
+            }
+
+            TextView textView = view.findViewById(R.id.activity_product_list_item_product_name);
             textView.setText(productList.get(position).getName());
 
-            TextView brandTextView = customView.findViewById(R.id.activity_product_list_item_product_brand);
+            TextView brandTextView = view.findViewById(R.id.activity_product_list_item_product_brand);
             brandTextView.setText(productList.get(position).getBrand()!=null ? productList.get(position).getBrand().getName() : "bilinmiyor");
 
             Typeface font = Typeface.createFromAsset(context.getAssets(),"fonts/fontawesome-webfont.ttf");
-            TextView priceTextView = customView.findViewById(R.id.activity_product_list_item_product_price);
+            TextView priceTextView = view.findViewById(R.id.activity_product_list_item_product_price);
             priceTextView.setTypeface(font);
             priceTextView.setText("" +productList.get(position).getSalePrice() + " " +
                     Currency.getCurrencyString( context.getResources(),productList.get(position).getCurrencyId()));
 
-            ImageView imageView = customView.findViewById(R.id.activity_product_list_item_image);
+            ImageView imageView = view.findViewById(R.id.activity_product_list_item_image);
             Picasso.with(context)
                     .load(productList.get(position).getImageUrl())
                     .placeholder(R.mipmap.ic_launcher)
@@ -165,7 +172,7 @@ public class ProductListAdapter extends ArrayAdapter {
                     .into(imageView);
 
         }
-        return customView;
+        return view;
     }
 
 }
