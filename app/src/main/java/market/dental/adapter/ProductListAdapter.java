@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.crashlytics.android.Crashlytics;
 import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
@@ -31,6 +33,7 @@ import market.dental.android.R;
 import market.dental.model.Product;
 import market.dental.util.Resource;
 import market.dental.model.Currency;
+import market.dental.util.Result;
 
 /**
  * Created by kemalsamikaraca on 18.01.2018.
@@ -96,7 +99,8 @@ public class ProductListAdapter extends ArrayAdapter {
         LayoutInflater inflater = LayoutInflater.from(getContext());
         View customView;
 
-        if(position==0 && images!=null && images.length()>0){
+        // sadece ilk sayfanın ilk elemanı için reklamlı ürün varsa yerleştirilir
+        if(position==0 && currentPage==1 && images!=null && images.length()>0){
 
             customView = inflater.inflate(R.layout.view_pager_layout,viewgroup,false);
             viewPager = (ViewPager)customView.findViewById(R.id.layout_view_pager);
