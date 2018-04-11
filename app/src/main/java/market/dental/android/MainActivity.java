@@ -132,12 +132,9 @@ public class MainActivity extends BaseActivity
                 bundle.putBoolean(Resource.KEY_GET_RECENT_PRODUCTS, true);
                 bundle.putString(Resource.KEY_FRAGMENT_TITLE, "İncelediğim Ürünler");
 
-                Fragment fragment = ProductListFragment.newInstance();
-                fragment.setArguments(bundle);
-                getSupportFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.content_main , fragment)
-                        .commit();
+                intent = new Intent(this,ProductListActivity.class);
+                intent.putExtras(bundle);
+                startActivity(intent);
                 break;
             case R.id.right_menu_logout:
                 userLogout();
@@ -258,7 +255,7 @@ public class MainActivity extends BaseActivity
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace();
                 Log.i(Result. LOG_TAG_INFO.getResultText(),"MainActivity >> ERROR ON GET DATA >> 121");
-                redirectLoginActivity();
+                Toast.makeText(context, "Beklenmedik network hatası ile karşılaşıldı" , Toast.LENGTH_LONG).show();
             }
         }){
             @Override
