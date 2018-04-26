@@ -234,7 +234,6 @@ public class MainActivity extends BaseActivity
                         Fragment fragment = ( (categoryId!=-1) ?
                                 ProductListFragment.newInstance() : MainFragment.newInstance() );
                         fragment.setArguments(bundle);
-                        getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
                         getSupportFragmentManager()
                                 .beginTransaction()
                                 .replace(R.id.content_main , fragment)

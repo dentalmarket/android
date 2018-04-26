@@ -359,9 +359,9 @@ public class RegisterActivity extends BaseActivity {
                             Toast.makeText(view.getContext() , response.getString("content"), Toast.LENGTH_LONG ).show();
                         }
 
-                    } catch (JSONException e) {
+                    } catch (Exception e) {
                         e.printStackTrace();
-                        Log.i(Result.LOG_TAG_INFO.getResultText(),"" + this.getClass().getName() + " >> JSONException >> 126");
+                        Log.i(Result.LOG_TAG_INFO.getResultText(),"" + this.getClass().getName() + " >> Exception >> " + Resource.ajax_register);
                     } finally {
                         progressDialog.dismiss();
                     }
@@ -370,7 +370,7 @@ public class RegisterActivity extends BaseActivity {
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     error.printStackTrace();
-                    Log.i(Result.LOG_TAG_INFO.getResultText(),this.getClass().getSimpleName() + " >> ERROR ON GET DATA >> 127");
+                    Log.i(Result.LOG_TAG_INFO.getResultText(),this.getClass().getSimpleName() + " >> ERROR ON GET DATA >> " + Resource.ajax_register);
                     Toast.makeText(view.getContext() , "İstek gerçekleştirilemedi :(", Toast.LENGTH_LONG ).show();
                     progressDialog.dismiss();
                 }
