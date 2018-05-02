@@ -80,6 +80,8 @@ public class ViewPagerAdapter extends PagerAdapter {
         try{
             Picasso.with(activity.getApplicationContext())
                     .load( Resource.DOMAIN_NAME + "/" +((JSONObject)images.get(position)).getString("image"))
+                    .fit()
+                    .centerCrop()
                     .placeholder(R.mipmap.ic_launcher)
                     .error(R.mipmap.ic_launcher)
                     //.memoryPolicy(MemoryPolicy.NO_CACHE,MemoryPolicy.NO_STORE)
@@ -122,6 +124,7 @@ public class ViewPagerAdapter extends PagerAdapter {
 
     @Override
     public void destroyItem(ViewGroup container, int position, Object object){
+        Picasso.with(activity.getApplicationContext()).cancelRequest((ImageView)object);
         ((ViewPager) container).removeView((View)object);
     }
 

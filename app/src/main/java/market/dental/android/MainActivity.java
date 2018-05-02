@@ -93,6 +93,26 @@ public class MainActivity extends BaseActivity
     }
 
     @Override
+    protected void onRestart() {
+        super.onRestart();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+    }
+
+    @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
@@ -150,11 +170,6 @@ public class MainActivity extends BaseActivity
 
         getCategoryList(item.getItemId());
         return true;
-    }
-
-    @Override
-    public void onResume(){
-        super.onResume();
     }
 
     public void getCategoryList(final int categoryId){
@@ -234,10 +249,11 @@ public class MainActivity extends BaseActivity
                         Fragment fragment = ( (categoryId!=-1) ?
                                 ProductListFragment.newInstance() : MainFragment.newInstance() );
                         fragment.setArguments(bundle);
+
                         getSupportFragmentManager()
                                 .beginTransaction()
                                 .replace(R.id.content_main , fragment)
-                                .commit();
+                                .commitAllowingStateLoss();
 
                     }else if(Result.FAILURE_TOKEN.checkResult(new Result(response))){
                         redirectLoginActivity();

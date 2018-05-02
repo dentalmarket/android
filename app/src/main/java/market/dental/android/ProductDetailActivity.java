@@ -3,11 +3,11 @@ package market.dental.android;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -24,12 +24,15 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.squareup.picasso.Picasso;
 
-import org.json.JSONException;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 
+import market.dental.adapter.ProductDetailViewPagerAdapter;
 import market.dental.adapter.ProductsRecyclerAdapter;
 import market.dental.model.Currency;
 import market.dental.model.Product;
@@ -52,6 +55,10 @@ public class ProductDetailActivity extends BaseActivity {
     private TextView brandName;
     private Button sendMessageBtn;
     private AlertDialog progressDialog;
+    private ViewPager viewPager;
+    private ProductDetailViewPagerAdapter productDetailViewPagerAdapter;
+    private ImageView[] dots;
+    private Timer timer;
 
     private int productId;
     private String productDesc;
@@ -140,13 +147,61 @@ public class ProductDetailActivity extends BaseActivity {
                                 startActivity(intent);
                             }
                         });
+
+
+                        // BURADA JSONARRAY ile resimler yollanır
+                        JSONArray productImageList = content.getJSONArray("images");
+                        JSONObject firstProductImage = new JSONObject();
+                        firstProductImage.put("photo" , content.getString("image"));
+                        firstProductImage.put("thumb" , content.getString("thumb"));
+                        productImageList.put(0,firstProductImage);
+
+                        viewPager = (ViewPager)findViewById(R.id.activity_product_detail_view_pager);
+                        productDetailViewPagerAdapter = new ProductDetailViewPagerAdapter(getApplicationContext(),productImageList);
+                        viewPager.setAdapter(productDetailViewPagerAdapter);
+
+                    /*
+                        LinearLayout sliderDotsPanel = (LinearLayout)findViewById(R.id.viewpage_dots_layout);
+                        dots = new ImageView[productDetailViewPagerAdapter.getCount()];
+                        for(int i=0; i<productDetailViewPagerAdapter.getCount(); i++){
+                            dots[i] = new ImageView(getApplicationContext());
+
+                            if(i==0){
+                                dots[i].setImageDrawable(ContextCompat.getDrawable(getApplicationContext() , R.drawable.active_dot));
+                            }else{
+                                dots[i].setImageDrawable(ContextCompat.getDrawable(getApplicationContext() , R.drawable.nonactive_dot));
+                            }
+
+                            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT , LinearLayout.LayoutParams.WRAP_CONTENT);
+                            params.setMargins(8,0,8,0);
+                            sliderDotsPanel.addView(dots[i],params);
+                        }
+
+                        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener(){
+                            @Override
+                            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {}
+                            @Override
+                            public void onPageSelected(int position) {
+                                for(int i=0; i<productDetailViewPagerAdapter.getCount(); i++){
+                                    if(i==position){
+                                        dots[i].setImageDrawable(ContextCompat.getDrawable(getApplicationContext() , R.drawable.active_dot));
+                                    }else{
+                                        dots[i].setImageDrawable(ContextCompat.getDrawable(getApplicationContext() , R.drawable.nonactive_dot));
+                                    }
+                                }
+                            }
+                            @Override
+                            public void onPageScrollStateChanged(int state) {}
+                        });
+
+                        timer = new Timer();
+                        timer.scheduleAtFixedRate(new ProductDetailActivity.MyTimerTask() , 2000 , 4000);
+                    */
+
                     } else if(Result.FAILURE_TOKEN.checkResult(new Result(response))){
                         redirectLoginActivity();
                     }
                     
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    Log.i(Result.LOG_TAG_INFO.getResultText(),"ProductDetail >> JSONException >> 120");
                 } catch (Exception e) {
                     e.printStackTrace();
                     Log.i(Result.LOG_TAG_INFO.getResultText(),"ProductDetail >> Exception");
@@ -221,8 +276,13 @@ public class ProductDetailActivity extends BaseActivity {
 
     @Override
     public void onDestroy() {
-        mRecyclerView = null;
-        mRecyclerLayoutManager = null;
+        viewPager.setAdapter(null);
+        mRecyclerView.setAdapter(null);
+
+        productDetailViewPagerAdapter = null;
+        mRecyclerLayoutManager.removeAllViews();
+        mRecyclerLayoutManager=null;
+
         mRecyclerAdapter = null;
         productDetailContext = null;
         pdImageView=null;
@@ -237,5 +297,28 @@ public class ProductDetailActivity extends BaseActivity {
         progressDialog = null;
         productDesc=null;
         super.onDestroy();
+    }
+
+    /**
+     * Bu TimerTask class ile image slider otomatik değiştirmesi sağlanıyor
+     */
+    public class MyTimerTask extends java.util.TimerTask {
+        @Override
+        public void run() {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+
+                    if(viewPager!=null){
+                        if(viewPager.getCurrentItem()+1==productDetailViewPagerAdapter.getCount()){
+                            viewPager.setCurrentItem(0);
+                        }else{
+                            viewPager.setCurrentItem(viewPager.getCurrentItem()+1);
+                        }
+                    }
+
+                }
+            });
+        }
     }
 }

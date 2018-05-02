@@ -62,10 +62,10 @@ public class ProductsRecyclerAdapter extends RecyclerView.Adapter<ProductsRecycl
 
             Picasso.with(context.getApplicationContext())
                     .load(product.getImageUrl())
+                    .fit()
+                    .centerCrop()
                     .placeholder(R.mipmap.ic_launcher)
                     .error(R.mipmap.ic_launcher)
-                    .memoryPolicy(MemoryPolicy.NO_CACHE,MemoryPolicy.NO_STORE)
-                    .networkPolicy(NetworkPolicy.NO_CACHE,NetworkPolicy.NO_STORE)
                     .into(holder.mImageView);
 
         } catch (Exception ex){
