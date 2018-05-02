@@ -45,7 +45,6 @@ public class ProductDetailActivity extends BaseActivity {
     private RecyclerView.LayoutManager mRecyclerLayoutManager;
     private RecyclerView.Adapter mRecyclerAdapter;
     private Context productDetailContext;
-    private ImageView  pdImageView;
     private TextView pdProductName;
     private TextView pdProductPrice;
     private TextView storeName;
@@ -76,7 +75,6 @@ public class ProductDetailActivity extends BaseActivity {
         // Initialization
         RequestQueue rq = Volley.newRequestQueue(this);
         productDetailContext = this.getApplicationContext();
-        pdImageView = (ImageView)findViewById(R.id.activity_product_detail_image);
         pdProductName = (TextView)findViewById(R.id.activity_product_detail_product_name);
         pdProductPrice = (TextView)findViewById(R.id.activity_product_detail_price);
         storeName = (TextView)findViewById(R.id.activity_product_detail_store_name);
@@ -119,11 +117,6 @@ public class ProductDetailActivity extends BaseActivity {
                         pdProductPrice.setTypeface(font);
                         pdProductPrice.setText(product.getSalePrice() + " "  + Currency.getCurrencyString( getResources(),product.getCurrencyId()));
                         pdProductName.setText((String) product.getName());
-                        Picasso.with(productDetailContext)
-                                .load(product.getImageUrl())
-                                .placeholder(R.mipmap.ic_launcher)
-                                .error(R.mipmap.ic_launcher)
-                                .into(pdImageView);
 
                         brandName.setText(product.getBrand().getName());
 
@@ -285,7 +278,6 @@ public class ProductDetailActivity extends BaseActivity {
 
         mRecyclerAdapter = null;
         productDetailContext = null;
-        pdImageView=null;
         pdProductName=null;
         pdProductPrice=null;
         storeName=null;

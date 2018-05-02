@@ -22,24 +22,16 @@
             <android.support.v4.view.ViewPager
                 android:id="@+id/activity_product_detail_view_pager"
                 android:layout_width="match_parent"
-                android:layout_height="140dp"
-                android:layout_alignParentStart="true"
-                ></android.support.v4.view.ViewPager>
-
-            <ImageView
-                android:id="@+id/activity_product_detail_image"
-                android:layout_width="match_parent"
-                android:layout_height="120dp"
-                android:layout_gravity="center"
-                android:src="@android:drawable/ic_menu_report_image"
-                android:layout_below="@+id/activity_product_detail_view_pager"/>
+                android:layout_height="240dp"
+                android:layout_alignParentStart="true">
+            </android.support.v4.view.ViewPager>
 
             <LinearLayout
                 android:id="@+id/activity_product_detail_product_linear_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:layout_below="@+id/activity_product_detail_image">
+                android:layout_below="@+id/activity_product_detail_view_pager">
 
                 <TextView
                     android:id="@+id/activity_product_detail_product_name"

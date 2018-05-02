@@ -54,7 +54,7 @@ public class ProductDetailViewPagerAdapter extends PagerAdapter {
     @Override
     public Object instantiateItem(ViewGroup container, int position){
 
-        View v = LayoutInflater.from(container.getContext()).inflate(R.layout.imageslider_viewpager_item,container,false);
+        View v = LayoutInflater.from(container.getContext()).inflate(R.layout.product_detail_viewpager_item,container,false);
         ProductDetailViewPagerAdapter.ViewHolder viewHolder = new ProductDetailViewPagerAdapter.ViewHolder(v);
 
         //inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
