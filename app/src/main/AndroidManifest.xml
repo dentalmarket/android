@@ -30,8 +30,9 @@
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_color"
             android:resource="@color/cardview_dark_background" />
-
-        <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id"/>
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_id" />
 
         <activity
             android:name=".LoginActivity"
@@ -43,8 +44,8 @@
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:launchMode="singleTask"/>
+            android:launchMode="singleTask"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".ProductDetailActivity"
             android:label="Ürün Detayı" />
@@ -63,8 +64,8 @@
         <activity
             android:name=".ConversationListActivity"
             android:label="@string/title_activity_conversation_list"
-            android:parentActivityName=".MainActivity"
-            android:launchMode="singleTask">
+            android:launchMode="singleTask"
+            android:parentActivityName=".MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
@@ -72,8 +73,8 @@
         <activity
             android:name=".MessageListActivity"
             android:label="@string/title_activity_message_list"
-            android:parentActivityName=".ConversationListActivity"
-            android:launchMode="singleTask" >
+            android:launchMode="singleTask"
+            android:parentActivityName=".ConversationListActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ConversationListActivity" />
@@ -88,7 +89,7 @@
             </intent-filter>
         </activity>
 
-        <!--  SERVICES  -->
+        <!-- SERVICES -->
         <service android:name="market.dental.service.MyFirebaseMessagingService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
@@ -100,14 +101,14 @@
             </intent-filter>
         </service>
         <service
-            android:exported="false"
-            android:name="market.dental.service.MyJobService">
+            android:name="market.dental.service.MyJobService"
+            android:exported="false">
             <intent-filter>
-                <action android:name="com.firebase.jobdispatcher.ACTION_EXECUTE"/>
+                <action android:name="com.firebase.jobdispatcher.ACTION_EXECUTE" />
             </intent-filter>
         </service>
 
-        <!--  RECEIVERS  -->
+        <!-- RECEIVERS -->
         <receiver
             android:name="market.dental.receiver.ConnectionReceiver"
             android:enabled="true">
@@ -116,6 +117,11 @@
             </intent-filter>
         </receiver>
 
+        <activity
+            android:name=".FullscreenImageActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/title_activity_fullscreen_image"
+            android:theme="@style/FullscreenTheme"></activity>
     </application>
 
 </manifest>

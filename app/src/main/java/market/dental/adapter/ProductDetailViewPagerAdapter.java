@@ -1,6 +1,11 @@
 package market.dental.adapter;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.view.PagerAdapter;
@@ -10,14 +15,21 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import com.crashlytics.android.Crashlytics;
+import com.github.chrisbanes.photoview.OnPhotoTapListener;
+import com.github.chrisbanes.photoview.PhotoView;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import market.dental.android.FullscreenImageActivity;
+import market.dental.android.MainActivity;
 import market.dental.android.R;
 import market.dental.util.Resource;
 import market.dental.util.Result;
@@ -70,8 +82,9 @@ public class ProductDetailViewPagerAdapter extends PagerAdapter {
 
         try{
 
+            viewHolder.imageUrl = Resource.DOMAIN_NAME + "/" +((JSONObject)images.get(position)).getString("photo");
             Picasso.with(context)
-                    .load( Resource.DOMAIN_NAME + "/" +((JSONObject)images.get(position)).getString("photo"))
+                    .load( viewHolder.imageUrl )
                     .fit()
                     .centerInside()
                     .placeholder(R.mipmap.ic_launcher)
@@ -92,30 +105,34 @@ public class ProductDetailViewPagerAdapter extends PagerAdapter {
     public void destroyItem(ViewGroup container, int position, Object object){
 
         try{
+            ((ViewPager) container).removeView((View)object);
             ConstraintLayout mainLayout = (ConstraintLayout)object;
             Picasso.with(context).cancelRequest((ImageView)mainLayout.findViewById(R.id.viewpage_imageView));
         }catch (Exception e){
             e.printStackTrace();
         }
-
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            Crashlytics.log(Log.ERROR , Result.LOG_TAG_INFO.getResultText() , this.getClass().getName() + " >> " + "destroyItem " + " >> " + object.getClass().getName() + " - " + object.getClass().getTypeName());
-        }else{
-            Crashlytics.log(Log.ERROR , Result.LOG_TAG_INFO.getResultText() , this.getClass().getName() + " >> " + "destroyItem " + " >> " + object.getClass().getName());
-        }
-
-        ((ViewPager) container).removeView((View)object);
     }
 
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public ImageView mImageView;
+        public String imageUrl;
 
         public ViewHolder(View itemView) {
             super(itemView);
             mImageView = (ImageView)itemView.findViewById(R.id.viewpage_imageView);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent fullScreenIntent = new Intent(context, FullscreenImageActivity.class);
+                    fullScreenIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    fullScreenIntent.putExtra("url" , imageUrl);
+                    context.startActivity(fullScreenIntent);
+                }
+            });
         }
+
     }
 
 }

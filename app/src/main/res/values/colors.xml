@@ -11,4 +11,6 @@
     <color name="dental_market_text_title">#D3BD98</color>
     <color name="dental_market_text_price">#31AC7A</color>
     <color name="dental_market_blue">#0000FF</color>
+
+    <color name="black_overlay">#66000000</color>
 </resources>
