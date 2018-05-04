@@ -3,6 +3,7 @@ package market.dental.android;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.os.Bundle;
@@ -14,6 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.android.volley.Request;
@@ -153,8 +155,8 @@ public class ProductDetailActivity extends BaseActivity {
                         productDetailViewPagerAdapter = new ProductDetailViewPagerAdapter(getApplicationContext(),productImageList);
                         viewPager.setAdapter(productDetailViewPagerAdapter);
 
-                    /*
-                        LinearLayout sliderDotsPanel = (LinearLayout)findViewById(R.id.viewpage_dots_layout);
+
+                        LinearLayout sliderDotsPanel = (LinearLayout)findViewById(R.id.activity_product_detail_view_pager_dots);
                         dots = new ImageView[productDetailViewPagerAdapter.getCount()];
                         for(int i=0; i<productDetailViewPagerAdapter.getCount(); i++){
                             dots[i] = new ImageView(getApplicationContext());
@@ -189,7 +191,6 @@ public class ProductDetailActivity extends BaseActivity {
 
                         timer = new Timer();
                         timer.scheduleAtFixedRate(new ProductDetailActivity.MyTimerTask() , 2000 , 4000);
-                    */
 
                     } else if(Result.FAILURE_TOKEN.checkResult(new Result(response))){
                         redirectLoginActivity();
@@ -238,6 +239,29 @@ public class ProductDetailActivity extends BaseActivity {
                 view.getContext().startActivity(intent);
             }
         });
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
+    @Override
+    public void onStop(){
+        if(timer!=null){
+            timer.cancel();
+        }
+        super.onStop();
     }
 
     @Override
