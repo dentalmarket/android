@@ -1,12 +1,7 @@
 package market.dental.adapter;
 
-import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.drawable.ColorDrawable;
-import android.os.Build;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -15,13 +10,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 
 import com.crashlytics.android.Crashlytics;
-import com.github.chrisbanes.photoview.OnPhotoTapListener;
 import com.github.chrisbanes.photoview.PhotoView;
 import com.squareup.picasso.Picasso;
 
@@ -29,22 +20,21 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import market.dental.android.FullscreenImageActivity;
-import market.dental.android.MainActivity;
 import market.dental.android.R;
 import market.dental.util.Resource;
 import market.dental.util.Result;
 
-public class ProductDetailViewPagerAdapter extends PagerAdapter {
+public class FullScreenImageViewPagerAdapter extends PagerAdapter {
 
     private Context context;
     private LayoutInflater inflater;
     private JSONArray images;
 
-    public ProductDetailViewPagerAdapter(Context context){
+    public FullScreenImageViewPagerAdapter(Context context){
         this.context = context;
     }
 
-    public ProductDetailViewPagerAdapter(Context context , JSONArray images){
+    public FullScreenImageViewPagerAdapter(Context context , JSONArray images){
         this.context = context;
         this.images = images;
     }
@@ -66,8 +56,8 @@ public class ProductDetailViewPagerAdapter extends PagerAdapter {
     @Override
     public Object instantiateItem(ViewGroup container, int position){
 
-        View v = LayoutInflater.from(container.getContext()).inflate(R.layout.product_detail_viewpager_item,container,false);
-        ProductDetailViewPagerAdapter.ViewHolder viewHolder = new ProductDetailViewPagerAdapter.ViewHolder(v);
+        View v = LayoutInflater.from(container.getContext()).inflate(R.layout.activity_fullscreen_photoview,container,false);
+        FullScreenImageViewPagerAdapter.ViewHolder viewHolder = new FullScreenImageViewPagerAdapter.ViewHolder(v);
 
         try{
 
@@ -78,7 +68,7 @@ public class ProductDetailViewPagerAdapter extends PagerAdapter {
                     .centerInside()
                     .placeholder(R.mipmap.ic_launcher)
                     .error(R.mipmap.ic_launcher)
-                    .into(viewHolder.mImageView);
+                    .into(viewHolder.photoView);
 
         }catch (Exception ex){
             ex.printStackTrace();
@@ -96,7 +86,7 @@ public class ProductDetailViewPagerAdapter extends PagerAdapter {
         try{
             ((ViewPager) container).removeView((View)object);
             ConstraintLayout mainLayout = (ConstraintLayout)object;
-            Picasso.with(context).cancelRequest((ImageView)mainLayout.findViewById(R.id.viewpage_imageView));
+            Picasso.with(context).cancelRequest((ImageView)mainLayout.findViewById(R.id.fullscreen_activity_photo_view));
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -104,23 +94,12 @@ public class ProductDetailViewPagerAdapter extends PagerAdapter {
 
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        public ImageView mImageView;
+        public PhotoView photoView;
         public String imageUrl;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            mImageView = (ImageView)itemView.findViewById(R.id.viewpage_imageView);
-
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent fullScreenIntent = new Intent(context, FullscreenImageActivity.class);
-                    fullScreenIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    fullScreenIntent.putExtra("url" , imageUrl);
-                    fullScreenIntent.putExtra("imagesJsonString" , images.toString());
-                    context.startActivity(fullScreenIntent);
-                }
-            });
+            photoView = (PhotoView)itemView.findViewById(R.id.fullscreen_activity_photo_view);
         }
 
     }
