@@ -4,9 +4,21 @@
     android:layout_height="match_parent"
     tools:context="market.dental.android.FullscreenImageActivity">
 
+    <TextView
+        android:id="@+id/fullscreen_activity_close"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true"
+        android:paddingTop="20dp"
+        android:layout_marginEnd="20dp"
+        android:textColor="@color/colorWhite"
+        android:text="Kapat" />
+
     <com.github.chrisbanes.photoview.PhotoView
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/fullscreen_activity_photo_view"
+        android:layout_below="@+id/fullscreen_activity_close"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_centerHorizontal="true"
