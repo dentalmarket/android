@@ -39,6 +39,7 @@ public class Resource {
     public static String KEY_PRODUCT_DESC = "KEY_PRODUCT_DESC";
     public static String KEY_CATEGORY_ID = "KEY_CATEGORY_ID";
     public static String KEY_MESSAGE_RECEIVER_ID = "KEY_MESSAGE_RECEIVER_ID";
+    public static String KEY_MESSAGE_CATEGORY_ID = "KEY_MESSAGE_CATEGORY_ID";
     public static String KEY_CONVERSATION_ID = "KEY_CONVERSATION_ID";
     public static String KEY_GET_RECENT_PRODUCTS = "KEY_GET_RECENT_PRODUCTS";
     public static String KEY_FRAGMENT_TITLE = "KEY_FRAGMENT_TITLE";

@@ -131,6 +131,12 @@ public class SplashActivity extends AppCompatActivity {
                         if (bundle!=null && bundle.getString("fromId")!=null && bundle.getString("fromId").length()>0) {
                             bundle.putString(Resource.KEY_MESSAGE_RECEIVER_ID, bundle.getString("fromId").toString());
                             redirectConversationListActivity(bundle);
+                        }else if(bundle!=null && bundle.getString("catId")!=null && bundle.getString("catId").length()>0){
+                            bundle.putString(Resource.KEY_MESSAGE_CATEGORY_ID, bundle.getString("catId").toString());
+                            Intent intent = new Intent(getApplicationContext() , MainActivity.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            intent.putExtras(bundle);
+                            startActivity(intent);
                         }else{
                             redirectMainActivity();
                         }

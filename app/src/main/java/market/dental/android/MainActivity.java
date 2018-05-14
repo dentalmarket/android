@@ -89,7 +89,21 @@ public class MainActivity extends BaseActivity
         progressDialogBuilder.setView(getLayoutInflater().inflate(R.layout.dialog_progressbar,null));
         progressDialog = progressDialogBuilder.create();
 
-        getCategoryList(-1);
+        // Eğer notification ile categoryId değeri geldi ise ilgili category ürünler listelenir
+        Bundle bundle = getIntent().getExtras();
+        try{
+            if(bundle.containsKey(Resource.KEY_MESSAGE_CATEGORY_ID)){
+                getCategoryList(Integer.parseInt(bundle.getString(Resource.KEY_MESSAGE_CATEGORY_ID)));
+            }else{
+                getCategoryList(-1);
+            }
+
+        }catch (Exception e){
+            e.printStackTrace();
+            Crashlytics.log(Log.INFO , Result.LOG_TAG_INFO.getResultText() , this.getClass().getName() + " >> Bundle Exception");
+            getCategoryList(-1);
+        }
+
     }
 
     @Override

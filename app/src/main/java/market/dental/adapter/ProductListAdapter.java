@@ -135,11 +135,39 @@ public class ProductListAdapter extends ArrayAdapter {
 
         }else{
 
+            ViewHolder holder;
+
             // listview içerisinde 2 farklı view olacağından farklı view olması durumunda yenisi oluşturulur
-            if(view==null || view.findViewById(R.id.activity_product_list_item_product_brand)==null){
-                view = LayoutInflater.from(getContext()).inflate(R.layout.activity_product_list_main_items,viewgroup,false);
+            if(view==null || view.findViewById(R.id.activity_product_list_item_product_brand)==null) {
+                view = LayoutInflater.from(getContext()).inflate(R.layout.activity_product_list_main_items, viewgroup, false);
+                holder = new ViewHolder();
+                holder.itemProductName = view.findViewById(R.id.activity_product_list_item_product_name);
+                holder.itemProductName.setText(productList.get(position).getName());
+
+                holder.productBrand = view.findViewById(R.id.activity_product_list_item_product_brand);
+                holder.productBrand.setText(productList.get(position).getBrand()!=null ? productList.get(position).getBrand().getName() : "bilinmiyor");
+
+                Typeface font = Typeface.createFromAsset(context.getAssets(),"fonts/fontawesome-webfont.ttf");
+                holder.priceTextView = view.findViewById(R.id.activity_product_list_item_product_price);
+                holder.priceTextView.setTypeface(font);
+                holder.priceTextView.setText("" +productList.get(position).getSalePrice() + " " +
+                        Currency.getCurrencyString( context.getResources(),productList.get(position).getCurrencyId()));
+
+                holder.productImage = view.findViewById(R.id.activity_product_list_item_image);
+                Picasso.with(context)
+                        .load(productList.get(position).getImageUrl())
+                        .placeholder(R.mipmap.ic_launcher)
+                        .error(R.mipmap.ic_launcher)
+                        .into(holder.productImage);
+
+                view.setTag(holder);
+
+            } else {
+                holder = (ViewHolder) view.getTag();
             }
 
+
+/*
             TextView textView = view.findViewById(R.id.activity_product_list_item_product_name);
             textView.setText(productList.get(position).getName());
 
@@ -158,9 +186,17 @@ public class ProductListAdapter extends ArrayAdapter {
                     .placeholder(R.mipmap.ic_launcher)
                     .error(R.mipmap.ic_launcher)
                     .into(imageView);
+*/
         }
 
         return view;
+    }
+
+    static class ViewHolder {
+        TextView itemProductName;
+        TextView productBrand;
+        TextView priceTextView;
+        ImageView productImage;
     }
 
 }

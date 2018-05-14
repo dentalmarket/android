@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.DisplayMetrics;
@@ -124,8 +125,13 @@ public class ViewPagerAdapter extends PagerAdapter {
 
     @Override
     public void destroyItem(ViewGroup container, int position, Object object){
-        Picasso.with(activity.getApplicationContext()).cancelRequest((ImageView)object);
-        ((ViewPager) container).removeView((View)object);
+        try{
+            ((ViewPager) container).removeView((View)object);
+            Picasso.with(activity.getApplicationContext()).cancelRequest((ImageView)((ConstraintLayout)object).findViewById(R.id.fullscreen_activity_photo_view));
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
     }
 
 }
