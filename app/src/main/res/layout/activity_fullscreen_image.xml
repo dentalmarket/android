@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/com_facebook_button_background_color_disabled"
+    android:background="#DD263238"
     tools:context="market.dental.android.FullscreenImageActivity">
 
     <TextView
@@ -11,11 +11,11 @@
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_alignParentTop="true"
-        android:paddingTop="20dp"
-        android:paddingBottom="20dp"
         android:layout_marginEnd="20dp"
-        android:textColor="@color/colorWhite"
-        android:text="Kapat" />
+        android:paddingBottom="20dp"
+        android:paddingTop="20dp"
+        android:text="Kapat"
+        android:textColor="@color/colorWhite" />
 
     <!--
     <android.support.v4.view.ViewPager
@@ -26,16 +26,14 @@
     </android.support.v4.view.ViewPager>
     -->
 
-    <com.github.chrisbanes.photoview.PhotoView
-        xmlns:android="http://schemas.android.com/apk/res/android"
+    <com.github.chrisbanes.photoview.PhotoView xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/fullscreen_activity_photo_view"
-        android:layout_below="@+id/fullscreen_activity_close"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:paddingBottom="40dp"
+        android:layout_below="@+id/fullscreen_activity_close"
         android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true">
-    </com.github.chrisbanes.photoview.PhotoView>
-
+        android:layout_centerVertical="true"></com.github.chrisbanes.photoview.PhotoView>
 
 
     <!-- This FrameLayout insets its children based on system windows using
