@@ -158,6 +158,7 @@ public class ProductListAdapter extends ArrayAdapter {
                         .load(productList.get(position).getImageUrl())
                         .placeholder(R.mipmap.ic_launcher)
                         .error(R.mipmap.ic_launcher)
+                        .resize(120, 100)
                         .into(holder.productImage);
 
                 view.setTag(holder);
