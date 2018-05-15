@@ -59,8 +59,15 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             Log.d(TAG, "Message data payload: " + remoteMessage.getData());
 
             Intent intent = new Intent(Resource.KEY_LOCAL_BROADCAST);
-            intent.putExtra("fromId", remoteMessage.getData().get("fromId"));
-            intent.putExtra("fromName", remoteMessage.getData().get("fromName"));
+            if(remoteMessage.getData().containsKey("fromId"))
+                intent.putExtra("fromId", remoteMessage.getData().get("fromId"));
+
+            if(remoteMessage.getData().containsKey("fromName"))
+                intent.putExtra("fromName", remoteMessage.getData().get("fromName"));
+
+            if(remoteMessage.getData().containsKey("catId"))
+                intent.putExtra("catId", remoteMessage.getData().get("catId"));
+
             intent.putExtra("notification", remoteMessage.getNotification().getBody());
             broadcaster.sendBroadcast(intent);
 

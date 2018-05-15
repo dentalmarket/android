@@ -101,10 +101,13 @@ public class BaseActivity extends AppCompatActivity implements ConnectionReceive
 
     public BroadcastReceiver messageReceiver = new BroadcastReceiver() {
         @Override
-        public void onReceive(Context context, Intent intent) {
+        public void onReceive(Context context, final Intent intent) {
 
-            final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), intent.getExtras().getString("fromName" ) , Snackbar.LENGTH_LONG);
+            String snackBarBody =  intent.getExtras().containsKey("fromName") ? intent.getExtras().getString("fromName") : "Yeni kampanyalarımız eklenmiştir";
+
+            final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), snackBarBody , Snackbar.LENGTH_LONG);
             final String fromId = intent.getExtras().getString("fromId");
+            final String catId = intent.getExtras().getString("catId");
             View snackView = snack.getView();
             TextView textView = (TextView) snackView.findViewById(android.support.design.R.id.snackbar_text);
             textView.setMaxLines(5);
@@ -115,11 +118,21 @@ public class BaseActivity extends AppCompatActivity implements ConnectionReceive
             snack.setAction("AÇ", new View.OnClickListener(){
                 @Override
                 public void onClick(View view) {
-                    Bundle bundle = new Bundle();
-                    bundle.putString(Resource.KEY_MESSAGE_RECEIVER_ID, fromId);
-                    Intent intent = new Intent(view.getContext(),MessageListActivity.class);
-                    intent.putExtras(bundle);
-                    view.getContext().startActivity(intent);
+                    if( intent.getExtras().containsKey("fromId")){
+                        Bundle bundle = new Bundle();
+                        bundle.putString(Resource.KEY_MESSAGE_RECEIVER_ID, fromId);
+                        Intent intent = new Intent(view.getContext(),MessageListActivity.class);
+                        intent.putExtras(bundle);
+                        view.getContext().startActivity(intent);
+                    }else if(intent.getExtras().containsKey("catId")){
+                        Bundle bundle = new Bundle();
+                        bundle.putString(Resource.KEY_MESSAGE_CATEGORY_ID, catId);
+                        Intent intent = new Intent(view.getContext(),MainActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        intent.putExtras(bundle);
+                        view.getContext().startActivity(intent);
+                    }
+
                 }
             });
             snack.setDuration(5000);
