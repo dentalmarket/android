@@ -1,10 +1,12 @@
 package market.dental.android;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -72,7 +74,7 @@ public class ProductListFragment extends Fragment {
             recentProducts = getArguments().getBoolean(Resource.KEY_GET_RECENT_PRODUCTS);
         }
 
-        getActivity().setTitle("Ürünler");
+        getActivity().setTitle(getString(R.string.title_category_products));
     }
 
     @Override
@@ -203,7 +205,7 @@ public class ProductListFragment extends Fragment {
                             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                             startActivity(intent);
                         } else {
-                            Toast.makeText(getActivity().getApplicationContext(), "Beklenmedik bir durum ile karşılaşıldı" , Toast.LENGTH_LONG).show();
+                            Toast.makeText(getActivity().getApplicationContext(), getString(R.string.unexpected_case_error) , Toast.LENGTH_LONG).show();
                             Crashlytics.log(Log.INFO , Result.LOG_TAG_INFO.getResultText() , this.getClass().getName() + " >> " + Resource.ajax_get_product_by_search_key + " >> responseString = " + responseString);
                         }
 
@@ -308,7 +310,20 @@ public class ProductListFragment extends Fragment {
                                     }
                                 });
 
-                            } else{
+                            } else {
+
+                                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                                builder.setMessage(getString(R.string.alert_product_not_found , content.getString("category_name")));
+                                builder.setPositiveButton(getString(R.string.dental_ok), new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        // Birşey yapmadan dialog kapatılır
+                                    }
+                                });
+
+                                AlertDialog alert = builder.create();
+                                alert.show();
+
                                 isLastPage = true;
                             }
 
@@ -318,7 +333,7 @@ public class ProductListFragment extends Fragment {
                             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                             startActivity(intent);
                         } else {
-                            Toast.makeText(getActivity().getApplicationContext(), "Beklenmedik bir durum ile karşılaşıldı" , Toast.LENGTH_LONG).show();
+                            Toast.makeText(getActivity().getApplicationContext(),  getString(R.string.unexpected_case_error) , Toast.LENGTH_LONG).show();
                             Crashlytics.log(Log.INFO , Result.LOG_TAG_INFO.getResultText() , this.getClass().getName() + " >> " + Resource.ajax_get_products_by_category + " >> responseString = " + responseString);
                         }
 

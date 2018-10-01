@@ -106,7 +106,7 @@ public class MainFragment extends Fragment {
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         startActivity(intent);
                     } else {
-                        Toast.makeText(getContext(), "Beklenmedik bir durum ile karşılaşıldı" , Toast.LENGTH_LONG).show();
+                        Toast.makeText(getContext(), getString(R.string.unexpected_case_error) , Toast.LENGTH_LONG).show();
                         Crashlytics.log(Log.INFO , Result.LOG_TAG_INFO.getResultText() , "MainFragment >> " + Resource.ajax_get_banner_images_url + " >> responseString = " + responseString);
                     }
 

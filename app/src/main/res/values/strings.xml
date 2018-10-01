@@ -42,6 +42,11 @@
     <string name="send_message">Mesaj Gönder</string>
     <string name="save">Kaydet</string>
     <string name="enter_message">Bir mesaj yazın</string>
+    <string name="dental_ok">Tamam</string>
+    <string name="alert_product_not_found">&quot;%1$s&quot; kategorisinde hiç ürün bulunmamaktadır.</string>
+    <string name="title_category_products">Kategori Ürünleri</string>
+    <string name="unexpected_case_error">Beklenmedik bir durum ile karşılaşıldı</string>
+    <string name="unexpected_network_error">Beklenmedik network hatası ile karşılaşıldı</string>
 
     <!-- RIGHT-TOP MENU -->
     <string name="action_settings">Settings</string>

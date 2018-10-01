@@ -167,7 +167,7 @@ public class MainActivity extends BaseActivity
             case R.id.right_menu_recent:
                 Bundle bundle = new Bundle();
                 bundle.putBoolean(Resource.KEY_GET_RECENT_PRODUCTS, true);
-                bundle.putString(Resource.KEY_FRAGMENT_TITLE, "İncelediğim Ürünler");
+                bundle.putString(Resource.KEY_FRAGMENT_TITLE, getString(R.string.right_menu_recent_products));
 
                 intent = new Intent(this,ProductListActivity.class);
                 intent.putExtras(bundle);
@@ -278,7 +278,7 @@ public class MainActivity extends BaseActivity
 
                 } catch (Exception e) {
                     e.printStackTrace();
-                    Toast.makeText(context, "Beklenmedik bir hata ile karşılaşıldı" , Toast.LENGTH_LONG).show();
+                    Toast.makeText(context, getString(R.string.unexpected_case_error) , Toast.LENGTH_LONG).show();
                     Crashlytics.log(Log.ERROR , Result.LOG_TAG_INFO.getResultText() , this.getClass().getName() + " >> " + Resource.ajax_get_categories + " >> Exception");
                 }
             }
@@ -287,7 +287,7 @@ public class MainActivity extends BaseActivity
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace();
                 Log.i(Result. LOG_TAG_INFO.getResultText(),"MainActivity >> ERROR ON GET DATA >> 121");
-                Toast.makeText(context, "Beklenmedik network hatası ile karşılaşıldı" , Toast.LENGTH_LONG).show();
+                Toast.makeText(context, getString(R.string.unexpected_network_error) , Toast.LENGTH_LONG).show();
             }
         }){
             @Override
