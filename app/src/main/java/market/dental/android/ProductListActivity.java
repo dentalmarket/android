@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -34,6 +35,7 @@ public class ProductListActivity extends BaseActivity {
     private boolean isLastPage;
     private boolean isLoading = false;
     private View view;
+    private String searchKey;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +49,7 @@ public class ProductListActivity extends BaseActivity {
         // Get Params
         Intent intent = getIntent();
         boolean recentProducts = intent.getBooleanExtra(Resource.KEY_GET_RECENT_PRODUCTS , false);
+        searchKey = intent.getStringExtra(Resource.SHAREDPREF_SEARCH_KEY);
 
         // Initialization
         requestQueue = Volley.newRequestQueue(this);
@@ -54,6 +57,8 @@ public class ProductListActivity extends BaseActivity {
 
         if(recentProducts){
             this.getRecentProducts(0);
+        }else if(searchKey!=null && searchKey.length()>0){
+            this.getSearchedProducts(0);
         }
 
     }
@@ -67,6 +72,114 @@ public class ProductListActivity extends BaseActivity {
                 finish();
         }
         return super.onOptionsItemSelected(item);
+    }
+
+
+    public void getSearchedProducts(final int page){
+        // *****************************************************************************************
+        //                        AJAX - GET PRODUCTS BY SEARCH KEY
+        // *****************************************************************************************
+
+        isLoading = true;
+        StringRequest jsonObjectRequest = new StringRequest(Request.Method.POST,
+                Resource.ajax_get_product_by_search_key, new Response.Listener<String>() {
+
+            @Override
+            public void onResponse(String responseString) {
+
+                try {
+
+                    JSONObject response = new JSONObject(responseString);
+                    if(Result.SUCCESS.checkResult(new Result(response))){
+
+                        JSONObject content = response.getJSONObject("content");
+                        if(content.getJSONArray("data").length()>0){
+
+                            productListAdapter.addProductList(Product.ProductList(content.getJSONArray("data")));
+                            productListAdapter.setCurrentPage(content.getInt("current_page"));
+                            ListView listView = findViewById(R.id.activity_product_list_main);
+                            if(listView.getAdapter()==null)
+                                listView.setAdapter(productListAdapter);
+                            else{
+                                productListAdapter.notifyDataSetChanged();
+                            }
+
+
+                            // -- EVENTS --
+                            listView.setOnScrollListener(new AbsListView.OnScrollListener() {
+                                @Override
+                                public void onScrollStateChanged(AbsListView view, int scrollState) {
+
+                                }
+
+                                @Override
+                                public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                                    if(view.getLastVisiblePosition() == totalItemCount-1 && !isLoading){
+                                        getSearchedProducts(productListAdapter.getCurrentPage()+1);
+                                    }
+                                }
+                            });
+
+                            listView.setOnItemClickListener(
+                                    new AdapterView.OnItemClickListener() {
+                                        @Override
+                                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                            int productId = ((Product) parent.getItemAtPosition(position)).getId();
+                                            Bundle bundle = new Bundle();
+                                            bundle.putInt(Resource.KEY_PRODUCT_ID, productId);
+                                            Intent intent = new Intent(view.getContext(),ProductDetailActivity.class);
+                                            intent.putExtras(bundle);
+                                            view.getContext().startActivity(intent);
+                                        }
+                                    }
+                            );
+                        }else{
+                            isLastPage = true;
+                        }
+
+                    } else if(Result.FAILURE_TOKEN.checkResult(new Result(response))){
+                        Resource.setDefaultAPITOKEN();
+                        Intent intent = new Intent(getApplicationContext() , LoginActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(intent);
+                    } else {
+                        Toast.makeText(getApplicationContext(), "Beklenmedik bir durum ile karşılaşıldı" , Toast.LENGTH_LONG).show();
+                        Crashlytics.log(Log.INFO , Result.LOG_TAG_INFO.getResultText() , this.getClass().getName() + " >> " + Resource.ajax_get_product_by_search_key + " >> responseString = " + responseString);
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Crashlytics.log(Log.INFO , Result.LOG_TAG_INFO.getResultText() , this.getClass().getName() + " >> " + Resource.ajax_get_product_by_search_key + " >> responseString = " + responseString);
+                } finally {
+                    isLoading = false;
+                }
+
+            }
+
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+                Log.i(Result.LOG_TAG_INFO.getResultText(),"ProductListActivity >> ERROR ON GET DATA >> 123");
+                isLoading = false;
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams()  {
+                Map<String, String> params = new HashMap<>();
+                params.put(Resource.KEY_API_TOKEN, Resource.VALUE_API_TOKEN);
+                params.put("title", searchKey);
+                params.put("page", String.valueOf(page));
+                return params;
+            }
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String,String> params = new HashMap<String, String>();
+                params.put("Content-Type","application/x-www-form-urlencoded");
+                return params;
+            }
+        };
+        requestQueue.add(jsonObjectRequest);
     }
 
 
