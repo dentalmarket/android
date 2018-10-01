@@ -57,6 +57,11 @@ public class ProductListAdapter extends ArrayAdapter {
         this.productList.addAll(productList);
     }
 
+    public void clearProductList(){
+        this.productList.clear();
+        this.currentPage = 0;
+    }
+
     public int getCurrentPage() {
         return currentPage;
     }

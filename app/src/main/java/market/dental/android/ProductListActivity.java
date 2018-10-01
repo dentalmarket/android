@@ -1,8 +1,12 @@
 package market.dental.android;
 
+import android.app.SearchManager;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.widget.SearchView;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AbsListView;
@@ -75,6 +79,32 @@ public class ProductListActivity extends BaseActivity {
     }
 
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+        getMenuInflater().inflate(R.menu.product_search_menu, menu);
+        MenuItem item = menu.findItem(R.id.right_menu_search);
+        SearchView searchView = (SearchView) item.getActionView();
+        SearchManager searchManager = (SearchManager)getSystemService(SEARCH_SERVICE);
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+        searchView.setSubmitButtonEnabled(true);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query){
+                searchKey = query;
+                getSearchedProducts(0);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String query){
+                return false;
+            }
+        });
+
+        return super.onCreateOptionsMenu(menu);
+    }
+
+
     public void getSearchedProducts(final int page){
         // *****************************************************************************************
         //                        AJAX - GET PRODUCTS BY SEARCH KEY
@@ -95,10 +125,15 @@ public class ProductListActivity extends BaseActivity {
                         JSONObject content = response.getJSONObject("content");
                         if(content.getJSONArray("data").length()>0){
 
+                            /* eğer aynı activity içerisinde arama yapılırsa eski liste boşaltılır */
+                            if(page == 0){
+                                productListAdapter.clearProductList();
+                            }
+
                             productListAdapter.addProductList(Product.ProductList(content.getJSONArray("data")));
                             productListAdapter.setCurrentPage(content.getInt("current_page"));
                             ListView listView = findViewById(R.id.activity_product_list_main);
-                            if(listView.getAdapter()==null)
+                            if(listView.getAdapter()==null || page==0)
                                 listView.setAdapter(productListAdapter);
                             else{
                                 productListAdapter.notifyDataSetChanged();
