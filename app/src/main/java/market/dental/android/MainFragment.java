@@ -78,7 +78,7 @@ public class MainFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {}
 
-        getActivity().setTitle("Anasayfa");
+        getActivity().setTitle(getString(R.string.title_activity_main));
     }
 
     @Override
