@@ -150,7 +150,7 @@ public class ProductListAdapter extends ArrayAdapter {
                 holder.itemProductName.setText(productList.get(position).getName());
 
                 holder.productBrand = view.findViewById(R.id.activity_product_list_item_product_brand);
-                holder.productBrand.setText(productList.get(position).getBrand()!=null ? productList.get(position).getBrand().getName() : "bilinmiyor");
+                holder.productBrand.setText(productList.get(position).getBrand()!=null ? productList.get(position).getBrand().getName() : context.getResources().getString(R.string.unknown));
 
                 Typeface font = Typeface.createFromAsset(context.getAssets(),"fonts/fontawesome-webfont.ttf");
                 holder.priceTextView = view.findViewById(R.id.activity_product_list_item_product_price);

@@ -286,7 +286,7 @@ public class RegisterActivity extends BaseActivity {
             @Override
             public void onClick(View view){
                 AlertDialog.Builder mBuilder = new AlertDialog.Builder(RegisterActivity.this);
-                mBuilder.setTitle("Şehir seçiniz");
+                mBuilder.setTitle(getString(R.string.choose_city));
                 mBuilder.setAdapter(cityListAdapter, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -306,7 +306,7 @@ public class RegisterActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 AlertDialog.Builder mBuilder = new AlertDialog.Builder(RegisterActivity.this);
-                mBuilder.setTitle("Mesleğinizi seçiniz");
+                mBuilder.setTitle(getString(R.string.choose_profession));
                 mBuilder.setAdapter(professionListAdapter, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -349,8 +349,8 @@ public class RegisterActivity extends BaseActivity {
                             NotificationManager notificationManager = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
                             Notification notification = new Notification.Builder(view.getContext())
                                     .setSmallIcon(R.drawable.ic_launcher)
-                                    .setContentTitle("Yeni Kayıt")
-                                    .setContentText("Kayıt işlemi başarıyla gerçekleştirildi")
+                                    .setContentTitle(getString(R.string.new_registration))
+                                    .setContentText(getString(R.string.registration_process_success))
                                     .build();
 
                             notificationManager.notify(0,notification);
@@ -371,7 +371,7 @@ public class RegisterActivity extends BaseActivity {
                 public void onErrorResponse(VolleyError error) {
                     error.printStackTrace();
                     Log.i(Result.LOG_TAG_INFO.getResultText(),this.getClass().getSimpleName() + " >> ERROR ON GET DATA >> " + Resource.ajax_register);
-                    Toast.makeText(view.getContext() , "İstek gerçekleştirilemedi :(", Toast.LENGTH_LONG ).show();
+                    Toast.makeText(view.getContext() , getString(R.string.unexpected_network_error), Toast.LENGTH_LONG ).show();
                     progressDialog.dismiss();
                 }
             }){

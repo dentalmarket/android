@@ -103,7 +103,7 @@ public class BaseActivity extends AppCompatActivity implements ConnectionReceive
         @Override
         public void onReceive(Context context, final Intent intent) {
 
-            String snackBarBody =  intent.getExtras().containsKey("fromName") ? intent.getExtras().getString("fromName") : "Yeni kampanyalarımız eklenmiştir";
+            String snackBarBody =  intent.getExtras().containsKey("fromName") ? intent.getExtras().getString("fromName") : getString(R.string.new_campaigns_added);
 
             final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), snackBarBody , Snackbar.LENGTH_LONG);
             final String fromId = intent.getExtras().getString("fromId");

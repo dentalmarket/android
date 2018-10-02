@@ -128,13 +128,13 @@ public class ProfileActivity extends BaseActivity {
                     }else if(Result.FAILURE_TOKEN.checkResult(new Result(response))){
                         redirectLoginActivity();
                     }else {
-                        Toast.makeText(context, "Meslek listesi getirilirken beklenilmeyen bir durum ile karşılaşıldı" , Toast.LENGTH_LONG).show();
+                        Toast.makeText(context, getString(R.string.unexpected_error_while_getting_profession_list) , Toast.LENGTH_LONG).show();
                         Crashlytics.log(Log.INFO , Result.LOG_TAG_INFO.getResultText() , this.getClass().getName() + " >> " + Resource.ajax_get_professions + " >> responseString = " + responseString);
                     }
 
                 } catch (Exception e) {
                     e.printStackTrace();
-                    Toast.makeText(context, "Meslek listesi getirilirken beklenilmeyen bir hata ile karşılaşıldı" , Toast.LENGTH_LONG).show();
+                    Toast.makeText(context, getString(R.string.unexpected_error_while_getting_profession_list) , Toast.LENGTH_LONG).show();
                     Crashlytics.log(Log.ERROR ,Result.LOG_TAG_INFO.getResultText(),this.getClass().getName() + " >> " + Resource.ajax_get_professions + " >> Exception");
                 } finally {
                     professionListRequestSuccess = true;
@@ -185,13 +185,13 @@ public class ProfileActivity extends BaseActivity {
                     }else if(Result.FAILURE_TOKEN.checkResult(new Result(response))){
                         redirectLoginActivity();
                     }else {
-                        Toast.makeText(context, "Şehir listesi getirilirken beklenilmeyen bir durum ile karşılaşıldı" , Toast.LENGTH_LONG).show();
+                        Toast.makeText(context, getString(R.string.unexpected_error_while_getting_city_list) , Toast.LENGTH_LONG).show();
                         Crashlytics.log(Log.INFO , Result.LOG_TAG_INFO.getResultText() , this.getClass().getName() + " >> " + Resource.ajax_get_city_list + " >> responseString = " + responseString);
                     }
 
                 } catch (Exception e) {
                     e.printStackTrace();
-                    Toast.makeText(context, "Şehir listesi getirilirken beklenilmeyen bir hata ile karşılaşıldı" , Toast.LENGTH_LONG).show();
+                    Toast.makeText(context, getString(R.string.unexpected_error_while_getting_city_list) , Toast.LENGTH_LONG).show();
                     Crashlytics.log(Log.ERROR ,Result.LOG_TAG_INFO.getResultText(),this.getClass().getName() + " >> " + Resource.ajax_get_city_list + " >> Exception");
                 } finally {
                     cityListRequestSuccess = true;
@@ -282,7 +282,7 @@ public class ProfileActivity extends BaseActivity {
             @Override
             public void onClick(View view){
                 AlertDialog.Builder mBuilder = new AlertDialog.Builder(ProfileActivity.this);
-                mBuilder.setTitle("Mesleğinizi seçiniz");
+                mBuilder.setTitle(getString(R.string.choose_profession));
 
                 mBuilder.setAdapter(professionListAdapter, new DialogInterface.OnClickListener() {
                     @Override
@@ -300,7 +300,7 @@ public class ProfileActivity extends BaseActivity {
             @Override
             public void onClick(View view){
                 AlertDialog.Builder mBuilder = new AlertDialog.Builder(ProfileActivity.this);
-                mBuilder.setTitle("Şehir seçiniz");
+                mBuilder.setTitle(getString(R.string.choose_city));
                 mBuilder.setAdapter(cityListAdapter, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -350,13 +350,13 @@ public class ProfileActivity extends BaseActivity {
                     }else if(Result.FAILURE_TOKEN.checkResult(new Result(response))){
                         redirectLoginActivity();
                     }else {
-                        Toast.makeText(context, "İlçe listesi getirilirken beklenilmeyen bir durum ile karşılaşıldı" , Toast.LENGTH_LONG).show();
+                        Toast.makeText(context, getString(R.string.unexpected_error_while_getting_borough_list) , Toast.LENGTH_LONG).show();
                         Crashlytics.log(Log.INFO , Result.LOG_TAG_INFO.getResultText() , this.getClass().getName() + " >> " + Resource.ajax_get_borough_list + " >> responseString = " + responseString);
                     }
 
                 } catch (Exception e) {
                     e.printStackTrace();
-                    Toast.makeText(context, "İlçe listesi getirilirken beklenilmeyen bir hata ile karşılaşıldı" , Toast.LENGTH_LONG).show();
+                    Toast.makeText(context, getString(R.string.unexpected_error_while_getting_borough_list) , Toast.LENGTH_LONG).show();
                     Crashlytics.log(Log.ERROR ,Result.LOG_TAG_INFO.getResultText(),this.getClass().getName() + " >> " + Resource.ajax_get_borough_list + " >> Exception");
                 } finally {
                     progressDialog.dismiss();
@@ -392,7 +392,7 @@ public class ProfileActivity extends BaseActivity {
             @Override
             public void onClick(View view){
                 AlertDialog.Builder mBuilder = new AlertDialog.Builder(ProfileActivity.this);
-                mBuilder.setTitle("İlçe seçiniz");
+                mBuilder.setTitle(getString(R.string.choose_borough));
                 mBuilder.setAdapter(boroughListAdapter, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -437,13 +437,13 @@ public class ProfileActivity extends BaseActivity {
                     }else if(Result.FAILURE_TOKEN.checkResult(new Result(response))){
                         redirectLoginActivity();
                     }else{
-                        Toast.makeText(context, "Bilgiler güncellenirken beklenilmeyen bir durum ile karşılaşıldı" , Toast.LENGTH_LONG).show();
+                        Toast.makeText(context, getString(R.string.unexpected_error_while_updating_info) , Toast.LENGTH_LONG).show();
                         Crashlytics.log(Log.INFO , Result.LOG_TAG_INFO.getResultText() , this.getClass().getName() + " >> " + Resource.ajax_profile_update + " >> responseString = " + responseString);
                     }
 
                 } catch (Exception e) {
                     e.printStackTrace();
-                    Toast.makeText(context, "Bilgiler güncellenirken beklenilmeyen bir hata ile karşılaşıldı" , Toast.LENGTH_LONG).show();
+                    Toast.makeText(context, getString(R.string.unexpected_error_while_updating_info) , Toast.LENGTH_LONG).show();
                     Crashlytics.log(Log.ERROR ,Result.LOG_TAG_INFO.getResultText(),this.getClass().getName() + " >> " + Resource.ajax_profile_update + " >> Exception");
                 } finally {
                     progressDialog.dismiss();
@@ -483,7 +483,7 @@ public class ProfileActivity extends BaseActivity {
                         params.put("password", activity_profile_password.getText().toString());
                         params.put("new_password", activity_profile_password_new.getText().toString());
                     }else{
-                        localError = "Yeni Şifrenizi Doğru Giriniz...";
+                        localError = getString(R.string.enter_new_password_correctly);
                     }
                 }
 
@@ -547,7 +547,7 @@ public class ProfileActivity extends BaseActivity {
         } catch (Exception e){
             e.printStackTrace();
             Crashlytics.log(Log.ERROR ,Result.LOG_TAG_INFO.getResultText(),this.getClass().getName() + " >> Exception >> updateView");
-            Toast.makeText(context, "Sayfa düzenlenirken hata ile karşılaşıldı", Toast.LENGTH_LONG).show();
+            Toast.makeText(context, getString(R.string.unexpected_error_while_updating_page), Toast.LENGTH_LONG).show();
         }
     }
 }

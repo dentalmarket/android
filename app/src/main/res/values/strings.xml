@@ -27,6 +27,7 @@
     <string name="terms_warning">Kayıt olarak dental.market kullanım koşullarını kabul etmiş sayılırsınız</string>
     <string name="password_link_request">Şifre Yenileme Linki Gönder</string>
     <string name="password_link_request_desc">Şifrenizi değiştirmeniz için email hesabınıza bir link gönderilecektir. Linke tıklayarak şifrenizi yenileyebilirsiniz.</string>
+    <string name="password_refresh_link_sent_to_mail">Şifrenizi yenileme linki mail adresinize gönderilmiştir</string>
     <string name="name">Adı</string>
     <string name="surname">Soyadı</string>
     <string name="email">Email</string>
@@ -42,11 +43,24 @@
     <string name="send_message">Mesaj Gönder</string>
     <string name="save">Kaydet</string>
     <string name="enter_message">Bir mesaj yazın</string>
+    <string name="new_campaigns_added">Yeni kampanyalarımız eklenmiştir</string>
     <string name="dental_ok">Tamam</string>
     <string name="alert_product_not_found">&quot;%1$s&quot; kategorisinde hiç ürün bulunmamaktadır.</string>
     <string name="title_category_products">Kategori Ürünleri</string>
     <string name="unexpected_case_error">Beklenmedik bir durum ile karşılaşıldı</string>
     <string name="unexpected_network_error">Beklenmedik network hatası ile karşılaşıldı</string>
+    <string name="unexpected_error_while_getting_profession_list">Meslek listesi getirilirken beklenilmeyen bir durum ile karşılaşıldı</string>
+    <string name="unexpected_error_while_getting_city_list">Şehir listesi getirilirken beklenilmeyen bir durum ile karşılaşıldı</string>
+    <string name="unexpected_error_while_getting_borough_list">İlçe listesi getirilirken beklenilmeyen bir durum ile karşılaşıldı</string>
+    <string name="unexpected_error_while_updating_info">Bilgiler güncellenirken beklenilmeyen bir durum ile karşılaşıldı</string>
+    <string name="unexpected_error_while_updating_page">Sayfa düzenlenirken hata ile karşılaşıldı</string>
+    <string name="choose_profession">Mesleğinizi seçiniz</string>
+    <string name="choose_city">Şehir seçiniz</string>
+    <string name="choose_borough">İlçe seçiniz</string>
+    <string name="enter_new_password_correctly">Yeni Şifrenizi Doğru Giriniz...</string>
+    <string name="new_registration">Yeni Kayıt</string>
+    <string name="registration_process_success">Kayıt işlemi başarıyla gerçekleştirildi</string>
+    <string name="unknown">bilinmiyor</string>
 
     <!-- RIGHT-TOP MENU -->
     <string name="action_settings">Settings</string>

@@ -76,8 +76,8 @@ public class ForgotPasswordActivity extends BaseActivity {
                         NotificationManager notificationManager = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
                         Notification notification = new Notification.Builder(view.getContext())
                                 .setSmallIcon(R.drawable.ic_launcher)
-                                .setContentTitle("Şifremi Unuttum")
-                                .setContentText("Şifrenizi yenileme linki mail adresinize gönderilmiştir")
+                                .setContentTitle(getString(R.string.forgot_password))
+                                .setContentText(getString(R.string.password_refresh_link_sent_to_mail))
                                 .build();
 
                         notificationManager.notify(0,notification);
