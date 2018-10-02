@@ -39,6 +39,7 @@ public class ConversationListActivity extends BaseActivity {
 
     private ConversationListAdapter conversationListAdapter;
     private RequestQueue requestQueue;
+    private StringRequest stringRequest;
     private TextView placeHolder;
 
     @Override
@@ -54,6 +55,16 @@ public class ConversationListActivity extends BaseActivity {
 
         // Get List
         this.getConversationList();
+    }
+
+    @Override
+    public void onStop(){
+
+        if (requestQueue != null) {
+            requestQueue.cancelAll(this.getClass().getName());
+        }
+
+        super.onStop();
     }
 
     @Override
@@ -74,7 +85,7 @@ public class ConversationListActivity extends BaseActivity {
     // *********************************************************************************************
     public void getConversationList(){
 
-        StringRequest jsonObjectRequest = new StringRequest(Request.Method.POST,
+        stringRequest = new StringRequest(Request.Method.POST,
                 Resource.ajax_get_conversation_list, new Response.Listener<String>() {
 
             @Override
@@ -143,7 +154,8 @@ public class ConversationListActivity extends BaseActivity {
                 return params;
             }
         };
-        requestQueue.add(jsonObjectRequest);
+        stringRequest.setTag(this.getClass().getName());
+        requestQueue.add(stringRequest);
     }
 
 }

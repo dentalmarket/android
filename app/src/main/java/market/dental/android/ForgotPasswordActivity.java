@@ -29,8 +29,9 @@ import market.dental.util.Result;
 
 public class ForgotPasswordActivity extends BaseActivity {
 
-    private RequestQueue requestQueue;
     private AlertDialog progressDialog;
+    private RequestQueue requestQueue;
+    private StringRequest stringRequest;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +47,13 @@ public class ForgotPasswordActivity extends BaseActivity {
         progressDialog = progressDialogBuilder.create();
     }
 
+    @Override
+    public void onStop() {
+        if (requestQueue != null) {
+            requestQueue.cancelAll(this.getClass().getName());
+        }
+        super.onStop();
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -64,7 +72,7 @@ public class ForgotPasswordActivity extends BaseActivity {
         // *****************************************************************************************
         //                          AJAX - FORGOT PASSWORD
         // *****************************************************************************************
-        StringRequest request = new StringRequest(Request.Method.POST,
+        stringRequest = new StringRequest(Request.Method.POST,
                 Resource.ajax_forgot_password, new Response.Listener<String>() {
 
             @Override
@@ -115,7 +123,8 @@ public class ForgotPasswordActivity extends BaseActivity {
                 return params;
             }
         };
-        requestQueue.add(request);
+        stringRequest.setTag(this.getClass().getName());
+        requestQueue.add(stringRequest);
 
     }
 }

@@ -70,6 +70,7 @@ public class LoginActivity extends BaseActivity implements LoaderCallbacks<Curso
     private static final int REQUEST_READ_CONTACTS = 0;
     private SharedPreferences sharedPref = null;
     private RequestQueue requestQueue;
+    private StringRequest stringRequest;
     private Context context;
 
     // UI references.
@@ -137,6 +138,16 @@ public class LoginActivity extends BaseActivity implements LoaderCallbacks<Curso
     public void onResume(){
         super.onResume();
         showProgress(false);
+    }
+
+    @Override
+    public void onStop(){
+
+        if (requestQueue != null) {
+            requestQueue.cancelAll(this.getClass().getName());
+        }
+
+        super.onStop();
     }
 
     private void goToForgotPasswordActivity(){
@@ -241,7 +252,7 @@ public class LoginActivity extends BaseActivity implements LoaderCallbacks<Curso
             // *************************************************************************************
             //                          AJAX - LOGIN
             // *************************************************************************************
-            StringRequest request = new StringRequest(Request.Method.POST,
+            stringRequest = new StringRequest(Request.Method.POST,
                     Resource.ajax_login, new Response.Listener<String>() {
 
                 @Override
@@ -292,7 +303,8 @@ public class LoginActivity extends BaseActivity implements LoaderCallbacks<Curso
                     return params;
                 }
             };
-            requestQueue.add(request);
+            stringRequest.setTag(this.getClass().getName());
+            requestQueue.add(stringRequest);
 
         }
     }

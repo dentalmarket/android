@@ -47,7 +47,6 @@ import market.dental.util.Result;
 public class ProductListFragment extends Fragment {
 
     private View view;
-    private RequestQueue requestQueue;
     private ProductListAdapter productListAdapter;
     private int categoryId;
     private String searchKey;
@@ -55,6 +54,8 @@ public class ProductListFragment extends Fragment {
     private boolean isLoading;
     private boolean isLastPage;
     private OnFragmentInteractionListener mListener;
+    private RequestQueue requestQueue;
+    private StringRequest stringRequest;
 
     public ProductListFragment() {}
 
@@ -116,8 +117,16 @@ public class ProductListFragment extends Fragment {
 
     @Override
     public void onDetach() {
-        super.onDetach();
         mListener = null;
+        super.onDetach();
+    }
+
+    @Override
+    public void onStop() {
+        if (requestQueue != null) {
+            requestQueue.cancelAll(this.getClass().getName());
+        }
+        super.onStop();
     }
 
     /**
@@ -142,7 +151,7 @@ public class ProductListFragment extends Fragment {
 
         if(!isLoading && !isLastPage){
             isLoading = true;
-            StringRequest jsonObjectRequest = new StringRequest(Request.Method.POST,
+            stringRequest = new StringRequest(Request.Method.POST,
                     Resource.ajax_get_product_by_search_key, new Response.Listener<String>() {
 
                 @Override
@@ -240,7 +249,8 @@ public class ProductListFragment extends Fragment {
                     return params;
                 }
             };
-            requestQueue.add(jsonObjectRequest);
+            stringRequest.setTag(this.getClass().getName());
+            requestQueue.add(stringRequest);
         }
     }
 
@@ -252,7 +262,7 @@ public class ProductListFragment extends Fragment {
         // *****************************************************************************************
         if(!isLoading && !isLastPage){
             isLoading = true;
-            StringRequest jsonObjectRequest = new StringRequest(Request.Method.POST,
+            stringRequest = new StringRequest(Request.Method.POST,
                     Resource.ajax_get_products_by_category, new Response.Listener<String>() {
 
                 @Override
@@ -368,7 +378,8 @@ public class ProductListFragment extends Fragment {
                     return params;
                 }
             };
-            requestQueue.add(jsonObjectRequest);
+            stringRequest.setTag(this.getClass().getName());
+            requestQueue.add(stringRequest);
         }
     }
 

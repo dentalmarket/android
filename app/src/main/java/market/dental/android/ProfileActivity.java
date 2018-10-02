@@ -48,7 +48,6 @@ import market.dental.util.Result;
 public class ProfileActivity extends BaseActivity {
 
     private SharedPreferences sharedPref = null;
-    private RequestQueue requestQueue;
     private Context context;
     private AlertDialog progressDialog;
     private TextView professionTextView;
@@ -75,6 +74,8 @@ public class ProfileActivity extends BaseActivity {
     private City selectedCity = null;
     private Borough selectedBorough = null;
     private String localError = "";
+    private RequestQueue requestQueue;
+    private StringRequest stringRequest;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,7 +113,7 @@ public class ProfileActivity extends BaseActivity {
         // *****************************************************************************************
         //                          AJAX - GET PROFESSIONS
         // *****************************************************************************************
-        StringRequest request = new StringRequest(Request.Method.POST,
+        stringRequest = new StringRequest(Request.Method.POST,
                 Resource.ajax_get_professions, new Response.Listener<String>() {
 
             @Override
@@ -164,13 +165,14 @@ public class ProfileActivity extends BaseActivity {
                 return params;
             }
         };
-        requestQueue.add(request);
+        stringRequest.setTag(this.getClass().getName());
+        requestQueue.add(stringRequest);
 
 
         // *****************************************************************************************
         //                          AJAX - GET CITY
         // *****************************************************************************************
-        StringRequest requestCityList = new StringRequest(Request.Method.POST,
+        stringRequest = new StringRequest(Request.Method.POST,
                 Resource.ajax_get_city_list, new Response.Listener<String>() {
 
             @Override
@@ -221,7 +223,8 @@ public class ProfileActivity extends BaseActivity {
                 return params;
             }
         };
-        requestQueue.add(requestCityList);
+        stringRequest.setTag(this.getClass().getName());
+        requestQueue.add(stringRequest);
 
 
         // *****************************************************************************************
@@ -258,6 +261,13 @@ public class ProfileActivity extends BaseActivity {
         });
     }
 
+    @Override
+    public void onStop() {
+        if (requestQueue != null) {
+            requestQueue.cancelAll(this.getClass().getName());
+        }
+        super.onStop();
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -325,7 +335,7 @@ public class ProfileActivity extends BaseActivity {
         // *****************************************************************************************
         //                          AJAX - GET PROFESSIONS
         // *****************************************************************************************
-        StringRequest request = new StringRequest(Request.Method.POST,
+        stringRequest = new StringRequest(Request.Method.POST,
                 Resource.ajax_get_borough_list, new Response.Listener<String>() {
 
             @Override
@@ -383,7 +393,8 @@ public class ProfileActivity extends BaseActivity {
                 return params;
             }
         };
-        requestQueue.add(request);
+        stringRequest.setTag(this.getClass().getName());
+        requestQueue.add(stringRequest);
     }
 
 
@@ -413,7 +424,7 @@ public class ProfileActivity extends BaseActivity {
 
         progressDialog.show();
 
-        StringRequest requestUpdateProfile = new StringRequest(Request.Method.POST,
+        stringRequest = new StringRequest(Request.Method.POST,
                 Resource.ajax_profile_update, new Response.Listener<String>() {
 
             @Override
@@ -496,7 +507,8 @@ public class ProfileActivity extends BaseActivity {
                 return params;
             }
         };
-        requestQueue.add(requestUpdateProfile);
+        stringRequest.setTag(this.getClass().getName());
+        requestQueue.add(stringRequest);
     }
 
 

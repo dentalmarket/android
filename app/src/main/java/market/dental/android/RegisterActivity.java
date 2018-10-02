@@ -47,6 +47,7 @@ public class RegisterActivity extends BaseActivity {
     private ProfessionListAdapter professionListAdapter = null;
     private CityListAdapter cityListAdapter = null;
     private RequestQueue requestQueue;
+    private StringRequest stringRequest;
     private Context context;
 
     private AlertDialog progressDialog;
@@ -92,7 +93,7 @@ public class RegisterActivity extends BaseActivity {
         // *****************************************************************************************
         //                          AJAX - GET CITY
         // *****************************************************************************************
-        StringRequest requestCityList = new StringRequest(Request.Method.POST,
+        stringRequest = new StringRequest(Request.Method.POST,
                 Resource.ajax_get_city_list, new Response.Listener<String>() {
 
             @Override
@@ -134,13 +135,14 @@ public class RegisterActivity extends BaseActivity {
                 return params;
             }
         };
+        stringRequest.setTag(this.getClass().getName());
         requestQueue.add(requestCityList);
 
 
         // *****************************************************************************************
         //                          AJAX - GET PROFESSIONS
         // *****************************************************************************************
-        StringRequest request = new StringRequest(Request.Method.POST,
+        stringRequest = new StringRequest(Request.Method.POST,
                 Resource.ajax_get_professions, new Response.Listener<String>() {
 
             @Override
@@ -183,11 +185,19 @@ public class RegisterActivity extends BaseActivity {
                 return params;
             }
         };
+        stringRequest.setTag(this.getClass().getName());
         requestQueue.add(request);
 */
 
     }
 
+    @Override
+    public void onStop() {
+        if (requestQueue != null) {
+            requestQueue.cancelAll(this.getClass().getName());
+        }
+        super.onStop();
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -216,7 +226,7 @@ public class RegisterActivity extends BaseActivity {
         // *****************************************************************************************
         //                          AJAX - GET PROFESSIONS
         // *****************************************************************************************
-        StringRequest request = new StringRequest(Request.Method.POST,
+        stringRequest = new StringRequest(Request.Method.POST,
                 Resource.ajax_get_borough_list, new Response.Listener<String>() {
 
             @Override
@@ -258,7 +268,8 @@ public class RegisterActivity extends BaseActivity {
                 return params;
             }
         };
-        requestQueue.add(request);
+        stringRequest.setTag(this.getClass().getName());
+        requestQueue.add(stringRequest);
     }
 
 
@@ -337,7 +348,7 @@ public class RegisterActivity extends BaseActivity {
             // *****************************************************************************************
             //                          AJAX - REGISTER NEW USER
             // *****************************************************************************************
-            StringRequest request = new StringRequest(Request.Method.POST,
+            stringRequest = new StringRequest(Request.Method.POST,
                     Resource.ajax_register, new Response.Listener<String>() {
 
                 @Override
@@ -400,8 +411,8 @@ public class RegisterActivity extends BaseActivity {
                     return params;
                 }
             };
-            requestQueue.add(request);
-
+            stringRequest.setTag(this.getClass().getName());
+            requestQueue.add(stringRequest);
         }
     }
 }

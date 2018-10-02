@@ -65,6 +65,8 @@ public class MainFragment extends Fragment {
     private ImageView[] dots;
     private EditText searchText;
     private OnFragmentInteractionListener mListener;
+    private RequestQueue requestQueue;
+    private StringRequest stringRequest;
 
     public MainFragment() {}
 
@@ -85,13 +87,12 @@ public class MainFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        RequestQueue rq = Volley.newRequestQueue(getContext());
+        requestQueue = Volley.newRequestQueue(getActivity().getApplicationContext());
         view = inflater.inflate(R.layout.fragment_main, container, false);
-
         // *****************************************************************************************
         //                              BANNER IMAGES
         // *****************************************************************************************
-        StringRequest bannerRequest = new StringRequest(Request.Method.POST,
+        stringRequest = new StringRequest(Request.Method.POST,
                 Resource.ajax_get_banner_images_url, new Response.Listener<String>() {
 
             @Override
@@ -112,14 +113,14 @@ public class MainFragment extends Fragment {
 
                 } catch (Exception e){
                     e.printStackTrace();
-                    Crashlytics.log(Log.INFO ,Result.LOG_TAG_INFO.getResultText(), Resource.ajax_get_banner_images_url );
+                    Crashlytics.log(Log.INFO ,Result.LOG_TAG_ERROR.getResultText(), Resource.ajax_get_banner_images_url );
                 }
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace();
-                Crashlytics.log(Log.ERROR , Result.LOG_TAG_INFO.getResultText() , "MainActivity >> onErrorResponse");
+                Crashlytics.log(Log.ERROR , Result.LOG_TAG_ERROR.getResultText() , "MainActivity >> onErrorResponse");
             }
         }){
             @Override
@@ -135,7 +136,8 @@ public class MainFragment extends Fragment {
                 return params;
             }
         };
-        rq.add(bannerRequest);
+        stringRequest.setTag(this.getClass().getName());
+        requestQueue.add(stringRequest);
 
 
         // *****************************************************************************************
@@ -158,7 +160,7 @@ public class MainFragment extends Fragment {
         newestProducts.setHasFixedSize(true);
         newestProductsLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL , false);
 
-        StringRequest jsonObjectRequest = new StringRequest(Request.Method.POST,
+        stringRequest = new StringRequest(Request.Method.POST,
                 Resource.ajax_get_products_homeproduct_url, new Response.Listener<String>() {
 
             @Override
@@ -219,8 +221,8 @@ public class MainFragment extends Fragment {
                 return params;
             }
         };
-        rq.add(jsonObjectRequest);
-
+        stringRequest.setTag(this.getClass().getName());
+        requestQueue.add(stringRequest);
 
         searchText = (EditText) view.findViewById(R.id.fragment_main_search);
         searchText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -257,17 +259,28 @@ public class MainFragment extends Fragment {
 
     @Override
     public void onStop(){
-        super.onStop();
-        
+        if (requestQueue != null) {
+            requestQueue.cancelAll(this.getClass().getName());
+        }
+
         if(timer!=null){
             timer.cancel();
         }
+        super.onStop();
     }
 
     @Override
     public void onDetach() {
-        super.onDetach();
         mListener = null;
+
+        if (requestQueue != null) {
+            requestQueue.cancelAll(this.getClass().getName());
+        }
+
+        if(timer!=null){
+            timer.cancel();
+        }
+        super.onDetach();
     }
 
     /**

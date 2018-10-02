@@ -49,6 +49,7 @@ public class MessageListActivity extends BaseActivity {
 
     private MessageListAdapter messageListAdapter;
     private RequestQueue requestQueue;
+    private StringRequest stringRequest;
     private Context context;
     private SharedPreferences sharedPref = null;
     private RecyclerView messageRecycler;
@@ -136,6 +137,16 @@ public class MessageListActivity extends BaseActivity {
     }
 
     @Override
+    public void onStop(){
+
+        if (requestQueue != null) {
+            requestQueue.cancelAll(this.getClass().getName());
+        }
+
+        super.onStop();
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         switch (id){
@@ -153,7 +164,7 @@ public class MessageListActivity extends BaseActivity {
     // *********************************************************************************************
     public void getMessageList(){
 
-        StringRequest jsonObjectRequest = new StringRequest(Request.Method.POST,
+        stringRequest = new StringRequest(Request.Method.POST,
                 Resource.ajax_get_message_list, new Response.Listener<String>() {
 
             @Override
@@ -213,7 +224,8 @@ public class MessageListActivity extends BaseActivity {
                 return params;
             }
         };
-        requestQueue.add(jsonObjectRequest);
+        stringRequest.setTag(this.getClass().getName());
+        requestQueue.add(stringRequest);
     }
 
 
@@ -225,7 +237,7 @@ public class MessageListActivity extends BaseActivity {
         messageText.setText("");
         if(message.length()>0){
 
-            StringRequest jsonObjectRequest = new StringRequest(Request.Method.POST,
+            stringRequest = new StringRequest(Request.Method.POST,
                     Resource.ajax_send_message, new Response.Listener<String>() {
 
                 @Override
@@ -270,7 +282,8 @@ public class MessageListActivity extends BaseActivity {
                     return params;
                 }
             };
-            requestQueue.add(jsonObjectRequest);
+            stringRequest.setTag(this.getClass().getName());
+            requestQueue.add(stringRequest);
         }
     }
 }

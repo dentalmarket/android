@@ -36,8 +36,9 @@ import market.dental.util.Result;
 public class SplashActivity extends AppCompatActivity {
 
     private SharedPreferences sharedPref = null;
-    private RequestQueue requestQueue;
     private Context context;
+    private RequestQueue requestQueue;
+    private StringRequest stringRequest;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +78,16 @@ public class SplashActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onStop(){
+
+        if (requestQueue != null) {
+            requestQueue.cancelAll(this.getClass().getName());
+        }
+
+        super.onStop();
+    }
+
     protected void redirectLoginActivity(){
         Resource.setDefaultAPITOKEN();
         Intent intent = new Intent(getApplicationContext() , LoginActivity.class);
@@ -107,7 +118,7 @@ public class SplashActivity extends AppCompatActivity {
      */
     protected void tryToSendDeviceTokenToServer(Context context){
         RequestQueue requestQueue = Volley.newRequestQueue(context);
-        StringRequest jsonObjectRequest = new StringRequest(Request.Method.POST,
+        stringRequest = new StringRequest(Request.Method.POST,
                 Resource.ajax_update_device_token, new Response.Listener<String>() {
 
             @Override
@@ -148,13 +159,11 @@ public class SplashActivity extends AppCompatActivity {
 
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    Log.i(Result.LOG_TAG_INFO.getResultText(),"JSONException");
+                    Crashlytics.log(Log.ERROR , Result.LOG_TAG_ERROR.getResultText() , "JSONException");
                     redirectLoginActivity();
                 } catch (Exception e) {
                     e.printStackTrace();
-
-                    Log.i(Result.LOG_TAG_INFO.getResultText(),"Exception");
-                    Crashlytics.log( 1 , Result.LOG_TAG_INFO.getResultText(), "Exception");
+                    Crashlytics.log(Log.ERROR , Result.LOG_TAG_ERROR.getResultText() , "Exception");
                     redirectLoginActivity();
                 }
             }
@@ -164,11 +173,11 @@ public class SplashActivity extends AppCompatActivity {
             public void onErrorResponse(VolleyError error) {
 
                 error.printStackTrace();
-                Log.i(Result.LOG_TAG_INFO.getResultText() , ">> Response.ErrorListener");
+                Crashlytics.log(Log.ERROR , Result.LOG_TAG_ERROR.getResultText() , ">> Response.ErrorListener");
 
                 NetworkResponse networkResponse = error.networkResponse;
                 if(networkResponse!=null){
-                    Log.i(Result.LOG_TAG_INFO.getResultText() , ">> Login.StatusCode >> " + networkResponse.statusCode);
+                    Crashlytics.log(Log.INFO , Result.LOG_TAG_INFO.getResultText() , ">> Login.StatusCode >> " + networkResponse.statusCode);
                 }
 
                 redirectLoginActivity();
@@ -188,7 +197,8 @@ public class SplashActivity extends AppCompatActivity {
                 return params;
             }
         };
-        requestQueue.add(jsonObjectRequest);
+        stringRequest.setTag(this.getClass().getName());
+        requestQueue.add(stringRequest);
     }
 
 }

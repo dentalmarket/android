@@ -36,6 +36,7 @@ public class ProductListActivity extends BaseActivity {
 
     private ProductListAdapter productListAdapter;
     private RequestQueue requestQueue;
+    private StringRequest stringRequest;
     private boolean isLastPage;
     private boolean isLoading = false;
     private View view;
@@ -67,6 +68,15 @@ public class ProductListActivity extends BaseActivity {
 
     }
 
+    @Override
+    public void onStop(){
+
+        if (requestQueue != null) {
+            requestQueue.cancelAll(this.getClass().getName());
+        }
+
+        super.onStop();
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -111,7 +121,7 @@ public class ProductListActivity extends BaseActivity {
         // *****************************************************************************************
 
         isLoading = true;
-        StringRequest jsonObjectRequest = new StringRequest(Request.Method.POST,
+        stringRequest = new StringRequest(Request.Method.POST,
                 Resource.ajax_get_product_by_search_key, new Response.Listener<String>() {
 
             @Override
@@ -214,7 +224,8 @@ public class ProductListActivity extends BaseActivity {
                 return params;
             }
         };
-        requestQueue.add(jsonObjectRequest);
+        stringRequest.setTag(this.getClass().getName());
+        requestQueue.add(stringRequest);
     }
 
 
@@ -225,7 +236,7 @@ public class ProductListActivity extends BaseActivity {
         // *****************************************************************************************
         if(!isLoading && !isLastPage){
             isLoading = true;
-            StringRequest jsonObjectRequest = new StringRequest(Request.Method.POST,
+            stringRequest = new StringRequest(Request.Method.POST,
                     Resource.ajax_get_products_by_user_history, new Response.Listener<String>() {
 
                 @Override
@@ -318,7 +329,8 @@ public class ProductListActivity extends BaseActivity {
                     return params;
                 }
             };
-            requestQueue.add(jsonObjectRequest);
+            stringRequest.setTag(this.getClass().getName());
+            requestQueue.add(stringRequest);
         }
     }
 

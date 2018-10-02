@@ -60,6 +60,8 @@ public class ProductDetailActivity extends BaseActivity {
     private ProductDetailViewPagerAdapter productDetailViewPagerAdapter;
     private ImageView[] dots;
     private Timer timer;
+    private RequestQueue requestQueue;
+    private StringRequest stringRequest;
 
     private int productId;
     private String productDesc;
@@ -75,7 +77,7 @@ public class ProductDetailActivity extends BaseActivity {
         productId = intent.getIntExtra(Resource.KEY_PRODUCT_ID,-1);
 
         // Initialization
-        RequestQueue rq = Volley.newRequestQueue(this);
+        requestQueue = Volley.newRequestQueue(this);
         productDetailContext = this.getApplicationContext();
         pdProductName = (TextView)findViewById(R.id.activity_product_detail_product_name);
         pdProductPrice = (TextView)findViewById(R.id.activity_product_detail_price);
@@ -98,7 +100,7 @@ public class ProductDetailActivity extends BaseActivity {
         mRecyclerView = (RecyclerView) findViewById(R.id.activity_product_detail_similar_prod_recycler_view);
         mRecyclerView.setHasFixedSize(true);
         mRecyclerLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL , false);
-        StringRequest jsonObjectRequest = new StringRequest(Request.Method.POST,
+        stringRequest = new StringRequest(Request.Method.POST,
                 Resource.ajax_get_product_detail_url, new Response.Listener<String>() {
 
             @Override
@@ -225,7 +227,8 @@ public class ProductDetailActivity extends BaseActivity {
                 return params;
             }
         };
-        rq.add(jsonObjectRequest);
+        stringRequest.setTag(this.getClass().getName());
+        requestQueue.add(stringRequest);
 
 
         Button productDescBnt = findViewById(R.id.activity_product_detail_product_desc_btn);
@@ -258,6 +261,11 @@ public class ProductDetailActivity extends BaseActivity {
 
     @Override
     public void onStop(){
+
+        if (requestQueue != null) {
+            requestQueue.cancelAll(this.getClass().getName());
+        }
+
         if(timer!=null){
             timer.cancel();
         }

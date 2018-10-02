@@ -55,6 +55,7 @@ public class MainActivity extends BaseActivity
     private NavigationView navigationView;
     private AlertDialog progressDialog;
     private RequestQueue requestQueue;
+    private StringRequest stringRequest;
     private Context context;
     private HashSet<Target> targetList = new HashSet<>();
 
@@ -126,6 +127,9 @@ public class MainActivity extends BaseActivity
 
     @Override
     protected void onStop() {
+        if (requestQueue != null) {
+            requestQueue.cancelAll(this.getClass().getName());
+        }
         super.onStop();
     }
 
@@ -194,7 +198,7 @@ public class MainActivity extends BaseActivity
         // *****************************************************************************************
         //                          AJAX - GET SUBCATEGORIES
         // *****************************************************************************************
-        StringRequest request = new StringRequest(Request.Method.POST,
+        stringRequest = new StringRequest(Request.Method.POST,
                 Resource.ajax_get_categories, new Response.Listener<String>() {
 
             @Override
@@ -304,7 +308,8 @@ public class MainActivity extends BaseActivity
                 return params;
             }
         };
-        requestQueue.add(request);
+        stringRequest.setTag(this.getClass().getName());
+        requestQueue.add(stringRequest);
     }
 
 
@@ -321,7 +326,7 @@ public class MainActivity extends BaseActivity
         // *****************************************************************************************
         //                          AJAX - LOGOUT
         // *****************************************************************************************
-        StringRequest request = new StringRequest(Request.Method.POST,
+        stringRequest = new StringRequest(Request.Method.POST,
                 Resource.ajax_logout, new Response.Listener<String>() {
 
             @Override
@@ -375,7 +380,8 @@ public class MainActivity extends BaseActivity
                 return params;
             }
         };
-        requestQueue.add(request);
+        stringRequest.setTag(this.getClass().getName());
+        requestQueue.add(stringRequest);
     }
 
     @Override
