@@ -195,7 +195,7 @@ public class Result <T> implements Serializable{
         FAILURE_USER_CONFIRM        = new Result("GUPPY.702", "User not confirmed.");               // dental.market standartına göre eklendi
         FAILURE_TOKEN               = new Result("GUPPY.703", "Token error.");                      // dental.market standartına göre eklendi
         LOG_TAG_INFO                = new Result("TAG.001", "INFO_DENTAL_MARKET");
-        LOG_TAG_ERROR               = new Result("TAG.401", "ERROR_DENTAL_MARKET");
+        LOG_TAG_ERROR               = new Result("TAG.601", "ERROR_DENTAL_MARKET");
     }
 
     /*Default Getters-Setters*/

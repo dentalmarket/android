@@ -89,7 +89,6 @@ public class MainActivity extends BaseActivity
         progressDialogBuilder.setCancelable(false);
         progressDialogBuilder.setView(getLayoutInflater().inflate(R.layout.dialog_progressbar,null));
         progressDialog = progressDialogBuilder.create();
-
     }
 
     @Override
@@ -118,7 +117,7 @@ public class MainActivity extends BaseActivity
 
         }catch (Exception e){
             e.printStackTrace();
-            Crashlytics.log(Log.INFO , Result.LOG_TAG_INFO.getResultText() , this.getClass().getName() + " >> Bundle Exception");
+            Crashlytics.log(Log.ERROR , Result.LOG_TAG_ERROR.getResultText() , this.getClass().getName() + " >> Bundle Exception");
             getCategoryList(-1);
         }
 
@@ -276,21 +275,35 @@ public class MainActivity extends BaseActivity
                                 .replace(R.id.content_main , fragment)
                                 .commitAllowingStateLoss();
 
-                    }else if(Result.FAILURE_TOKEN.checkResult(new Result(response))){
+                    } else if(Result.FAILURE_TOKEN.checkResult(new Result(response))){
                         redirectLoginActivity();
+                    } else {
+                        Toast.makeText(context, getString(R.string.unexpected_case_error) , Toast.LENGTH_LONG).show();
+                        Crashlytics.log(Log.INFO , Result.LOG_TAG_INFO.getResultText() , this.getClass().getName() + " >> " + Resource.ajax_get_categories + " >> Exception >> ");
                     }
 
                 } catch (Exception e) {
-                    e.printStackTrace();
+
                     Toast.makeText(context, getString(R.string.unexpected_case_error) , Toast.LENGTH_LONG).show();
-                    Crashlytics.log(Log.ERROR , Result.LOG_TAG_INFO.getResultText() , this.getClass().getName() + " >> " + Resource.ajax_get_categories + " >> Exception");
+                    Crashlytics.log(Log.INFO , Result.LOG_TAG_INFO.getResultText() , this.getClass().getName() + " >> " + Resource.ajax_get_categories + " >> Exception >> " + e.getStackTrace()[0].getLineNumber());
+
+                    // stack trace üzerindeki log ları print etmektedir - şimdilik kullanılmıyor
+                /*
+                    String error = "";
+                    for(int i=0; i<e.getStackTrace().length; i++){
+                        StackTraceElement ste = e.getStackTrace()[i];
+                        error += ste.toString() + "\n";
+                    }
+                    Crashlytics.log(Log.INFO , Result.LOG_TAG_ERROR.getResultText() , "__>>__" + error);
+                */
                 }
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace();
-                Log.i(Result. LOG_TAG_INFO.getResultText(),"MainActivity >> ERROR ON GET DATA >> 121");
+                Crashlytics.log(Log.ERROR , Result.LOG_TAG_ERROR.getResultText() , this.getClass().getName() + " >> " + "Response.ErrorListener" + " >> " + Resource.ajax_get_categories + " >> Exception");
+
                 Toast.makeText(context, getString(R.string.unexpected_network_error) , Toast.LENGTH_LONG).show();
             }
         }){
@@ -352,9 +365,10 @@ public class MainActivity extends BaseActivity
 
                 } catch (JSONException e) {
                     e.printStackTrace();
+                    Crashlytics.log(Log.ERROR , Result.LOG_TAG_ERROR.getResultText() , this.getClass().getName() + " >> " + Resource.ajax_logout + " >> JSONException");
                 } catch (Exception e) {
                     e.printStackTrace();
-                    Log.i(Result.LOG_TAG_INFO.getResultText(),"Exception");
+                    Crashlytics.log(Log.ERROR , Result.LOG_TAG_ERROR.getResultText() , this.getClass().getName() + " >> " + Resource.ajax_logout + " >> Exception");
                 } finally {
                     progressDialog.dismiss();
                 }
@@ -363,6 +377,7 @@ public class MainActivity extends BaseActivity
             @Override
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace();
+                Crashlytics.log(Log.ERROR , Result.LOG_TAG_ERROR.getResultText() , this.getClass().getName() + " >> " + "Response.ErrorListener" + " >> " + Resource.ajax_logout + " >> Exception");
                 progressDialog.dismiss();
                 redirectLoginActivity();
             }
@@ -386,6 +401,6 @@ public class MainActivity extends BaseActivity
 
     @Override
     public void onFragmentInteraction(Uri uri) {
-        Log.i(Result.LOG_TAG_INFO.getResultText(), "MainActivity >> onFragmentInteraction");
+        Crashlytics.log(Log.INFO , Result.LOG_TAG_INFO.getResultText() , this.getClass().getName() + " >> " + "onFragmentInteraction");
     }
 }
