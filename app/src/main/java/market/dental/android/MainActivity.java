@@ -303,7 +303,6 @@ public class MainActivity extends BaseActivity
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace();
                 Crashlytics.log(Log.ERROR , Result.LOG_TAG_ERROR.getResultText() , this.getClass().getName() + " >> " + "Response.ErrorListener" + " >> " + Resource.ajax_get_categories + " >> Exception");
-
                 Toast.makeText(context, getString(R.string.unexpected_network_error) , Toast.LENGTH_LONG).show();
             }
         }){
