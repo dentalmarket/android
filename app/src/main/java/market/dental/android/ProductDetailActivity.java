@@ -301,12 +301,17 @@ public class ProductDetailActivity extends BaseActivity {
 
     @Override
     public void onDestroy() {
-        viewPager.setAdapter(null);
-        mRecyclerView.setAdapter(null);
+        if(viewPager!=null)
+            viewPager.setAdapter(null);
+
+        if(mRecyclerView!=null)
+            mRecyclerView.setAdapter(null);
 
         productDetailViewPagerAdapter = null;
-        mRecyclerLayoutManager.removeAllViews();
-        mRecyclerLayoutManager=null;
+        if(mRecyclerLayoutManager!=null){
+            mRecyclerLayoutManager.removeAllViews();
+            mRecyclerLayoutManager=null;
+        }
 
         mRecyclerAdapter = null;
         productDetailContext = null;
@@ -333,7 +338,7 @@ public class ProductDetailActivity extends BaseActivity {
                 @Override
                 public void run() {
 
-                    if(viewPager!=null){
+                    if(viewPager!=null && productDetailViewPagerAdapter!=null){
                         if(viewPager.getCurrentItem()+1==productDetailViewPagerAdapter.getCount()){
                             viewPager.setCurrentItem(0);
                         }else{

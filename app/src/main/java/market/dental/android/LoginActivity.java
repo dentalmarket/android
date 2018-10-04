@@ -42,6 +42,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.crashlytics.android.Crashlytics;
 import com.google.firebase.iid.FirebaseInstanceId;
 
 import org.json.JSONException;
@@ -241,19 +242,16 @@ public class LoginActivity extends BaseActivity implements LoaderCallbacks<Curso
         }
 
         if (cancel) {
-            // There was an error; don't attempt login and focus the first
-            // form field with an error.
             focusView.requestFocus();
-        } else {
-            // Show a progress spinner, and kick off a background task to
-            // perform the user login attempt.
-            showProgress(true);
 
+        } else {
+
+            showProgress(true);
             // *************************************************************************************
             //                          AJAX - LOGIN
             // *************************************************************************************
             stringRequest = new StringRequest(Request.Method.POST,
-                    Resource.ajax_login, new Response.Listener<String>() {
+                    Resource.ajax_login.replace("api","dapi"), new Response.Listener<String>() {
 
                 @Override
                 public void onResponse(String responseString) {
@@ -266,12 +264,13 @@ public class LoginActivity extends BaseActivity implements LoaderCallbacks<Curso
                         } else if(Result.FAILURE_USER_CONFIRM.checkResult(new Result(response))){
                             Toast.makeText(context,response.getString("content"),Toast.LENGTH_LONG).show();
                         }else {
-                            Toast.makeText(context,"Beklenmedik hata",Toast.LENGTH_LONG).show();
+                            Toast.makeText(context,getString(R.string.unexpected_case_error),Toast.LENGTH_LONG).show();
                         }
 
                     } catch (JSONException e) {
-                        e.printStackTrace();
-                        Log.i(Result.LOG_TAG_INFO.getResultText(),"LoginActivity >> JSONException >> 120");
+                        Crashlytics.log(Log.INFO , Result.LOG_TAG_INFO.getResultText() , this.getClass().getName() + " >> " + Resource.ajax_login + " >> JSONException >> " + e.getStackTrace()[0].getLineNumber());
+                    } catch (Exception e) {
+                        Crashlytics.log(Log.INFO , Result.LOG_TAG_INFO.getResultText() , this.getClass().getName() + " >> " + Resource.ajax_login + " >> Exception >> " + e.getStackTrace()[0].getLineNumber());
                     } finally {
                         showProgress(false);
                     }
@@ -280,11 +279,10 @@ public class LoginActivity extends BaseActivity implements LoaderCallbacks<Curso
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     showProgress(false);
-                    error.printStackTrace();
                     NetworkResponse networkResponse = error.networkResponse;
-                    Log.i(Result.LOG_TAG_INFO.getResultText() , ">> Login.Response.ErrorListener");
+                    Crashlytics.log(Log.INFO , Result.LOG_TAG_INFO.getResultText() , this.getClass().getName() + " >> " + Resource.ajax_login + " >> Exception >> Login.Response.ErrorListener:" + networkResponse.statusCode + " line:" + error.getStackTrace()[0].getLineNumber());
                     if(networkResponse!=null){
-                        Log.i(Result.LOG_TAG_INFO.getResultText() , ">> Login.StausCode >> " + networkResponse.statusCode);
+                        Crashlytics.log(Log.INFO , Result.LOG_TAG_INFO.getResultText() , this.getClass().getName() + " >> " + Resource.ajax_login + " >> Exception >> Login.StausCode:" + networkResponse.statusCode + " line:" + error.getStackTrace()[0].getLineNumber());
                     }
                 }
             }){
