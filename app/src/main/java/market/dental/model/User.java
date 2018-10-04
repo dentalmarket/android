@@ -22,6 +22,7 @@ public class User {
     private String api_token;
     private String city_id;
     private String borough_id;
+    private int store_type;
 
     public User(JSONObject userJsonObject){
 
@@ -48,7 +49,11 @@ public class User {
                     userJsonObject.getString("city"):"";
             this.borough_id = userJsonObject.has("district") && !userJsonObject.isNull("district")?
                     userJsonObject.getString("district"):"";
+            this.store_type = userJsonObject.has("store_type")?
+                    userJsonObject.getInt("store_type") : -1 ;
         } catch (JSONException e) {
+            e.printStackTrace();
+        } catch (Exception e){
             e.printStackTrace();
         }
     }
@@ -139,5 +144,13 @@ public class User {
 
     public void setBorough_id(String borough_id) {
         this.borough_id = borough_id;
+    }
+
+    public int getStoreType() {
+        return store_type;
+    }
+
+    public void setStoreType(int store_type) {
+        this.store_type = store_type;
     }
 }

@@ -42,6 +42,7 @@ import java.util.List;
 import java.util.Map;
 
 import market.dental.model.Category;
+import market.dental.model.User;
 import market.dental.util.Resource;
 import market.dental.util.Result;
 
@@ -50,6 +51,7 @@ public class MainActivity extends BaseActivity
                     MainFragment.OnFragmentInteractionListener,
                     ProductListFragment.OnFragmentInteractionListener{
 
+    private SharedPreferences sharedPref = null;
     private Menu menu;
     private Menu navigationViewMenu;
     private NavigationView navigationView;
@@ -147,6 +149,19 @@ public class MainActivity extends BaseActivity
         // Inflate the menu; this adds items to the action bar if it is present.
         this.menu = menu;
         getMenuInflater().inflate(R.menu.main, menu);
+
+        try{
+            sharedPref = getSharedPreferences(getString(R.string.sp_dental_market), Context.MODE_PRIVATE);
+            JSONObject userJsonObject = new JSONObject(sharedPref.getString(getString(R.string.sp_user_json_str) , ""));
+            User user = new User(userJsonObject);
+            if(user.getStoreType() > 0){
+                MenuItem item = (MenuItem) this.menu.findItem(R.id.right_menu_new_product);
+                item.setVisible(true);
+            }
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+
         return true;
     }
 

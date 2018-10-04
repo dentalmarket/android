@@ -4,11 +4,13 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.app.LoaderManager.LoaderCallbacks;
 
@@ -79,6 +81,7 @@ public class LoginActivity extends BaseActivity implements LoaderCallbacks<Curso
     private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
+    private AlertDialog.Builder builder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -133,6 +136,12 @@ public class LoginActivity extends BaseActivity implements LoaderCallbacks<Curso
             }
         });
 
+        // ALERT BUILDER
+        builder = new AlertDialog.Builder(context);
+        builder.setPositiveButton(getString(R.string.dental_ok), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {}
+        });
     }
 
     @Override
@@ -251,8 +260,9 @@ public class LoginActivity extends BaseActivity implements LoaderCallbacks<Curso
             //                          AJAX - LOGIN
             // *************************************************************************************
             stringRequest = new StringRequest(Request.Method.POST,
-                    Resource.ajax_login.replace("api","dapi"), new Response.Listener<String>() {
+                    Resource.ajax_login, new Response.Listener<String>() {
 
+                String errorText = "";
                 @Override
                 public void onResponse(String responseString) {
                     try {
@@ -269,10 +279,21 @@ public class LoginActivity extends BaseActivity implements LoaderCallbacks<Curso
 
                     } catch (JSONException e) {
                         Crashlytics.log(Log.INFO , Result.LOG_TAG_INFO.getResultText() , this.getClass().getName() + " >> " + Resource.ajax_login + " >> JSONException >> " + e.getStackTrace()[0].getLineNumber());
+                        errorText = getString(R.string.alert_exception);
+
                     } catch (Exception e) {
                         Crashlytics.log(Log.INFO , Result.LOG_TAG_INFO.getResultText() , this.getClass().getName() + " >> " + Resource.ajax_login + " >> Exception >> " + e.getStackTrace()[0].getLineNumber());
+                        errorText = getString(R.string.alert_exception);
+
                     } finally {
                         showProgress(false);
+                        // show alert if any error
+                        if(errorText.length() > 0){
+                            builder.setMessage(errorText);
+                            AlertDialog alert = builder.create();
+                            alert.show();
+                        }
+
                     }
                 }
             }, new Response.ErrorListener() {
@@ -284,6 +305,11 @@ public class LoginActivity extends BaseActivity implements LoaderCallbacks<Curso
                     if(networkResponse!=null){
                         Crashlytics.log(Log.INFO , Result.LOG_TAG_INFO.getResultText() , this.getClass().getName() + " >> " + Resource.ajax_login + " >> Exception >> Login.StausCode:" + networkResponse.statusCode + " line:" + error.getStackTrace()[0].getLineNumber());
                     }
+
+                    // show alert error
+                    builder.setMessage(getString(R.string.alert_volley_network_error));
+                    AlertDialog alert = builder.create();
+                    alert.show();
                 }
             }){
                 @Override
