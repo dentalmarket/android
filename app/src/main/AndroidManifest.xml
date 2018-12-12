@@ -62,6 +62,9 @@
             android:name=".RegisterActivity"
             android:label="Kayıt" />
         <activity
+            android:name=".ProductAddActivity"
+            android:label="@string/title_activity_product_add" />
+        <activity
             android:name=".ConversationListActivity"
             android:label="@string/title_activity_conversation_list"
             android:launchMode="singleTask"
@@ -121,7 +124,11 @@
             android:name=".FullscreenImageActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_fullscreen_image"
-            android:theme="@style/FullscreenTheme"></activity>
+            android:theme="@style/FullscreenTheme" />
+        <activity
+            android:name=".OfferActivity"
+            android:label="@string/title_activity_offer"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

@@ -60,6 +60,8 @@
     <string name="new_registration">Yeni Kayıt</string>
     <string name="registration_process_success">Kayıt işlemi başarıyla gerçekleştirildi</string>
     <string name="unknown">bilinmiyor</string>
+    <string name="offer_status_active">Aktif</string>
+    <string name="offer_status_inactive">Pasif</string>
 
     <!-- ALERT -->
     <string name="alert_volley_network_error">Network hatası ile karşılaşıldı...</string>
@@ -72,6 +74,7 @@
     <string name="right_menu_messages">Mesajlar</string>
     <string name="right_menu_recent_products">İncelediğim Ürünler</string>
     <string name="right_menu_new_product">Yeni Ürün</string>
+    <string name="right_menu_offers">Teklif İsteklerim</string>
     <string name="right_menu_share">Paylaş</string>
     <string name="right_menu_logout">Çıkış</string>
     <string name="right_menu_search">Ara</string>
@@ -106,8 +109,9 @@
     <!-- ACTIVITY TITLES -->
     <string name="title_activity_conversation_list">Sohbet Listesi</string>
     <string name="title_activity_message_list">Mesajlarınız</string>
-    <string name="title_activity_fullscreen_image">FullscreenImageActivity</string>
     <string name="title_activity_main">Anasayfa</string>
+    <string name="title_activity_product_add">Yeni Ürün</string>
+    <string name="title_activity_fullscreen_image">FullscreenImageActivity</string>
 
     <!-- GOOGLE FIREBASE -->
     <string name="msg_subscribed">Subscribed to news topic</string>
@@ -117,5 +121,6 @@
 
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="title_activity_offer">OfferActivity</string>
 
 </resources>

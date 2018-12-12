@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <GridLayout
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:layout_centerHorizontal="true"
+        android:layout_centerInParent="true"
+        android:paddingTop="5dp"
+        android:columnCount="4"
+        android:rowCount="1">
+
+        <TextView
+            android:id="@+id/offer_name"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="fill"
+            android:layout_columnWeight="1"
+            android:paddingLeft="8dp"
+            android:gravity="center|left"
+            android:maxLines="2"
+            android:text="@string/unknown_name"
+            android:textSize="14dp" />
+
+        <TextView
+            android:id="@+id/offer_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:maxLines="1"
+            android:layout_gravity="fill"
+            android:layout_columnWeight="1"
+            android:text="@string/unknown_name"
+            android:textSize="14dp" />
+
+        <TextView
+            android:id="@+id/offer_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_gravity="fill"
+            android:layout_columnWeight="1"
+            android:text="@string/unknown_name"
+            android:textSize="14dp" />
+
+        <TextView
+            android:id="@+id/offer_created_date"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="fill"
+            android:layout_columnWeight="1"
+            android:text="@string/unknown_name"
+            android:gravity="center|right"
+            android:paddingRight="8dp"
+            android:textSize="14dp" />
+
+    </GridLayout>
+
+</android.support.constraint.ConstraintLayout>

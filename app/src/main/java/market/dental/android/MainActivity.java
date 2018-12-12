@@ -191,6 +191,14 @@ public class MainActivity extends BaseActivity
                 intent.putExtras(bundle);
                 startActivity(intent);
                 break;
+            case R.id.right_menu_offers:
+                intent = new Intent(this,OfferActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.right_menu_new_product:
+                intent = new Intent(this,ProductAddActivity.class);
+                startActivity(intent);
+                break;
             case R.id.right_menu_logout:
                 userLogout();
                 break;
