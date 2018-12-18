@@ -15,7 +15,6 @@
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingBottom="50dp"
             android:id="@+id/activity_profile_main_panel"
             android:layout_below="@+id/activity_profile_top_panel">
 
@@ -34,31 +33,30 @@
                     style="@style/DentalMarket.EditText"
                     android:hint="Teklif İçin İsim Giriniz" />
 
-                <TextView
-                    android:id="@+id/fragment_offer_add_product"
-                    style="@style/DentalMarket.EditTextView"
-                    android:text="Ürün"/>
-
-                <AutoCompleteTextView
-                    android:id="@+id/fragment_offer_add_product_select"
-                    style="@style/DentalMarket.EditText"
-                    android:hint="Teklif isteğine eklemek istediğiniz ürün adını giriniz?"/>
+                <Button
+                    android:id="@+id/open_offer_add_product_activity"
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_gravity="center"
+                    android:background="@drawable/dental_icon_add_circle_24dp" />
 
                 <TextView
                     android:id="@+id/fragment_offer_added_products"
                     style="@style/DentalMarket.EditTextView"
                     android:text="Teklifteki Ürünler"/>
 
-                <ListView
-                    android:id="@+id/fragment_offer_added_product_list"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                </ListView>
-
             </LinearLayout>
 
         </ScrollView>
 
+        <ListView
+            android:id="@+id/fragment_offer_added_product_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/activity_profile_save_btn"
+            android:layout_below="@+id/activity_profile_main_panel"></ListView>
 
         <Button android:id="@+id/activity_profile_save_btn"
             android:layout_width="match_parent"

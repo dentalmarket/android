@@ -1,41 +1,21 @@
 package market.dental.android;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
+import android.widget.Button;
 import android.widget.ListView;
-import android.widget.Toast;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
-import com.crashlytics.android.Crashlytics;
-
-import org.json.JSONObject;
-
-import java.util.HashMap;
-import java.util.Map;
+import com.google.gson.Gson;
 
 import market.dental.adapter.OfferProductAddedListAdapter;
-import market.dental.adapter.OfferSearchProductListAdapter;
 import market.dental.model.Product;
-import market.dental.util.Resource;
-import market.dental.util.Result;
-
 
 /**
  * A simple {@link Fragment} subclass.
@@ -58,13 +38,9 @@ public class OfferAddFragment extends Fragment {
     private OnFragmentInteractionListener mListener;
 
     private OfferProductAddedListAdapter addedProductListAdapter;
-    private OfferSearchProductListAdapter productAutoCompListAdapter;
-    private RequestQueue requestQueue;
-    private StringRequest stringRequest;
-    private boolean isLastPage;
-    private boolean isLoading = false;
-    private View viewMain;
-    private AutoCompleteTextView acTextView;
+    private View view;
+
+    private static final int PRODUCT_ADD_FOR_OFFER = 1001;
 
     public OfferAddFragment() {
         // Required empty public constructor
@@ -103,34 +79,22 @@ public class OfferAddFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         // Inflate the layout for this fragment
-        viewMain = inflater.inflate(R.layout.fragment_offer_add, container, false);
+        view = inflater.inflate(R.layout.fragment_offer_add, container, false);
 
         // Initialization
-        requestQueue = Volley.newRequestQueue(this.getContext());
-        productAutoCompListAdapter = new OfferSearchProductListAdapter(this.getContext());
         addedProductListAdapter = new OfferProductAddedListAdapter(this.getContext());
 
-        // Set AutoCompleteTextView
-        acTextView = (AutoCompleteTextView) viewMain.findViewById(R.id.fragment_offer_add_product_select);
-        acTextView.setThreshold(1);
-        acTextView.addTextChangedListener(new TextWatcher() {
+        // ACTION LISTENER
+        Button openOfferAddProduct = view.findViewById(R.id.open_offer_add_product_activity);
+        openOfferAddProduct.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                getProductsAutoCompleteList(-1);
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(),OfferProductAddActivity.class);
+                startActivityForResult(intent , PRODUCT_ADD_FOR_OFFER);
             }
         });
 
-        return viewMain;
+        return view;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -157,6 +121,29 @@ public class OfferAddFragment extends Fragment {
         mListener = null;
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch(requestCode) {
+            case (PRODUCT_ADD_FOR_OFFER) : {
+                if (resultCode == Activity.RESULT_OK) {
+                    Gson gson = new Gson();
+                    Product selectedProduct = gson.fromJson(data.getStringExtra("PRODUCT_GSON_STRING"), Product.class);
+
+                    addedProductListAdapter.addProduct(selectedProduct);
+                    ListView listView = view.findViewById(R.id.fragment_offer_added_product_list);
+                    if (listView.getAdapter() == null){
+                        listView.setAdapter(addedProductListAdapter);
+                    }else{
+                        addedProductListAdapter.notifyDataSetChanged();
+                    }
+
+                }
+                break;
+            }
+        }
+    }
+
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -170,97 +157,6 @@ public class OfferAddFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
-    }
-
-    private void getProductsAutoCompleteList(final int page){
-
-        // *****************************************************************************************
-        //                        GET PRODUCTS LIST
-        // *****************************************************************************************
-        if(!isLoading && !isLastPage){
-            isLoading = true;
-            stringRequest = new StringRequest(Request.Method.POST,
-                    Resource.ajax_get_productsautocomplete, new Response.Listener<String>() {
-
-                @Override
-                public void onResponse(String responseString) {
-
-                    try {
-
-                        JSONObject response = new JSONObject(responseString);
-                        if(Result.SUCCESS.checkResult(new Result(response))){
-
-                            if(response.getJSONArray("content").length()>0){
-
-                                productAutoCompListAdapter.addProductList(Product.ProductList(response.getJSONArray("content")));
-                                acTextView.setAdapter(productAutoCompListAdapter);
-                                acTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                                    @Override
-                                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-                                        // Clicked Product added to List
-                                        addedProductListAdapter.addProduct((Product)parent.getItemAtPosition(position));
-                                        ListView listView = viewMain.findViewById(R.id.fragment_offer_added_product_list);
-                                        if(listView.getAdapter()==null)
-                                            listView.setAdapter(addedProductListAdapter);
-                                        else{
-                                            addedProductListAdapter.notifyDataSetChanged();
-                                        }
-                                        acTextView.setText("");
-
-
-                                    }
-                                });
-
-                            } else{
-                                isLastPage = false;
-                            }
-
-                        }else if(Result.FAILURE_TOKEN.checkResult(new Result(response))){
-                            Resource.setDefaultAPITOKEN();
-                            Intent intent = new Intent(getActivity().getApplicationContext() , LoginActivity.class);
-                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                            startActivity(intent);
-                        } else {
-                            Toast.makeText(getActivity().getApplicationContext(), getString(R.string.unexpected_case_error) , Toast.LENGTH_LONG).show();
-                            Crashlytics.log(Log.INFO , Result.LOG_TAG_INFO.getResultText() , this.getClass().getName() + " >> " + Resource.ajax_get_productsautocomplete + " >> responseString = " + responseString);
-                        }
-
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        Crashlytics.log(Log.INFO ,Result.LOG_TAG_INFO.getResultText(), Resource.ajax_get_productsautocomplete );
-                    } finally {
-                        isLoading = false;
-                    }
-                }
-
-            }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    error.printStackTrace();
-                    Crashlytics.log(Log.ERROR , Result.LOG_TAG_INFO.getResultText() , this.getClass().getName() + " >> " + "onErrorResponse");
-                    isLoading = false;
-                }
-            }){
-                @Override
-                protected Map<String, String> getParams()  {
-                    Map<String, String> params = new HashMap<>();
-                    params.put(Resource.KEY_API_TOKEN, Resource.VALUE_API_TOKEN);
-                    params.put("page", String.valueOf(page));
-                    params.put("word", "por");
-                    return params;
-                }
-                @Override
-                public Map<String, String> getHeaders() {
-                    Map<String,String> params = new HashMap<String, String>();
-                    params.put("Content-Type","application/x-www-form-urlencoded");
-                    return params;
-                }
-            };
-            stringRequest.setTag(this.getClass().getName());
-            requestQueue.add(stringRequest);
-        }
-
     }
 
 

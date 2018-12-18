@@ -2,11 +2,13 @@ package market.dental.adapter;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Filter;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -52,7 +54,7 @@ public class OfferProductAddedListAdapter extends ArrayAdapter {
     }
 
     @Override
-    public View getView(int position, View view, ViewGroup viewgroup){
+    public View getView(final int position, View view, ViewGroup viewgroup){
 
         AddedProductListForOfferViewHolder holder;
         if(view==null) {
@@ -61,14 +63,22 @@ public class OfferProductAddedListAdapter extends ArrayAdapter {
             holder.pName = view.findViewById(R.id.offer_added_product_name);
             holder.pName.setText(addedProductList.get(position).getName());
 
-            holder.pImage = (ImageView)view.findViewById(R.id.activity_product_list_item_image);
+            holder.pImageButton = (ImageButton)view.findViewById(R.id.activity_product_list_item_image);
             Picasso.with(context)
                     .load(addedProductList.get(position).getImageUrl())
                     .placeholder(R.mipmap.ic_launcher)
                     .error(R.mipmap.ic_launcher)
                     .resize(120, 100)
-                    .into(holder.pImage);
-
+                    .into(holder.pImageButton);
+/*
+            holder.pImageButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // burada kaçıncı child olduğu alınır
+                    Log.i("DENEMEME" , "POSITION " + position);
+                }
+            });
+*/
             view.setTag(holder);
 
         } else {
@@ -80,7 +90,7 @@ public class OfferProductAddedListAdapter extends ArrayAdapter {
     static class AddedProductListForOfferViewHolder {
         TextView pName;
         TextView pSubtitle;
-        ImageView pImage;
+        ImageButton pImageButton;
     }
 
 

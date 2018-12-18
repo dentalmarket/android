@@ -22,7 +22,7 @@
             android:layout_height="100dp"
             android:orientation="horizontal">
 
-            <ImageView
+            <ImageButton
                 android:id="@+id/activity_product_list_item_image"
                 android:layout_width="120dp"
                 android:paddingTop="10dp"
