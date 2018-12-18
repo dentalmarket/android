@@ -1,13 +1,19 @@
 package market.dental.android;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 
-public class OfferActivity extends BaseActivity {
+import com.crashlytics.android.Crashlytics;
+
+import market.dental.util.Result;
+
+public class OfferActivity extends BaseActivity implements OfferAddFragment.OnFragmentInteractionListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,11 +26,18 @@ public class OfferActivity extends BaseActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                Fragment offerAddFragment = new OfferAddFragment();
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                fragmentManager.beginTransaction()
+                        .replace(R.id.offer_fragment_main, offerAddFragment)
+                        .commit();
             }
         });
 
     }
 
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+        Crashlytics.log(Log.INFO , Result.LOG_TAG_INFO.getResultText() , this.getClass().getName() + " >> " + "onFragmentInteraction");
+    }
 }

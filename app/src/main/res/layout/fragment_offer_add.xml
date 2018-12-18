@@ -1,0 +1,73 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?android:windowBackground"
+    tools:context="market.dental.android.OfferAddFragment">
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="50dp"
+            android:id="@+id/activity_profile_main_panel"
+            android:layout_below="@+id/activity_profile_top_panel">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/fragment_offer_add_title"
+                    style="@style/DentalMarket.EditTextView"
+                    android:text="Teklif İsmi"/>
+
+                <EditText
+                    android:id="@+id/fragment_offer_add_title_name"
+                    style="@style/DentalMarket.EditText"
+                    android:hint="Teklif İçin İsim Giriniz" />
+
+                <TextView
+                    android:id="@+id/fragment_offer_add_product"
+                    style="@style/DentalMarket.EditTextView"
+                    android:text="Ürün"/>
+
+                <AutoCompleteTextView
+                    android:id="@+id/fragment_offer_add_product_select"
+                    style="@style/DentalMarket.EditText"
+                    android:hint="Teklif isteğine eklemek istediğiniz ürün adını giriniz?"/>
+
+                <TextView
+                    android:id="@+id/fragment_offer_added_products"
+                    style="@style/DentalMarket.EditTextView"
+                    android:text="Teklifteki Ürünler"/>
+
+                <ListView
+                    android:id="@+id/fragment_offer_added_product_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                </ListView>
+
+            </LinearLayout>
+
+        </ScrollView>
+
+
+        <Button android:id="@+id/activity_profile_save_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:background="@color/dental_market_text_title"
+            android:text="@string/publish" />
+
+    </RelativeLayout>
+
+
+</FrameLayout>

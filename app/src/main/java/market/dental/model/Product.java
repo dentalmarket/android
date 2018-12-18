@@ -21,7 +21,10 @@ public class Product {
     private String description;
     private String price;
     private String salePrice;
+    private String subtitle;
     private int currencyId;
+    private int offerCount;
+    private String offerDesc;
     private Brand brand;
 
     public Product (){}
@@ -32,6 +35,8 @@ public class Product {
                     projectJsonObject.getInt("product_id") : -1 ;
             this.name = projectJsonObject.has("title") && !projectJsonObject.isNull("title")?
                     projectJsonObject.getString("title"):"";
+            this.subtitle = projectJsonObject.has("subtitle") && !projectJsonObject.isNull("subtitle")?
+                    projectJsonObject.getString("subtitle"):"";
             this.description = projectJsonObject.has("description") && !projectJsonObject.isNull("description")?
                     projectJsonObject.getString("description"):"-";
             this.imageUrl = projectJsonObject.has("image")?
@@ -140,5 +145,29 @@ public class Product {
 
     public void setSalePrice(String salePrice) {
         this.salePrice = salePrice;
+    }
+
+    public String getSubtitle() {
+        return subtitle;
+    }
+
+    public void setSubtitle(String subTitle) {
+        this.subtitle = subTitle;
+    }
+
+    public int getOfferCount() {
+        return offerCount;
+    }
+
+    public void setOfferCount(int offerCount) {
+        this.offerCount = offerCount;
+    }
+
+    public String getOfferDesc() {
+        return offerDesc;
+    }
+
+    public void setOfferDesc(String offerDesc) {
+        this.offerDesc = offerDesc;
     }
 }

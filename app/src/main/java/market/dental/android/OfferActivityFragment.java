@@ -75,9 +75,6 @@ public class OfferActivityFragment extends Fragment {
                 public void onResponse(String responseString) {
 
                     try {
-                        //Log.i("DENEMEE " , Resource.VALUE_API_TOKEN);
-                        //Log.i("DENEMEE " , responseString);
-
                         JSONObject response = new JSONObject(responseString);
                         if(Result.SUCCESS.checkResult(new Result(response))){
 
