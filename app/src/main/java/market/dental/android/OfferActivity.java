@@ -1,5 +1,6 @@
 package market.dental.android;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -30,6 +31,7 @@ public class OfferActivity extends BaseActivity implements OfferAddFragment.OnFr
                 FragmentManager fragmentManager = getSupportFragmentManager();
                 fragmentManager.beginTransaction()
                         .replace(R.id.offer_fragment_main, offerAddFragment)
+                        .addToBackStack( null )
                         .commit();
             }
         });

@@ -70,15 +70,16 @@ public class OfferProductAddedListAdapter extends ArrayAdapter {
                     .error(R.mipmap.ic_launcher)
                     .resize(120, 100)
                     .into(holder.pImageButton);
-/*
-            holder.pImageButton.setOnClickListener(new View.OnClickListener() {
+
+            holder.pRemoveButton = view.findViewById(R.id.adapter_item_remove_product);
+            holder.pRemoveButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    // burada kaçıncı child olduğu alınır
-                    Log.i("DENEMEME" , "POSITION " + position);
+                    addedProductList.remove(position);
+                    notifyDataSetChanged();
                 }
             });
-*/
+
             view.setTag(holder);
 
         } else {
@@ -91,6 +92,7 @@ public class OfferProductAddedListAdapter extends ArrayAdapter {
         TextView pName;
         TextView pSubtitle;
         ImageButton pImageButton;
+        ImageView pRemoveButton;
     }
 
 
