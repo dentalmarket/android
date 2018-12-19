@@ -46,6 +46,7 @@ public class OfferProductAddActivity extends AppCompatActivity {
     private boolean isLoading = false;
     private AutoCompleteTextView acTextView;
     private Product selectedProduct=null;
+    private String prevSearchKey = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,7 +72,11 @@ public class OfferProductAddActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                getProductsAutoCompleteList(-1);
+
+                // 3 harften küçük kelimeler için arama yapılamaz
+                if(s.toString().length()>=3 && !prevSearchKey.contains(s.toString()))
+                    getProductsAutoCompleteList(-1);
+
             }
         });
 
@@ -118,6 +123,7 @@ public class OfferProductAddActivity extends AppCompatActivity {
 
                             if(response.getJSONArray("content").length()>0){
 
+                                productAutoCompListAdapter.clearProductList();
                                 productAutoCompListAdapter.addProductList(Product.ProductList(response.getJSONArray("content")));
                                 acTextView.setAdapter(productAutoCompListAdapter);
                                 acTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -175,7 +181,8 @@ public class OfferProductAddActivity extends AppCompatActivity {
                     Map<String, String> params = new HashMap<>();
                     params.put(Resource.KEY_API_TOKEN, Resource.VALUE_API_TOKEN);
                     params.put("page", String.valueOf(page));
-                    params.put("word", "por");
+                    params.put("word", acTextView.getText().toString());
+                    prevSearchKey = acTextView.getText().toString();
                     return params;
                 }
                 @Override
