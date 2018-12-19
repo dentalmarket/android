@@ -132,6 +132,10 @@
         <activity
             android:name=".OfferProductAddActivity"
             android:label="@string/title_activity_offer_product_add"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".OfferCreateActivity"
+            android:label="@string/title_activity_offer_create"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
