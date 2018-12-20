@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -43,7 +44,8 @@ public class OfferActivityFragment extends Fragment {
     private boolean isLastPage;
     private boolean isLoading = false;
     private View fragmentView;
-    public static final int OFFER_REQUEST_UPDATE = 1111;
+    private static final int OFFER_REQUEST_UPDATE = 1111;
+    private static final int OFFER_REQUEST_CREATE = 1101;
 
     public OfferActivityFragment() {
     }
@@ -59,6 +61,15 @@ public class OfferActivityFragment extends Fragment {
         getOfferList(-1);
 
         fragmentView = inflater.inflate(R.layout.fragment_offer, container, false);
+
+        Button createNewOffer = fragmentView.findViewById(R.id.new_offer_create_button);
+        createNewOffer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity().getApplicationContext(),OfferCreateActivity.class);
+                startActivityForResult(intent , OFFER_REQUEST_CREATE);
+            }
+        });
 
         return fragmentView;
     }
@@ -99,6 +110,27 @@ public class OfferActivityFragment extends Fragment {
                         Crashlytics.log(Log.INFO ,Result.LOG_TAG_ERROR.getResultText(), this.getClass().getName() );
                     }
 
+                }
+                break;
+            }
+
+            case (OFFER_REQUEST_CREATE) : {
+                if (resultCode == Activity.RESULT_OK) {
+                    try{
+                        Offer newOfferRequest = new Offer(data.getStringExtra("OFFER_REQUEST_CREATE_JSON_STR"));
+                        offerListAdapter.addOffer(newOfferRequest);
+
+                        ListView listView = fragmentView.findViewById(R.id.offer_list_main);
+                        if(listView.getAdapter()==null)
+                            listView.setAdapter(offerListAdapter);
+                        else{
+                            offerListAdapter.notifyDataSetChanged();
+                        }
+
+                    }catch (Exception e){
+                        e.printStackTrace();
+                        Crashlytics.log(Log.INFO ,Result.LOG_TAG_ERROR.getResultText(), this.getClass().getName() );
+                    }
                 }
                 break;
             }

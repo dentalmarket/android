@@ -25,6 +25,7 @@ public class Resource {
     public static String ajax_get_my_offer_requests = "https://dental.market/api/get/myOfferRequests";
     public static String ajax_get_offer_request = "https://dental.market/api/get/offerRequest";
     public static String ajax_set_offer_request_with_id = "https://dental.market/api/set/offerRequestWithId";
+    public static String ajax_set_offer_request = "https://dental.market/api/set/offerRequest";
     public static String ajax_get_productsautocomplete = "https://dental.market/api/get/productsAutoComplete";
     public static String ajax_get_professions = "https://dental.market/api/get/jobs";
     public static String ajax_get_city_list = "https://dental.market/api/get/cities";

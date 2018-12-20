@@ -101,7 +101,7 @@ public class OfferCreateActivity extends BaseActivity {
                 if(offerId!=-1){
                     setOfferRequest(""+offerId);
                 }else{
-                    Toast.makeText(getApplicationContext(), "EKLEME işlemi şuan çalışmamaktadır" , Toast.LENGTH_LONG).show();
+                    addOfferRequest();
                 }
             }
         });
@@ -238,7 +238,7 @@ public class OfferCreateActivity extends BaseActivity {
 
                     } catch (Exception e) {
                         e.printStackTrace();
-                        Crashlytics.log(Log.INFO ,Result.LOG_TAG_INFO.getResultText(), Resource.ajax_get_productsautocomplete );
+                        Crashlytics.log(Log.INFO ,Result.LOG_TAG_INFO.getResultText(), Resource.ajax_set_offer_request_with_id );
                     } finally {
                         isLoading = false;
                     }
@@ -259,6 +259,83 @@ public class OfferCreateActivity extends BaseActivity {
                     params.put("requestId", offerId);
                     params.put("requestName", ((EditText)findViewById(R.id.fragment_offer_add_title_name)).getText().toString());
                     params.put("isActive", ((Switch)findViewById(R.id.is_offer_active)).isChecked() ? "true" : "false");
+
+                    int i=0;
+                    for(OfferProduct offerProduct : addedProductListAdapter.getAddedProductList()){
+                        params.put("productId["+i+"]", ""+offerProduct.getProductId());
+                        params.put("productTitle["+i+"]", offerProduct.getProductTitle());
+                        params.put("unit["+i+"]", ""+offerProduct.getUnit());
+                        params.put("description["+i+"]", offerProduct.getDescription());
+                        i++;
+                    }
+
+                    return params;
+                }
+
+
+                @Override
+                public Map<String, String> getHeaders() {
+                    Map<String,String> params = new HashMap<String, String>();
+                    params.put("Content-Type","application/x-www-form-urlencoded");
+                    return params;
+                }
+            };
+            stringRequest.setTag(this.getClass().getName());
+            requestQueue.add(stringRequest);
+        }
+
+    }
+
+    private void addOfferRequest(){
+
+        // *****************************************************************************************
+        //                        ADD OFFER REQUEST
+        // *****************************************************************************************
+        if(!isLoading && !isLastPage){
+            isLoading = true;
+            stringRequest = new StringRequest(Request.Method.POST,
+                    Resource.ajax_set_offer_request, new Response.Listener<String>() {
+
+                @Override
+                public void onResponse(String responseString) {
+                    try {
+                        JSONObject response = new JSONObject(responseString);
+                        if(Result.SUCCESS.checkResult(new Result(response))){
+                            Intent resultIntent = new Intent();
+                            resultIntent.putExtra("OFFER_REQUEST_CREATE_JSON_STR", response.getJSONObject("content").toString());
+                            setResult(Activity.RESULT_OK, resultIntent);
+                            finish();
+                        }else if(Result.FAILURE_TOKEN.checkResult(new Result(response))){
+                            Resource.setDefaultAPITOKEN();
+                            Intent intent = new Intent(getApplicationContext() , LoginActivity.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            startActivity(intent);
+                        } else {
+                            Toast.makeText(getApplicationContext(), getString(R.string.unexpected_case_error) , Toast.LENGTH_LONG).show();
+                            Crashlytics.log(Log.INFO , Result.LOG_TAG_INFO.getResultText() , this.getClass().getName() + " >> " + Resource.ajax_set_offer_request + " >> responseString = " + responseString);
+                        }
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        Crashlytics.log(Log.INFO ,Result.LOG_TAG_INFO.getResultText(), Resource.ajax_set_offer_request );
+                    } finally {
+                        isLoading = false;
+                    }
+                }
+
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    error.printStackTrace();
+                    Crashlytics.log(Log.ERROR , Result.LOG_TAG_INFO.getResultText() , this.getClass().getName() + " >> " + "onErrorResponse");
+                    isLoading = false;
+                }
+            }){
+                @Override
+                protected Map<String, String> getParams()  {
+                    Map<String, String> params = new HashMap<>();
+                    params.put(Resource.KEY_API_TOKEN, Resource.VALUE_API_TOKEN);
+                    params.put("requestName", ((EditText)findViewById(R.id.fragment_offer_add_title_name)).getText().toString());
 
                     int i=0;
                     for(OfferProduct offerProduct : addedProductListAdapter.getAddedProductList()){

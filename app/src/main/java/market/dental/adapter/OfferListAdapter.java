@@ -42,6 +42,9 @@ public class OfferListAdapter extends ArrayAdapter {
     public void addOfferList(List<Offer> offerList){
         this.offerList.addAll(offerList);
     }
+    public void addOffer(Offer offer){
+        this.offerList.add(offer);
+    }
     public void setCurrentPage(int currentPage) {
         this.currentPage = currentPage;
     }
