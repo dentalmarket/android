@@ -44,6 +44,10 @@ public class OfferProductAddedListAdapter extends ArrayAdapter {
         this.addedProductList.clear();
     }
 
+    public List<OfferProduct> getAddedProductList(){
+        return this.addedProductList;
+    }
+
     @Override
     public int getCount(){
         return addedProductList.size();

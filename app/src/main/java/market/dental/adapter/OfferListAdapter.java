@@ -36,13 +36,15 @@ public class OfferListAdapter extends ArrayAdapter {
         this.offerList = new ArrayList<>();
     }
 
+    public List<Offer> getOfferList(){
+        return this.offerList;
+    }
     public void addOfferList(List<Offer> offerList){
         this.offerList.addAll(offerList);
     }
     public void setCurrentPage(int currentPage) {
         this.currentPage = currentPage;
     }
-
     public void clearOfferList(){
         this.offerList.clear();
         this.currentPage = 0;

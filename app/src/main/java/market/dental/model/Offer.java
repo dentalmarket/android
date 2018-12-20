@@ -7,12 +7,6 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-import market.dental.util.Resource;
-
-/**
- * Created by kemalsamikaraca on 12.12.2018.
- */
-
 public class Offer {
 
     private int id;
@@ -20,8 +14,6 @@ public class Offer {
     private int numberOfOffers;
     private boolean isActive;
     private int userId;
-
-    public Offer (){}
 
     public Offer(JSONObject projectJsonObject){
         try {
@@ -42,9 +34,11 @@ public class Offer {
         }
     }
 
+    public Offer(String jsonString) throws JSONException {
+        this(new JSONObject(jsonString) );
+    }
 
     public static List<Offer> offerList(JSONArray projectJsonArray){
-
         List<Offer> offerList = new ArrayList<Offer>();
         for(int i=0; i<projectJsonArray.length(); i++){
             try {

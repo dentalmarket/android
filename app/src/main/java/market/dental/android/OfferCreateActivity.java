@@ -37,6 +37,7 @@ import java.util.Map;
 
 import market.dental.adapter.OfferProductAddedListAdapter;
 import market.dental.model.Category;
+import market.dental.model.Offer;
 import market.dental.model.OfferProduct;
 import market.dental.model.Product;
 import market.dental.util.Resource;
@@ -51,6 +52,8 @@ public class OfferCreateActivity extends BaseActivity {
     private StringRequest stringRequest;
     private boolean isLastPage;
     private boolean isLoading = false;
+    private int offerId = -1;
+    private int offerPositionInPrevActivity = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,9 +68,9 @@ public class OfferCreateActivity extends BaseActivity {
         Intent intent = getIntent();
 
         // Get bundle info if exist
-        int offerId = intent.getIntExtra("offerId" , -1);
+        offerId = intent.getIntExtra("offerId" , -1);
+        offerPositionInPrevActivity = intent.getIntExtra("offer_list_position",-1);
         if(offerId!=-1){
-
             getOfferRequest(""+offerId);
 
             Switch isActive = findViewById(R.id.is_offer_active);
@@ -78,7 +81,6 @@ public class OfferCreateActivity extends BaseActivity {
 
             Button offerUpdateButton = findViewById(R.id.offer_update_btn);
             offerUpdateButton.setText("Düzenle");
-
         }
 
         // ACTION LISTENER
@@ -88,6 +90,19 @@ public class OfferCreateActivity extends BaseActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(),OfferProductAddActivity.class);
                 startActivityForResult(intent , PRODUCT_ADD_FOR_OFFER);
+            }
+        });
+
+        // ACTION LISTENER
+        Button offerRequestMain = findViewById(R.id.offer_update_btn);
+        offerRequestMain.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(offerId!=-1){
+                    setOfferRequest(""+offerId);
+                }else{
+                    Toast.makeText(getApplicationContext(), "EKLEME işlemi şuan çalışmamaktadır" , Toast.LENGTH_LONG).show();
+                }
             }
         });
     }
@@ -108,7 +123,6 @@ public class OfferCreateActivity extends BaseActivity {
                     }else{
                         addedProductListAdapter.notifyDataSetChanged();
                     }
-
                 }
                 break;
             }
@@ -119,7 +133,7 @@ public class OfferCreateActivity extends BaseActivity {
     private void getOfferRequest(final String offerId){
 
         // *****************************************************************************************
-        //                        GET PRODUCTS LIST
+        //                        GET OFFER REQUEST
         // *****************************************************************************************
         if(!isLoading && !isLastPage){
             isLoading = true;
@@ -178,6 +192,87 @@ public class OfferCreateActivity extends BaseActivity {
                     params.put("id", offerId);
                     return params;
                 }
+                @Override
+                public Map<String, String> getHeaders() {
+                    Map<String,String> params = new HashMap<String, String>();
+                    params.put("Content-Type","application/x-www-form-urlencoded");
+                    return params;
+                }
+            };
+            stringRequest.setTag(this.getClass().getName());
+            requestQueue.add(stringRequest);
+        }
+
+    }
+
+
+    private void setOfferRequest(final String offerId){
+
+        // *****************************************************************************************
+        //                        SET OFFER REQUEST
+        // *****************************************************************************************
+        if(!isLoading && !isLastPage){
+            isLoading = true;
+            stringRequest = new StringRequest(Request.Method.POST,
+                    Resource.ajax_set_offer_request_with_id, new Response.Listener<String>() {
+
+                @Override
+                public void onResponse(String responseString) {
+                    try {
+                        JSONObject response = new JSONObject(responseString);
+                        if(Result.SUCCESS.checkResult(new Result(response))){
+                            Intent resultIntent = new Intent();
+                            resultIntent.putExtra("OFFER_REQUEST_UPDATE_JSON_STR", response.getJSONObject("content").toString());
+                            resultIntent.putExtra("OFFER_REQUEST_POSITION", offerPositionInPrevActivity);
+                            setResult(Activity.RESULT_OK, resultIntent);
+                            finish();
+                        }else if(Result.FAILURE_TOKEN.checkResult(new Result(response))){
+                            Resource.setDefaultAPITOKEN();
+                            Intent intent = new Intent(getApplicationContext() , LoginActivity.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            startActivity(intent);
+                        } else {
+                            Toast.makeText(getApplicationContext(), getString(R.string.unexpected_case_error) , Toast.LENGTH_LONG).show();
+                            Crashlytics.log(Log.INFO , Result.LOG_TAG_INFO.getResultText() , this.getClass().getName() + " >> " + Resource.ajax_set_offer_request_with_id + " >> responseString = " + responseString);
+                        }
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        Crashlytics.log(Log.INFO ,Result.LOG_TAG_INFO.getResultText(), Resource.ajax_get_productsautocomplete );
+                    } finally {
+                        isLoading = false;
+                    }
+                }
+
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    error.printStackTrace();
+                    Crashlytics.log(Log.ERROR , Result.LOG_TAG_INFO.getResultText() , this.getClass().getName() + " >> " + "onErrorResponse");
+                    isLoading = false;
+                }
+            }){
+                @Override
+                protected Map<String, String> getParams()  {
+                    Map<String, String> params = new HashMap<>();
+                    params.put(Resource.KEY_API_TOKEN, Resource.VALUE_API_TOKEN);
+                    params.put("requestId", offerId);
+                    params.put("requestName", ((EditText)findViewById(R.id.fragment_offer_add_title_name)).getText().toString());
+                    params.put("isActive", ((Switch)findViewById(R.id.is_offer_active)).isChecked() ? "true" : "false");
+
+                    int i=0;
+                    for(OfferProduct offerProduct : addedProductListAdapter.getAddedProductList()){
+                        params.put("productId["+i+"]", ""+offerProduct.getProductId());
+                        params.put("productTitle["+i+"]", offerProduct.getProductTitle());
+                        params.put("unit["+i+"]", ""+offerProduct.getUnit());
+                        params.put("description["+i+"]", offerProduct.getDescription());
+                        i++;
+                    }
+
+                    return params;
+                }
+
+
                 @Override
                 public Map<String, String> getHeaders() {
                     Map<String,String> params = new HashMap<String, String>();

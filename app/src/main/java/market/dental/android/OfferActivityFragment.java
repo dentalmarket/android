@@ -1,5 +1,6 @@
 package market.dental.android;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
@@ -18,6 +19,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.crashlytics.android.Crashlytics;
+import com.google.gson.Gson;
 
 import org.json.JSONObject;
 
@@ -41,6 +43,7 @@ public class OfferActivityFragment extends Fragment {
     private boolean isLastPage;
     private boolean isLoading = false;
     private View fragmentView;
+    public static final int OFFER_REQUEST_UPDATE = 1111;
 
     public OfferActivityFragment() {
     }
@@ -58,6 +61,48 @@ public class OfferActivityFragment extends Fragment {
         fragmentView = inflater.inflate(R.layout.fragment_offer, container, false);
 
         return fragmentView;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch(requestCode) {
+            case (OFFER_REQUEST_UPDATE) : {
+                if (resultCode == Activity.RESULT_OK) {
+
+                    try{
+                        int position = data.getIntExtra("OFFER_REQUEST_POSITION", -1);
+                        Offer updatedOffer = new Offer(data.getStringExtra("OFFER_REQUEST_UPDATE_JSON_STR"));
+                        if(position!=-1){
+                            Offer offerInAdapter = offerListAdapter.getOfferList().get(position);
+                            offerInAdapter.setActive(updatedOffer.isActive());
+                            offerInAdapter.setName(updatedOffer.getName());
+                        }else{
+                            // Eğer position bir yerlerde kaybolursa
+                            for(Offer offerInAdapter: offerListAdapter.getOfferList()){
+                                if(offerInAdapter.getId() == updatedOffer.getId()){
+                                    offerInAdapter.setActive(updatedOffer.isActive());
+                                    offerInAdapter.setName(updatedOffer.getName());
+                                }
+                            }
+                        }
+
+                        ListView listView = fragmentView.findViewById(R.id.offer_list_main);
+                        if(listView.getAdapter()==null)
+                            listView.setAdapter(offerListAdapter);
+                        else{
+                            offerListAdapter.notifyDataSetChanged();
+                        }
+
+                    }catch (Exception e){
+                        e.printStackTrace();
+                        Crashlytics.log(Log.INFO ,Result.LOG_TAG_ERROR.getResultText(), this.getClass().getName() );
+                    }
+
+                }
+                break;
+            }
+        }
     }
 
 
@@ -99,9 +144,10 @@ public class OfferActivityFragment extends Fragment {
                                         bundle.putInt("offerId", sOffer.getId());
                                         bundle.putBoolean("isOfferAcvite", sOffer.isActive());
                                         bundle.putString("offerName" , sOffer.getName() );
+                                        bundle.putInt("offer_list_position" , position );
                                         Intent intent = new Intent(view.getContext(),OfferCreateActivity.class);
                                         intent.putExtras(bundle);
-                                        view.getContext().startActivity(intent);
+                                        startActivityForResult(intent, OFFER_REQUEST_UPDATE);
                                     }
                                 });
 
