@@ -18,12 +18,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import market.dental.android.R;
+import market.dental.model.OfferProduct;
 import market.dental.model.Product;
 
 public class OfferProductAddedListAdapter extends ArrayAdapter {
 
     private Context context;
-    private List<Product> addedProductList;
+    private List<OfferProduct> addedProductList;
 
     public OfferProductAddedListAdapter(@NonNull Context context) {
         super(context, R.layout.adapter_item_offer_list_search);
@@ -31,15 +32,15 @@ public class OfferProductAddedListAdapter extends ArrayAdapter {
         this.addedProductList = new ArrayList<>();
     }
 
-    public void addProductList(List<Product> productList){
+    public void addProductList(List<OfferProduct> productList){
         this.addedProductList.addAll(productList);
     }
 
-    public void addProduct(Product product){
-        this.addedProductList.add(product);
+    public void addProduct(OfferProduct oProduct){
+        this.addedProductList.add(oProduct);
     }
 
-    public void clearProductList(){
+    public void clearList(){
         this.addedProductList.clear();
     }
 
@@ -61,7 +62,7 @@ public class OfferProductAddedListAdapter extends ArrayAdapter {
             view = LayoutInflater.from(getContext()).inflate(R.layout.adapter_item_offer_added_product_list, viewgroup, false);
             holder = new AddedProductListForOfferViewHolder();
             holder.pName = view.findViewById(R.id.offer_added_product_name);
-            holder.pName.setText(addedProductList.get(position).getName());
+            holder.pName.setText(addedProductList.get(position).getProductTitle());
 
             holder.pImageButton = (ImageButton)view.findViewById(R.id.activity_product_list_item_image);
             Picasso.with(context)

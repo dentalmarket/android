@@ -94,15 +94,14 @@ public class OfferActivityFragment extends Fragment {
                                 listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                                     @Override
                                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                                        /*
-                                            int productId = ((Offer) parent.getItemAtPosition(position)).getId();
-                                            Bundle bundle = new Bundle();
-                                            bundle.putInt(Resource.KEY_PRODUCT_ID, productId);
-                                            Intent intent = new Intent(view.getContext(),ProductDetailActivity.class);
-                                            intent.putExtras(bundle);
-                                            view.getContext().startActivity(intent);
-                                        */
-                                        Log.i("DENEME" , "" + ((Offer)parent.getItemAtPosition(position)).getId() + " clicked");
+                                        Offer sOffer = ((Offer) parent.getItemAtPosition(position));
+                                        Bundle bundle = new Bundle();
+                                        bundle.putInt("offerId", sOffer.getId());
+                                        bundle.putBoolean("isOfferAcvite", sOffer.isActive());
+                                        bundle.putString("offerName" , sOffer.getName() );
+                                        Intent intent = new Intent(view.getContext(),OfferCreateActivity.class);
+                                        intent.putExtras(bundle);
+                                        view.getContext().startActivity(intent);
                                     }
                                 });
 

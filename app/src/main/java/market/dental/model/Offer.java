@@ -19,6 +19,7 @@ public class Offer {
     private String name;
     private int numberOfOffers;
     private boolean isActive;
+    private int userId;
 
     public Offer (){}
 
@@ -32,6 +33,8 @@ public class Offer {
                     projectJsonObject.getInt("number_of_offers") : 0 ;
             this.isActive = projectJsonObject.has("is_active")?
                     projectJsonObject.getInt("is_active")==1 : false ;
+            this.userId = projectJsonObject.has("user_id")?
+                    projectJsonObject.getInt("user_id") : -1 ;
         } catch (JSONException e) {
             e.printStackTrace();
         } catch (Exception e){
@@ -85,5 +88,13 @@ public class Offer {
 
     public void setActive(boolean active) {
         isActive = active;
+    }
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 }

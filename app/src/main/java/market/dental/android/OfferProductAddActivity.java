@@ -33,6 +33,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import market.dental.adapter.OfferSearchProductListAdapter;
+import market.dental.model.OfferProduct;
 import market.dental.model.Product;
 import market.dental.util.Resource;
 import market.dental.util.Result;
@@ -65,18 +66,18 @@ public class OfferProductAddActivity extends AppCompatActivity {
         acTextView.setThreshold(1);
         acTextView.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                prevSearchKey = s.toString();
+            }
 
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
 
             @Override
             public void afterTextChanged(Editable s) {
-
-                // 3 harften küçük kelimeler için arama yapılamaz
-                if(s.toString().length()>=3 && !prevSearchKey.contains(s.toString()))
-                    getProductsAutoCompleteList(-1);
-
+                getProductsAutoCompleteList(-1);
             }
         });
 
@@ -91,9 +92,12 @@ public class OfferProductAddActivity extends AppCompatActivity {
                 Intent resultIntent = new Intent();
                 if(selectedProduct!=null){
                     Gson gson = new Gson();
-                    selectedProduct.setOfferCount(Integer.parseInt(((EditText)findViewById(R.id.selected_product_count_for_offer)).getText().toString()));
-                    selectedProduct.setOfferDesc(((EditText)findViewById(R.id.selected_product_desc_for_offer)).getText().toString());
-                    resultIntent.putExtra("PRODUCT_GSON_STRING", gson.toJson(selectedProduct));
+                    OfferProduct selectedOfferProduct = new OfferProduct();
+                    selectedOfferProduct.setImageUrl(selectedProduct.getImageUrl());
+                    selectedOfferProduct.setProductTitle(selectedProduct.getName());
+                    selectedOfferProduct.setDescription(((EditText)findViewById(R.id.selected_product_desc_for_offer)).getText().toString());
+                    selectedOfferProduct.setUnit(Integer.parseInt(((EditText)findViewById(R.id.selected_product_count_for_offer)).getText().toString()));
+                    resultIntent.putExtra("OFFERPRODUCT_GSON_STRING", gson.toJson(selectedOfferProduct));
                     setResult(Activity.RESULT_OK, resultIntent);
                 }
                 finish();
@@ -182,7 +186,6 @@ public class OfferProductAddActivity extends AppCompatActivity {
                     params.put(Resource.KEY_API_TOKEN, Resource.VALUE_API_TOKEN);
                     params.put("page", String.valueOf(page));
                     params.put("word", acTextView.getText().toString());
-                    prevSearchKey = acTextView.getText().toString();
                     return params;
                 }
                 @Override

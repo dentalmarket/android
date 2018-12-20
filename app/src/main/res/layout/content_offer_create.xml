@@ -23,23 +23,63 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:focusableInTouchMode="true">
 
                 <TextView
                     android:id="@+id/fragment_offer_add_title"
                     style="@style/DentalMarket.EditTextView"
-                    android:text="Teklif İsmi"/>
+                    android:text="Teklif Bilgileri"/>
 
-                <EditText
-                    android:id="@+id/fragment_offer_add_title_name"
-                    style="@style/DentalMarket.EditText"
-                    android:hint="Teklif İçin İsim Giriniz" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:paddingLeft="16dp"
+                        android:layout_width="@dimen/activity_profile_text_width"
+                        android:layout_height="@dimen/activity_profile_text_height"
+                        android:gravity="center_vertical"
+                        android:layout_marginTop="10dp"
+                        android:text="Teklif İsmi" />
+
+                    <EditText
+                        android:id="@+id/fragment_offer_add_title_name"
+                        style="@style/DentalMarket.EditText"
+                        android:hint="Teklif İsimini Giriniz" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:paddingLeft="16dp"
+                        android:layout_width="@dimen/activity_profile_text_width"
+                        android:layout_height="@dimen/activity_profile_text_height"
+                        android:layout_marginTop="10dp"
+                        android:gravity="center_vertical"
+                        android:text="Aktif İlan" />
+
+                    <Switch
+                        android:id="@+id/is_offer_active"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginTop="10dp"
+                        android:gravity="center"/>
+
+                </LinearLayout>
 
                 <Button
                     android:id="@+id/open_offer_add_product_activity"
-                    android:layout_width="56dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
                     android:layout_gravity="center"
                     android:background="@drawable/dental_icon_add_circle_24dp" />
 
@@ -59,7 +99,7 @@
             android:layout_height="wrap_content">
         </ListView>
 
-        <Button android:id="@+id/activity_profile_save_btn"
+        <Button android:id="@+id/offer_update_btn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
