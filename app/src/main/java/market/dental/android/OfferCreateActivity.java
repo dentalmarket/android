@@ -3,20 +3,14 @@ package market.dental.android;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Switch;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -27,19 +21,13 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.crashlytics.android.Crashlytics;
 import com.google.gson.Gson;
-import com.squareup.picasso.Picasso;
 
 import org.json.JSONObject;
-
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import market.dental.adapter.OfferProductAddedListAdapter;
-import market.dental.model.Category;
-import market.dental.model.Offer;
 import market.dental.model.OfferProduct;
-import market.dental.model.Product;
 import market.dental.util.Resource;
 import market.dental.util.Result;
 
@@ -59,8 +47,7 @@ public class OfferCreateActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_offer_create);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         // Initialization
         requestQueue = Volley.newRequestQueue(this);
@@ -105,6 +92,16 @@ public class OfferCreateActivity extends BaseActivity {
                 }
             }
         });
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        switch (id){
+            case android.R.id.home:
+                finish();
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -258,7 +255,7 @@ public class OfferCreateActivity extends BaseActivity {
                     params.put(Resource.KEY_API_TOKEN, Resource.VALUE_API_TOKEN);
                     params.put("requestId", offerId);
                     params.put("requestName", ((EditText)findViewById(R.id.fragment_offer_add_title_name)).getText().toString());
-                    params.put("isActive", ((Switch)findViewById(R.id.is_offer_active)).isChecked() ? "true" : "false");
+                    params.put("isActive", ((Switch)findViewById(R.id.is_offer_active)).isChecked() ? "1" : "0");
 
                     int i=0;
                     for(OfferProduct offerProduct : addedProductListAdapter.getAddedProductList()){

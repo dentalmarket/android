@@ -8,6 +8,7 @@ import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
@@ -53,9 +54,7 @@ public class OfferProductAddActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_offer_product_add);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         // Initialization
         requestQueue = Volley.newRequestQueue(this);
@@ -81,10 +80,7 @@ public class OfferProductAddActivity extends AppCompatActivity {
             }
         });
 
-
-        // Ürün Ekle butonu sonrası aşağıdaki işlemler yapılır
-        // Product değeri bir önceki activity'e pass edilir
-
+        // Action Listener
         Button b = findViewById(R.id.offer_add_product_button);
         b.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -106,6 +102,15 @@ public class OfferProductAddActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        switch (id){
+            case android.R.id.home:
+                finish();
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
     private void getProductsAutoCompleteList(final int page){
 

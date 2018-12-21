@@ -65,6 +65,15 @@
             android:name=".ProductAddActivity"
             android:label="@string/title_activity_product_add" />
         <activity
+            android:name=".OfferActivity"
+            android:label="@string/title_activity_offer"/>
+        <activity
+            android:name=".OfferCreateActivity"
+            android:label="@string/title_activity_offer_create"/>
+        <activity
+            android:name=".OfferProductAddActivity"
+            android:label="@string/title_activity_offer_product_add"/>
+        <activity
             android:name=".ConversationListActivity"
             android:label="@string/title_activity_conversation_list"
             android:launchMode="singleTask"
@@ -125,18 +134,6 @@
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_fullscreen_image"
             android:theme="@style/FullscreenTheme" />
-        <activity
-            android:name=".OfferActivity"
-            android:label="@string/title_activity_offer"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".OfferProductAddActivity"
-            android:label="@string/title_activity_offer_product_add"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".OfferCreateActivity"
-            android:label="@string/title_activity_offer_create"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

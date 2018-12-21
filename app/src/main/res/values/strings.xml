@@ -113,6 +113,9 @@
     <string name="title_activity_main">Anasayfa</string>
     <string name="title_activity_product_add">Yeni Ürün</string>
     <string name="title_activity_fullscreen_image">FullscreenImageActivity</string>
+    <string name="title_activity_offer">Teklif İsteklerim</string>
+    <string name="title_activity_offer_create">Teklif İsteği Oluşturma</string>
+    <string name="title_activity_offer_product_add">Teklif İsteği Ürün Ekleme</string>
 
     <!-- GOOGLE FIREBASE -->
     <string name="msg_subscribed">Subscribed to news topic</string>
@@ -122,11 +125,8 @@
 
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
-    <string name="title_activity_offer">OfferActivity</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="title_activity_offer_product_add">OfferProductAddActivity</string>
-    <string name="title_activity_offer_create">OfferCreateActivity</string>
 
 </resources>
