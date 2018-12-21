@@ -4,6 +4,9 @@ import android.app.Application;
 import android.content.Context;
 import android.content.res.Resources;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import market.dental.android.R;
 
 /**

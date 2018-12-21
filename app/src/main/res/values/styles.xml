@@ -1,5 +1,7 @@
 <resources>
 
+
+
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
@@ -26,6 +28,19 @@
         <item name="colorAccent">@color/dental_market_text_title</item>
     </style>
 
+    <!-- ALERTDIALOG BUTTON COLORS  -->
+    <style name="DentalMarket.AlertDialogTheme" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="buttonBarNegativeButtonStyle">@style/DentalMarket.NegativeButtonStyle</item>
+        <item name="buttonBarPositiveButtonStyle">@style/DentalMarket.PositiveButtonStyle</item>
+    </style>
+
+    <style name="DentalMarket.NegativeButtonStyle" parent="Widget.AppCompat.Button.ButtonBar.AlertDialog">
+        <item name="android:textColor">@color/dental_market_main</item>
+    </style>
+
+    <style name="DentalMarket.PositiveButtonStyle" parent="Widget.AppCompat.Button.ButtonBar.AlertDialog">
+        <item name="android:textColor">@color/dental_market_main</item>
+    </style>
 
     <style name="DentalMarket.Profile.InputField" parent="@android:style/TextAppearance.Small">
         <item name="android:layout_width">wrap_content</item>
@@ -71,10 +86,10 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_marginTop">10dp</item>
         <item name="android:layout_marginBottom">10dp</item>
-        <item name="android:paddingBottom">10dp</item>
-        <item name="android:paddingTop">10dp</item>
         <item name="android:layout_marginLeft">20dp</item>
         <item name="android:layout_marginRight">20dp</item>
+        <item name="android:paddingBottom">10dp</item>
+        <item name="android:paddingTop">10dp</item>
         <item name="android:textSize">14dp</item>
         <item name="android:textCursorDrawable">@null</item>
         <item name="android:background">@drawable/edit_text_register</item>

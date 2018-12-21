@@ -1,10 +1,13 @@
 package market.dental.android;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -27,12 +30,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 import market.dental.adapter.OfferProductAddedListAdapter;
+import market.dental.dialog.OfferDialog;
 import market.dental.model.OfferProduct;
 import market.dental.model.User;
 import market.dental.util.Resource;
 import market.dental.util.Result;
 
-public class OfferCreateActivity extends BaseActivity {
+public class OfferCreateActivity extends BaseActivity implements OfferDialog.OfferDialogListener {
 
     private OfferProductAddedListAdapter addedProductListAdapter;
 
@@ -73,7 +77,7 @@ public class OfferCreateActivity extends BaseActivity {
                 if(offerRequestType==1) {
                     setOfferRequest("" + offerId);
                 }else if(offerRequestType==2){
-                    Toast.makeText(getApplicationContext(), "Teklif verme pop up açılacak" , Toast.LENGTH_LONG).show();
+                    openOfferDialog();
                 }else{
                     addOfferRequest();
                 }
@@ -144,6 +148,17 @@ public class OfferCreateActivity extends BaseActivity {
                 break;
             }
         }
+    }
+
+    @Override
+    public void applyOfferDialogValues(String desc, int price, int currency) {
+        Log.i("DENEME" , desc + "-" + price + "-" + currency);
+        Toast.makeText(getApplicationContext(), desc + "-" + price + " teklif servisi çağırılacak"  , Toast.LENGTH_LONG).show();
+    }
+
+    private void openOfferDialog(){
+        OfferDialog offerDialog = new OfferDialog();
+        offerDialog.show(getSupportFragmentManager(), "offer dialog");
     }
 
 
