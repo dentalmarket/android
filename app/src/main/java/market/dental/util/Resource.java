@@ -23,6 +23,7 @@ public class Resource {
     public static String ajax_get_product_by_search_key = "https://dental.market/api/get/searchProducts";
     public static String ajax_get_products_by_user_history = "https://dental.market/api/get/userHistory";
     public static String ajax_get_my_offer_requests = "https://dental.market/api/get/myOfferRequests";
+    public static String ajax_get_offer_request_list = "https://dental.market/api/get/offerRequests";
     public static String ajax_get_offer_request = "https://dental.market/api/get/offerRequest";
     public static String ajax_set_offer_request_with_id = "https://dental.market/api/set/offerRequestWithId";
     public static String ajax_set_offer_request = "https://dental.market/api/set/offerRequest";

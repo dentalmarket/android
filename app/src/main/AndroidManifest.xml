@@ -66,13 +66,16 @@
             android:label="@string/title_activity_product_add" />
         <activity
             android:name=".OfferActivity"
-            android:label="@string/title_activity_offer"/>
+            android:label="@string/title_activity_offer" />
         <activity
             android:name=".OfferCreateActivity"
-            android:label="@string/title_activity_offer_create"/>
+            android:label="@string/title_activity_offer_create" />
         <activity
             android:name=".OfferProductAddActivity"
-            android:label="@string/title_activity_offer_product_add"/>
+            android:label="@string/title_activity_offer_product_add" />
+        <activity
+            android:name=".OfferRequestListActivity"
+            android:label="@string/title_activity_offer_request_list"/>
         <activity
             android:name=".ConversationListActivity"
             android:label="@string/title_activity_conversation_list"

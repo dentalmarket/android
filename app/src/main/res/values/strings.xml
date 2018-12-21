@@ -76,6 +76,7 @@
     <string name="right_menu_recent_products">İncelediğim Ürünler</string>
     <string name="right_menu_new_product">Yeni Ürün</string>
     <string name="right_menu_offers">Teklif İsteklerim</string>
+    <string name="right_menu_offer_requests">Teklif İstekleri</string>
     <string name="right_menu_share">Paylaş</string>
     <string name="right_menu_logout">Çıkış</string>
     <string name="right_menu_search">Ara</string>
@@ -116,6 +117,7 @@
     <string name="title_activity_offer">Teklif İsteklerim</string>
     <string name="title_activity_offer_create">Teklif İsteği Oluşturma</string>
     <string name="title_activity_offer_product_add">Teklif İsteği Ürün Ekleme</string>
+    <string name="title_activity_offer_request_list">Teklif İstekleri</string>
 
     <!-- GOOGLE FIREBASE -->
     <string name="msg_subscribed">Subscribed to news topic</string>

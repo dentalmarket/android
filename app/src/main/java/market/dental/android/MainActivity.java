@@ -195,6 +195,10 @@ public class MainActivity extends BaseActivity
                 intent = new Intent(this,OfferActivity.class);
                 startActivity(intent);
                 break;
+            case R.id.right_menu_offer_requests:
+                intent = new Intent(this,OfferRequestListActivity.class);
+                startActivity(intent);
+                break;
             case R.id.right_menu_new_product:
                 intent = new Intent(this,ProductAddActivity.class);
                 startActivity(intent);
