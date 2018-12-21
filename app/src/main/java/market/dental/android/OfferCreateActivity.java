@@ -28,6 +28,7 @@ import java.util.Map;
 
 import market.dental.adapter.OfferProductAddedListAdapter;
 import market.dental.model.OfferProduct;
+import market.dental.model.User;
 import market.dental.util.Resource;
 import market.dental.util.Result;
 
@@ -42,6 +43,7 @@ public class OfferCreateActivity extends BaseActivity {
     private boolean isLoading = false;
     private int offerId = -1;
     private int offerPositionInPrevActivity = -1;
+    private int offerRequestType=0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,10 +56,35 @@ public class OfferCreateActivity extends BaseActivity {
         addedProductListAdapter = new OfferProductAddedListAdapter(this);
         Intent intent = getIntent();
 
+        // BUTTON ACTION LISTENER
+        Button openOfferAddProduct = findViewById(R.id.open_offer_add_product_activity);
+        openOfferAddProduct.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(),OfferProductAddActivity.class);
+                startActivityForResult(intent , PRODUCT_ADD_FOR_OFFER);
+            }
+        });
+
+        Button offerRequestMain = findViewById(R.id.offer_update_btn);
+        offerRequestMain.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(offerRequestType==1) {
+                    setOfferRequest("" + offerId);
+                }else if(offerRequestType==2){
+                    Toast.makeText(getApplicationContext(), "Teklif verme pop up açılacak" , Toast.LENGTH_LONG).show();
+                }else{
+                    addOfferRequest();
+                }
+            }
+        });
+
         // Get bundle info if exist
-        offerId = intent.getIntExtra("offerId" , -1);
         offerPositionInPrevActivity = intent.getIntExtra("offer_list_position",-1);
-        if(offerId!=-1){
+        if(intent.getIntExtra("offerId" , -1)!=-1){
+            offerRequestType = 1;
+            offerId = intent.getIntExtra("offerId" , -1);
             getOfferRequest(""+offerId);
 
             Switch isActive = findViewById(R.id.is_offer_active);
@@ -68,30 +95,23 @@ public class OfferCreateActivity extends BaseActivity {
 
             Button offerUpdateButton = findViewById(R.id.offer_update_btn);
             offerUpdateButton.setText("Düzenle");
+        }else if(intent.getIntExtra("offerRequestId" , -1)!=-1){
+            offerRequestType = 2;
+            getOfferRequest(""+intent.getIntExtra("offerRequestId" , -1));
+
+            // Ürün ekleme butonu kaldırılır
+            EditText offerTitle = findViewById(R.id.fragment_offer_add_title_name);
+            offerTitle.setText(intent.getStringExtra("offerRequestName" ));
+            offerTitle.setEnabled(false);
+
+            // Ürün ekleme butonu kaldırılır
+            findViewById(R.id.open_offer_add_product_activity).setVisibility(View.GONE);
+            findViewById(R.id.is_offer_active_layout).setVisibility(View.GONE);
+
+            Button offerUpdateButton = findViewById(R.id.offer_update_btn);
+            offerUpdateButton.setText("Teklif Ver");
         }
 
-        // ACTION LISTENER
-        Button openOfferAddProduct = findViewById(R.id.open_offer_add_product_activity);
-        openOfferAddProduct.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(),OfferProductAddActivity.class);
-                startActivityForResult(intent , PRODUCT_ADD_FOR_OFFER);
-            }
-        });
-
-        // ACTION LISTENER
-        Button offerRequestMain = findViewById(R.id.offer_update_btn);
-        offerRequestMain.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(offerId!=-1){
-                    setOfferRequest(""+offerId);
-                }else{
-                    addOfferRequest();
-                }
-            }
-        });
     }
 
     @Override
@@ -153,9 +173,15 @@ public class OfferCreateActivity extends BaseActivity {
                                 }else{
                                     addedProductListAdapter.notifyDataSetChanged();
                                 }
-                            } else{
-                                isLastPage = false;
                             }
+
+                            if(content.has("user") && content.getJSONArray("user").length()>0){
+                                User offerRequestOwner = new User((JSONObject) content.getJSONArray("user").get(0));
+                                findViewById(R.id.offer_request_owner_layout).setVisibility(View.VISIBLE);
+                                ((EditText)findViewById(R.id.offer_request_owner_fullname_name))
+                                        .setText(offerRequestOwner.getFirst_name() + " " + offerRequestOwner.getLast_name());
+                            }
+
                         }else if(Result.FAILURE_TOKEN.checkResult(new Result(response))){
                             Resource.setDefaultAPITOKEN();
                             Intent intent = new Intent(getApplicationContext() , LoginActivity.class);

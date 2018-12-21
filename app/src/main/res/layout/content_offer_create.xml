@@ -38,28 +38,30 @@
 
                     <TextView
                         android:paddingLeft="16dp"
-                        android:layout_width="@dimen/activity_profile_text_width"
-                        android:layout_height="@dimen/activity_profile_text_height"
+                        android:layout_width="@dimen/offer_request_text_label_width"
+                        android:layout_height="@dimen/offer_request_text_label_height"
                         android:gravity="center_vertical"
                         android:layout_marginTop="10dp"
                         android:text="Teklif İsmi" />
 
                     <EditText
                         android:id="@+id/fragment_offer_add_title_name"
+                        android:maxLength="40"
                         style="@style/DentalMarket.EditText"
-                        android:hint="Teklif İsimini Giriniz" />
+                        android:hint="Teklif İsimini Giriniz"/>
 
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/is_offer_active_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
                     <TextView
                         android:paddingLeft="16dp"
-                        android:layout_width="@dimen/activity_profile_text_width"
-                        android:layout_height="@dimen/activity_profile_text_height"
+                        android:layout_width="@dimen/offer_request_text_label_width"
+                        android:layout_height="@dimen/offer_request_text_label_height"
                         android:layout_marginTop="10dp"
                         android:gravity="center_vertical"
                         android:text="Aktif İlan" />
@@ -71,6 +73,30 @@
                         android:layout_marginLeft="20dp"
                         android:layout_marginTop="10dp"
                         android:gravity="center"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/offer_request_owner_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:paddingLeft="16dp"
+                        android:layout_width="@dimen/offer_request_text_label_width"
+                        android:layout_height="@dimen/offer_request_text_label_height"
+                        android:gravity="center_vertical"
+                        android:layout_marginTop="10dp"
+                        android:text="Teklif Sahibi" />
+
+                    <EditText
+                        android:id="@+id/offer_request_owner_fullname_name"
+                        android:maxLength="40"
+                        android:enabled="false"
+                        style="@style/DentalMarket.EditText"
+                        android:hint="-"/>
 
                 </LinearLayout>
 

@@ -9,6 +9,8 @@
 
     <dimen name="activity_profile_text_height">40dp</dimen>
     <dimen name="activity_profile_text_width">160dp</dimen>
+    <dimen name="offer_request_text_label_height">40dp</dimen>
+    <dimen name="offer_request_text_label_width">100dp</dimen>
     <dimen name="dental_market_edit_text_size">14dp</dimen>
 
     <dimen name="dental_market_text_view_12dp">12dp</dimen>

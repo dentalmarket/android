@@ -99,22 +99,20 @@ public class OfferRequestListActivity extends AppCompatActivity {
                                     offerListAdapter.notifyDataSetChanged();
                                 }
 
-/*
                                 listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                                     @Override
                                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                                         Offer sOffer = ((Offer) parent.getItemAtPosition(position));
                                         Bundle bundle = new Bundle();
-                                        bundle.putInt("offerId", sOffer.getId());
-                                        bundle.putBoolean("isOfferAcvite", sOffer.isActive());
-                                        bundle.putString("offerName" , sOffer.getName() );
+                                        bundle.putInt("offerRequestId", sOffer.getId());
+                                        bundle.putString("offerRequestName" , sOffer.getName() );
                                         bundle.putInt("offer_list_position" , position );
                                         Intent intent = new Intent(view.getContext(),OfferCreateActivity.class);
                                         intent.putExtras(bundle);
                                         startActivityForResult(intent, 0000);
                                     }
                                 });
-*/
+
 
                             } else{
                                 isLastPage = false;
