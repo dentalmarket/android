@@ -48,7 +48,7 @@
             android:textSize="14dp" />
 
         <TextView
-            android:id="@+id/offer_created_date"
+            android:id="@+id/offer_created_at"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:layout_gravity="fill"

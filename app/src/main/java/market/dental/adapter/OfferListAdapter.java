@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.widget.ArrayAdapter;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -80,6 +81,10 @@ public class OfferListAdapter extends ArrayAdapter {
 
             holder.offerCount = view.findViewById(R.id.offer_count);
             holder.offerCount.setText(""+offerList.get(position).getNumberOfOffers());
+
+            holder.offerDate = view.findViewById(R.id.offer_created_at);
+            SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+            holder.offerDate.setText(df.format(offerList.get(position).getCreated_at()));
 
             view.setTag(holder);
 

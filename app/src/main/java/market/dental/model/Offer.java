@@ -4,7 +4,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class Offer {
@@ -14,6 +16,7 @@ public class Offer {
     private int numberOfOffers;
     private boolean isActive;
     private int userId;
+    private Date created_at;
 
     public Offer(JSONObject projectJsonObject){
         try {
@@ -27,6 +30,12 @@ public class Offer {
                     projectJsonObject.getInt("is_active")==1 : false ;
             this.userId = projectJsonObject.has("user_id")?
                     projectJsonObject.getInt("user_id") : -1 ;
+
+            if(projectJsonObject.has("created_at")){
+                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                this.created_at = formatter.parse(projectJsonObject.getString("created_at"));
+            }
+
         } catch (JSONException e) {
             e.printStackTrace();
         } catch (Exception e){
@@ -90,5 +99,13 @@ public class Offer {
 
     public void setUserId(int userId) {
         this.userId = userId;
+    }
+
+    public Date getCreated_at() {
+        return created_at;
+    }
+
+    public void setCreated_at(Date created_at) {
+        this.created_at = created_at;
     }
 }
