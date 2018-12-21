@@ -101,6 +101,7 @@ public class OfferCreateActivity extends BaseActivity implements OfferDialog.Off
             offerUpdateButton.setText("Düzenle");
         }else if(intent.getIntExtra("offerRequestId" , -1)!=-1){
             offerRequestType = 2;
+            offerId = intent.getIntExtra("offerRequestId" , -1);
             getOfferRequest(""+intent.getIntExtra("offerRequestId" , -1));
 
             // Ürün ekleme butonu kaldırılır
@@ -151,9 +152,68 @@ public class OfferCreateActivity extends BaseActivity implements OfferDialog.Off
     }
 
     @Override
-    public void applyOfferDialogValues(String desc, int price, int currency) {
-        Log.i("DENEME" , desc + "-" + price + "-" + currency);
-        Toast.makeText(getApplicationContext(), desc + "-" + price + " teklif servisi çağırılacak"  , Toast.LENGTH_LONG).show();
+    public void applyOfferDialogValues(final String desc, final int price, final int currency) {
+
+        if(!isLoading && !isLastPage){
+            isLoading = true;
+            stringRequest = new StringRequest(Request.Method.POST,
+                    Resource.ajax_set_offer, new Response.Listener<String>() {
+
+                @Override
+                public void onResponse(String responseString) {
+                    try {
+
+                        JSONObject response = new JSONObject(responseString);
+                        if(Result.SUCCESS.checkResult(new Result(response))){
+                            finish();
+                        }else if(Result.FAILURE_TOKEN.checkResult(new Result(response))){
+                            Resource.setDefaultAPITOKEN();
+                            Intent intent = new Intent(getApplicationContext() , LoginActivity.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            startActivity(intent);
+                        } else {
+                            Toast.makeText(getApplicationContext(), getString(R.string.unexpected_case_error) , Toast.LENGTH_LONG).show();
+                            Crashlytics.log(Log.INFO , Result.LOG_TAG_INFO.getResultText() , this.getClass().getName() + " >> " + Resource.ajax_set_offer + " >> responseString = " + responseString);
+                        }
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        Crashlytics.log(Log.INFO ,Result.LOG_TAG_INFO.getResultText(), Resource.ajax_set_offer );
+                    } finally {
+                        isLoading = false;
+                    }
+                }
+
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    error.printStackTrace();
+                    Crashlytics.log(Log.ERROR , Result.LOG_TAG_INFO.getResultText() , this.getClass().getName() + " >> " + "onErrorResponse");
+                    isLoading = false;
+                }
+            }){
+                @Override
+                protected Map<String, String> getParams()  {
+                    Map<String, String> params = new HashMap<>();
+                    params.put(Resource.KEY_API_TOKEN, Resource.VALUE_API_TOKEN);
+                    params.put("request_id", ""+offerId);
+                    params.put("description", ""+desc);
+                    params.put("price", ""+price);
+                    params.put("currency", ""+currency);
+                    return params;
+                }
+
+                @Override
+                public Map<String, String> getHeaders() {
+                    Map<String,String> params = new HashMap<String, String>();
+                    params.put("Content-Type","application/x-www-form-urlencoded");
+                    return params;
+                }
+            };
+            stringRequest.setTag(this.getClass().getName());
+            requestQueue.add(stringRequest);
+        }
+
     }
 
     private void openOfferDialog(){
