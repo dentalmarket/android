@@ -154,9 +154,15 @@ public class MainActivity extends BaseActivity
             sharedPref = getSharedPreferences(getString(R.string.sp_dental_market), Context.MODE_PRIVATE);
             JSONObject userJsonObject = new JSONObject(sharedPref.getString(getString(R.string.sp_user_json_str) , ""));
             User user = new User(userJsonObject);
+            Log.i("DNEME" , "user.getStoreType() >> " + user.getStoreType());
             if(user.getStoreType() > 0){
-                MenuItem item = (MenuItem) this.menu.findItem(R.id.right_menu_new_product);
-                item.setVisible(true);
+                this.menu.findItem(R.id.right_menu_new_product).setVisible(false);
+                this.menu.findItem(R.id.right_menu_offer_requests).setVisible(true);
+                this.menu.findItem(R.id.right_menu_my_offer_requests).setVisible(false);
+            }else{
+                this.menu.findItem(R.id.right_menu_new_product).setVisible(false);
+                this.menu.findItem(R.id.right_menu_offer_requests).setVisible(false);
+                this.menu.findItem(R.id.right_menu_my_offer_requests).setVisible(true);
             }
         } catch (Exception e){
             e.printStackTrace();
@@ -191,7 +197,7 @@ public class MainActivity extends BaseActivity
                 intent.putExtras(bundle);
                 startActivity(intent);
                 break;
-            case R.id.right_menu_offers:
+            case R.id.right_menu_my_offer_requests:
                 intent = new Intent(this,OfferActivity.class);
                 startActivity(intent);
                 break;

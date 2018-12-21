@@ -75,7 +75,7 @@
     <string name="right_menu_messages">Mesajlar</string>
     <string name="right_menu_recent_products">İncelediğim Ürünler</string>
     <string name="right_menu_new_product">Yeni Ürün</string>
-    <string name="right_menu_offers">Teklif İsteklerim</string>
+    <string name="right_menu_my_offer_requests">Teklif İsteklerim</string>
     <string name="right_menu_offer_requests">Teklif İstekleri</string>
     <string name="right_menu_share">Paylaş</string>
     <string name="right_menu_logout">Çıkış</string>

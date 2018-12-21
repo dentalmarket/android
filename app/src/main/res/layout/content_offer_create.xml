@@ -130,6 +130,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:background="@color/dental_market_text_title"
+            android:textColor="#FFFFFF"
             android:text="@string/publish" />
 
     </RelativeLayout>

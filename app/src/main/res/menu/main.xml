@@ -28,9 +28,9 @@
         app:showAsAction="never" />
 
     <item
-        android:id="@+id/right_menu_offers"
+        android:id="@+id/right_menu_my_offer_requests"
         android:orderInCategory="100"
-        android:title="@string/right_menu_offers"
+        android:title="@string/right_menu_my_offer_requests"
         app:showAsAction="never" />
 
     <item
