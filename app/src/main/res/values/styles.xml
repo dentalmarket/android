@@ -42,6 +42,11 @@
         <item name="android:textColor">@color/dental_market_main</item>
     </style>
 
+    <!-- SWITCH COLORS  -->
+    <style name="SwitchCompatTheme" >
+        <item name="colorControlActivated">@color/dental_market_main</item>
+    </style>
+
     <style name="DentalMarket.Profile.InputField" parent="@android:style/TextAppearance.Small">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">match_parent</item>

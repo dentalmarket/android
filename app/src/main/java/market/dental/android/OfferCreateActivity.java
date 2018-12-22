@@ -77,7 +77,7 @@ public class OfferCreateActivity extends BaseActivity implements OfferDialog.Off
         });
         */
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.offer_request_add_offer_product);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -85,6 +85,7 @@ public class OfferCreateActivity extends BaseActivity implements OfferDialog.Off
                 startActivityForResult(intent , PRODUCT_ADD_FOR_OFFER);
             }
         });
+
 
         Button offerRequestMain = findViewById(R.id.offer_update_btn);
         offerRequestMain.setOnClickListener(new View.OnClickListener() {
@@ -128,6 +129,8 @@ public class OfferCreateActivity extends BaseActivity implements OfferDialog.Off
             // Ürün ekleme butonu kaldırılır
             findViewById(R.id.open_offer_add_product_activity).setVisibility(View.GONE);
             findViewById(R.id.is_offer_active_layout).setVisibility(View.GONE);
+            findViewById(R.id.offer_request_add_offer_product).setVisibility(View.GONE);
+            setTitle("Teklif Ver");
 
             Button offerUpdateButton = findViewById(R.id.offer_update_btn);
             offerUpdateButton.setText("Teklif Ver");
