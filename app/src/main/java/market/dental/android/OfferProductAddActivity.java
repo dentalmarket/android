@@ -99,25 +99,7 @@ public class OfferProductAddActivity extends BaseActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if(s.toString().length()>=3){
-                    getProductsAutoCompleteList(-1 , s.toString());
-                }
-
-                 /*
-                else{
-                    List<Product> customProductList = new ArrayList<>();
-                    Product customProduct = new Product();
-                    customProduct.setName(s.toString());
-                    customProductList.add(customProduct);
-
-                    productAutoCompListAdapter.setProductList(customProductList);
-                    if(acTextView.getAdapter()==null){
-                        acTextView.setAdapter(productAutoCompListAdapter);
-                    }else{
-                        productAutoCompListAdapter.notifyDataSetChanged();
-                    }
-                }
-                */
+                getProductsAutoCompleteList(-1 , s.toString());
             }
         });
 
@@ -174,15 +156,7 @@ public class OfferProductAddActivity extends BaseActivity {
                         if(Result.SUCCESS.checkResult(new Result(response))){
 
                             if(response.getJSONArray("content").length()>0){
-
-                                productAutoCompListAdapter.clearProductList();
-                                productAutoCompListAdapter.addProductList(Product.ProductList(response.getJSONArray("content")));
-                                if(acTextView.getAdapter()==null){
-                                    acTextView.setAdapter(productAutoCompListAdapter);
-                                }else{
-                                    productAutoCompListAdapter.notifyDataSetChanged();
-                                }
-
+                                productAutoCompListAdapter.setProductList(Product.ProductList(response.getJSONArray("content")));
                             } else{
                                 isLastPage = false;
                             }
@@ -192,9 +166,24 @@ public class OfferProductAddActivity extends BaseActivity {
                             Intent intent = new Intent(getApplicationContext() , LoginActivity.class);
                             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                             startActivity(intent);
+
+                        // TODO: Servis "minimum 3 letter" için GUPPY.101 hatası dönmektedir. Uygun code için değişiklik yapılmalıdır
+                        } else if(Result.FAILURE_AUTH.checkResult(new Result(response))){
+                            List<Product> customProductList = new ArrayList<>();
+                            Product customProduct = new Product();
+                            customProduct.setName(keyword);
+                            customProductList.add(customProduct);
+                            productAutoCompListAdapter.setProductList(customProductList);
+
                         } else {
                             Toast.makeText(getApplicationContext(), getString(R.string.unexpected_case_error) , Toast.LENGTH_LONG).show();
                             Crashlytics.log(Log.INFO , Result.LOG_TAG_INFO.getResultText() , this.getClass().getName() + " >> " + Resource.ajax_get_productsautocomplete + " >> responseString = " + responseString);
+                        }
+
+                        if(acTextView.getAdapter()==null){
+                            acTextView.setAdapter(productAutoCompListAdapter);
+                        }else{
+                            productAutoCompListAdapter.notifyDataSetChanged();
                         }
 
                     } catch (Exception e) {

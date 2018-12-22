@@ -28,7 +28,7 @@ public class Product {
     private Brand brand;
 
     public Product (){
-        this.id = -1;
+        this.id = 0;
         this.name = "";
         this.subtitle = "";
         this.description = "";
