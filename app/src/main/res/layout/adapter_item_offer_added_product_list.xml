@@ -22,7 +22,7 @@
             android:layout_height="100dp"
             android:orientation="horizontal">
 
-            <ImageButton
+            <ImageView
                 android:id="@+id/activity_product_list_item_image"
                 android:layout_width="120dp"
                 android:paddingTop="10dp"
@@ -48,7 +48,7 @@
                     android:textSize="14dp" />
 
                 <TextView
-                    android:id="@+id/offer_added_product_name_XXX"
+                    android:id="@+id/offer_added_product_desc"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="left"
@@ -60,7 +60,7 @@
                     android:textSize="8dp" />
 
                 <TextView
-                    android:id="@+id/offer_added_product_name_YYY"
+                    android:id="@+id/offer_added_product_price"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="right"

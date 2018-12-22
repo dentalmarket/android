@@ -83,13 +83,16 @@ public class OfferProductAddedListAdapter extends ArrayAdapter {
             holder.pName = view.findViewById(R.id.offer_added_product_name);
             holder.pName.setText(addedProductList.get(position).getProductTitle());
 
-            holder.pImageButton = (ImageButton)view.findViewById(R.id.activity_product_list_item_image);
+            holder.pDescription = view.findViewById(R.id.offer_added_product_desc);
+            holder.pDescription.setText(addedProductList.get(position).getDescription());
+
+            holder.pImageView = (ImageView)view.findViewById(R.id.activity_product_list_item_image);
             Picasso.with(context)
                     .load(addedProductList.get(position).getImageUrl())
                     .placeholder(R.mipmap.ic_launcher)
                     .error(R.mipmap.ic_launcher)
                     .resize(120, 100)
-                    .into(holder.pImageButton);
+                    .into(holder.pImageView);
 
             holder.pRemoveButton = view.findViewById(R.id.adapter_item_remove_product);
             holder.pRemoveButton.setOnClickListener(new View.OnClickListener() {
@@ -100,6 +103,7 @@ public class OfferProductAddedListAdapter extends ArrayAdapter {
                 }
             });
 
+            view.findViewById(R.id.offer_added_product_price).setVisibility(View.GONE);
             if(storeType>0)
                 holder.pRemoveButton.setVisibility(View.GONE);
 
@@ -113,8 +117,8 @@ public class OfferProductAddedListAdapter extends ArrayAdapter {
 
     static class AddedProductListForOfferViewHolder {
         TextView pName;
-        TextView pSubtitle;
-        ImageButton pImageButton;
+        TextView pDescription;
+        ImageView pImageView;
         ImageView pRemoveButton;
     }
 
