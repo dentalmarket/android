@@ -42,6 +42,14 @@ public class OfferSearchProductListAdapter extends ArrayAdapter {
         this.currentPage = 0;
     }
 
+    public List<Product> getProductList() {
+        return productList;
+    }
+
+    public void setProductList(List<Product> productList) {
+        this.productList = productList;
+    }
+
     @Override
     public int getCount(){
         return productList.size();

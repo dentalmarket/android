@@ -27,7 +27,16 @@ public class Product {
     private String offerDesc;
     private Brand brand;
 
-    public Product (){}
+    public Product (){
+        this.id = -1;
+        this.name = "";
+        this.subtitle = "";
+        this.description = "";
+        this.imageUrl = null;
+        this.price = "";
+        this.currencyId = -1;
+        this.brand = null;
+    }
 
     public Product(JSONObject projectJsonObject){
         try {

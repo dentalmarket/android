@@ -15,10 +15,10 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingBottom="50dp"
             android:id="@+id/activity_profile_main_panel"
             android:layout_below="@+id/activity_profile_top_panel">
 
@@ -41,7 +41,6 @@
 
                 <LinearLayout
                     android:id="@+id/offer_add_product_layout"
-                    android:visibility="visible"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
@@ -129,6 +128,7 @@
 
                         <EditText
                             android:id="@+id/selected_product_desc_for_offer"
+                            android:maxLength="200"
                             style="@style/DentalMarket.EditText" />
 
                     </LinearLayout>

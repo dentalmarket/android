@@ -30,7 +30,9 @@ import com.squareup.picasso.Picasso;
 
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import market.dental.adapter.OfferSearchProductListAdapter;
@@ -39,7 +41,7 @@ import market.dental.model.Product;
 import market.dental.util.Resource;
 import market.dental.util.Result;
 
-public class OfferProductAddActivity extends AppCompatActivity {
+public class OfferProductAddActivity extends BaseActivity {
 
     private OfferSearchProductListAdapter productAutoCompListAdapter;
     private RequestQueue requestQueue;
@@ -60,9 +62,32 @@ public class OfferProductAddActivity extends AppCompatActivity {
         requestQueue = Volley.newRequestQueue(this);
         productAutoCompListAdapter = new OfferSearchProductListAdapter(this);
 
+        // Set UI options
+        findViewById(R.id.offer_add_product_layout).setVisibility(View.GONE);
+
         // Set AutoCompleteTextView
         acTextView = (AutoCompleteTextView) findViewById(R.id.autocomplete_product_for_offer);
         acTextView.setThreshold(1);
+        acTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
+
+                acTextView.setText("");
+                // Ürün bilgileri eklenir
+                selectedProduct = (Product)parent.getItemAtPosition(position);
+                findViewById(R.id.offer_add_product_layout).setVisibility(View.VISIBLE);
+                ((TextView)findViewById(R.id.selected_product_name_for_offer)).setText(selectedProduct.getName());
+                ((TextView)findViewById(R.id.selected_product_subtitle_for_offer)).setText(selectedProduct.getSubtitle());
+
+                Picasso.with(getApplicationContext())
+                        .load(selectedProduct.getImageUrl())
+                        .placeholder(R.mipmap.ic_launcher)
+                        .error(R.mipmap.ic_launcher)
+                        .resize(120, 100)
+                        .into((ImageView) findViewById(R.id.selected_product_image_for_offer));
+            }
+        });
+
         acTextView.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -72,11 +97,30 @@ public class OfferProductAddActivity extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
 
+
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-                getProductsAutoCompleteList(-1);
+                if(s.toString().length()>=3){
+                    getProductsAutoCompleteList(-1 , s.toString());
+                }
+
+                 /*
+                else{
+                    List<Product> customProductList = new ArrayList<>();
+                    Product customProduct = new Product();
+                    customProduct.setName(s.toString());
+                    customProductList.add(customProduct);
+
+                    productAutoCompListAdapter.setProductList(customProductList);
+                    if(acTextView.getAdapter()==null){
+                        acTextView.setAdapter(productAutoCompListAdapter);
+                    }else{
+                        productAutoCompListAdapter.notifyDataSetChanged();
+                    }
+                }
+                */
             }
         });
 
@@ -112,7 +156,7 @@ public class OfferProductAddActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void getProductsAutoCompleteList(final int page){
+    private void getProductsAutoCompleteList(final int page , final String keyword){
 
         // *****************************************************************************************
         //                        GET PRODUCTS LIST
@@ -134,26 +178,11 @@ public class OfferProductAddActivity extends AppCompatActivity {
 
                                 productAutoCompListAdapter.clearProductList();
                                 productAutoCompListAdapter.addProductList(Product.ProductList(response.getJSONArray("content")));
-                                acTextView.setAdapter(productAutoCompListAdapter);
-                                acTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                                    @Override
-                                    public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-
-                                        acTextView.setText("");
-                                        // Ürün bilgileri eklenir
-                                        selectedProduct = (Product)parent.getItemAtPosition(position);
-                                        ((TextView)findViewById(R.id.selected_product_name_for_offer)).setText(selectedProduct.getName());
-                                        ((TextView)findViewById(R.id.selected_product_subtitle_for_offer)).setText(selectedProduct.getSubtitle());
-
-                                        Picasso.with(getApplicationContext())
-                                                .load(selectedProduct.getImageUrl())
-                                                .placeholder(R.mipmap.ic_launcher)
-                                                .error(R.mipmap.ic_launcher)
-                                                .resize(120, 100)
-                                                .into((ImageView) findViewById(R.id.selected_product_image_for_offer));
-
-                                    }
-                                });
+                                if(acTextView.getAdapter()==null){
+                                    acTextView.setAdapter(productAutoCompListAdapter);
+                                }else{
+                                    productAutoCompListAdapter.notifyDataSetChanged();
+                                }
 
                             } else{
                                 isLastPage = false;
@@ -190,7 +219,7 @@ public class OfferProductAddActivity extends AppCompatActivity {
                     Map<String, String> params = new HashMap<>();
                     params.put(Resource.KEY_API_TOKEN, Resource.VALUE_API_TOKEN);
                     params.put("page", String.valueOf(page));
-                    params.put("word", acTextView.getText().toString());
+                    params.put("word", keyword);
                     return params;
                 }
                 @Override
