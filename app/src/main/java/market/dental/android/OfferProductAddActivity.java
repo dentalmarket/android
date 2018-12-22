@@ -95,10 +95,7 @@ public class OfferProductAddActivity extends BaseActivity {
             }
 
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-
-            }
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
 
             @Override
             public void afterTextChanged(Editable s) {
@@ -133,10 +130,12 @@ public class OfferProductAddActivity extends BaseActivity {
                 if(selectedProduct!=null){
                     Gson gson = new Gson();
                     OfferProduct selectedOfferProduct = new OfferProduct();
+                    selectedOfferProduct.setProductId(selectedProduct.getId());
                     selectedOfferProduct.setImageUrl(selectedProduct.getImageUrl());
                     selectedOfferProduct.setProductTitle(selectedProduct.getName());
                     selectedOfferProduct.setDescription(((EditText)findViewById(R.id.selected_product_desc_for_offer)).getText().toString());
                     selectedOfferProduct.setUnit(Integer.parseInt(((EditText)findViewById(R.id.selected_product_count_for_offer)).getText().toString()));
+
                     resultIntent.putExtra("OFFERPRODUCT_GSON_STRING", gson.toJson(selectedOfferProduct));
                     setResult(Activity.RESULT_OK, resultIntent);
                 }

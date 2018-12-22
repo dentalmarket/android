@@ -18,12 +18,14 @@ public class OfferProduct {
     private int unit;
     private String description;
 
-    public OfferProduct(){}
+    public OfferProduct(){
+        this.id=0;
+    }
 
     public OfferProduct(JSONObject projectJsonObject){
         try {
-            this.id = projectJsonObject.has("product_id")?
-                    projectJsonObject.getInt("product_id") : -1 ;
+            this.id = projectJsonObject.has("id")?
+                    projectJsonObject.getInt("id") : -1 ;
             this.productId = projectJsonObject.has("product_id")?
                     projectJsonObject.getInt("product_id") : -1 ;
             this.productTitle = projectJsonObject.has("product_title") && !projectJsonObject.isNull("product_title")?
