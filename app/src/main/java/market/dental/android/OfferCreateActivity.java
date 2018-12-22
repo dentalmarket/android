@@ -5,6 +5,8 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -48,6 +50,7 @@ public class OfferCreateActivity extends BaseActivity implements OfferDialog.Off
     private int offerId = -1;
     private int offerPositionInPrevActivity = -1;
     private int offerRequestType=0;
+    private View view;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,13 +61,26 @@ public class OfferCreateActivity extends BaseActivity implements OfferDialog.Off
         // Initialization
         requestQueue = Volley.newRequestQueue(this);
         addedProductListAdapter = new OfferProductAddedListAdapter(this);
+        view = findViewById(android.R.id.content);
         Intent intent = getIntent();
 
+        // TODO: Bu tasarımı sorulacak. İstenilmesi durumunda buna geçilecek
         // BUTTON ACTION LISTENER
+        /*
         Button openOfferAddProduct = findViewById(R.id.open_offer_add_product_activity);
         openOfferAddProduct.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(),OfferProductAddActivity.class);
+                startActivityForResult(intent , PRODUCT_ADD_FOR_OFFER);
+            }
+        });
+        */
+
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(),OfferProductAddActivity.class);
                 startActivityForResult(intent , PRODUCT_ADD_FOR_OFFER);
             }

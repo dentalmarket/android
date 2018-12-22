@@ -8,4 +8,15 @@
 
     <include layout="@layout/content_offer_create" />
 
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginBottom="70dp"
+        android:layout_marginRight="20dp"
+        android:src="@drawable/dental_icon_add_white_24dp"
+        app:fabSize="normal"
+        app:backgroundTint="@color/dental_market_main"/>
+
 </android.support.design.widget.CoordinatorLayout>
