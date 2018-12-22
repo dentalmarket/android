@@ -154,7 +154,6 @@ public class MainActivity extends BaseActivity
             sharedPref = getSharedPreferences(getString(R.string.sp_dental_market), Context.MODE_PRIVATE);
             JSONObject userJsonObject = new JSONObject(sharedPref.getString(getString(R.string.sp_user_json_str) , ""));
             User user = new User(userJsonObject);
-            Log.i("DNEME" , "user.getStoreType() >> " + user.getStoreType());
             if(user.getStoreType() > 0){
                 this.menu.findItem(R.id.right_menu_new_product).setVisible(false);
                 this.menu.findItem(R.id.right_menu_offer_requests).setVisible(true);

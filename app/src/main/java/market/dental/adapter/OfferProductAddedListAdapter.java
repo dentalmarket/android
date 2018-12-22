@@ -1,6 +1,7 @@
 package market.dental.adapter;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,22 +15,36 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import market.dental.android.R;
 import market.dental.model.OfferProduct;
 import market.dental.model.Product;
+import market.dental.model.User;
 
 public class OfferProductAddedListAdapter extends ArrayAdapter {
 
     private Context context;
     private List<OfferProduct> addedProductList;
+    private int storeType=-1;
 
     public OfferProductAddedListAdapter(@NonNull Context context) {
         super(context, R.layout.adapter_item_offer_list_search);
         this.context  = context;
         this.addedProductList = new ArrayList<>();
+
+        try {
+            SharedPreferences sharedPref = context.getSharedPreferences(context.getString(R.string.sp_dental_market), Context.MODE_PRIVATE);
+            JSONObject userJsonObject = new JSONObject(sharedPref.getString(context.getString(R.string.sp_user_json_str) , ""));
+            User user = new User(userJsonObject);
+            storeType = user.getStoreType();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     public void addProductList(List<OfferProduct> productList){
@@ -84,6 +99,9 @@ public class OfferProductAddedListAdapter extends ArrayAdapter {
                     notifyDataSetChanged();
                 }
             });
+
+            if(storeType>0)
+                holder.pRemoveButton.setVisibility(View.GONE);
 
             view.setTag(holder);
 
