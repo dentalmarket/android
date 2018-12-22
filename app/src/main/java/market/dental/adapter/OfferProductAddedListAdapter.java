@@ -76,42 +76,37 @@ public class OfferProductAddedListAdapter extends ArrayAdapter {
     @Override
     public View getView(final int position, View view, ViewGroup viewgroup){
 
-        AddedProductListForOfferViewHolder holder;
-        if(view==null) {
-            view = LayoutInflater.from(getContext()).inflate(R.layout.adapter_item_offer_added_product_list, viewgroup, false);
-            holder = new AddedProductListForOfferViewHolder();
-            holder.pName = view.findViewById(R.id.offer_added_product_name);
-            holder.pName.setText(addedProductList.get(position).getProductTitle());
+        view = LayoutInflater.from(getContext()).inflate(R.layout.adapter_item_offer_added_product_list, viewgroup, false);
+        AddedProductListForOfferViewHolder holder = new AddedProductListForOfferViewHolder();
+        holder.pName = view.findViewById(R.id.offer_added_product_name);
+        holder.pName.setText(addedProductList.get(position).getProductTitle());
 
-            holder.pDescription = view.findViewById(R.id.offer_added_product_desc);
-            holder.pDescription.setText(addedProductList.get(position).getDescription());
+        holder.pDescription = view.findViewById(R.id.offer_added_product_desc);
+        holder.pDescription.setText(addedProductList.get(position).getDescription());
 
-            holder.pImageView = (ImageView)view.findViewById(R.id.activity_product_list_item_image);
-            Picasso.with(context)
-                    .load(addedProductList.get(position).getImageUrl())
-                    .placeholder(R.mipmap.ic_launcher)
-                    .error(R.mipmap.ic_launcher)
-                    .resize(120, 100)
-                    .into(holder.pImageView);
+        holder.pImageView = (ImageView)view.findViewById(R.id.activity_product_list_item_image);
+        Picasso.with(context)
+                .load(addedProductList.get(position).getImageUrl())
+                .placeholder(R.mipmap.ic_launcher)
+                .error(R.mipmap.ic_launcher)
+                .resize(120, 100)
+                .into(holder.pImageView);
 
-            holder.pRemoveButton = view.findViewById(R.id.adapter_item_remove_product);
-            holder.pRemoveButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    addedProductList.remove(position);
-                    notifyDataSetChanged();
-                }
-            });
+        holder.pRemoveButton = view.findViewById(R.id.adapter_item_remove_product);
+        holder.pRemoveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addedProductList.remove(position);
+                notifyDataSetChanged();
+            }
+        });
 
-            view.findViewById(R.id.offer_added_product_price).setVisibility(View.GONE);
-            if(storeType>0)
-                holder.pRemoveButton.setVisibility(View.GONE);
+        view.findViewById(R.id.offer_added_product_price).setVisibility(View.GONE);
+        if(storeType>0)
+            holder.pRemoveButton.setVisibility(View.GONE);
 
-            view.setTag(holder);
+        view.setTag(holder);
 
-        } else {
-            holder = (AddedProductListForOfferViewHolder) view.getTag();
-        }
         return view;
     }
 

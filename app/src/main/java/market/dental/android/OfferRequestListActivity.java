@@ -31,7 +31,7 @@ import market.dental.model.Offer;
 import market.dental.util.Resource;
 import market.dental.util.Result;
 
-public class OfferRequestListActivity extends AppCompatActivity {
+public class OfferRequestListActivity extends BaseActivity {
 
     private OfferListAdapter offerListAdapter;
     private RequestQueue requestQueue;

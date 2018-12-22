@@ -1,7 +1,6 @@
 package market.dental.adapter;
 
 import android.content.Context;
-import android.graphics.Typeface;
 import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.widget.ArrayAdapter;
@@ -11,18 +10,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import market.dental.android.R;
-import market.dental.model.Currency;
 import market.dental.model.Offer;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
-
-import com.squareup.picasso.Picasso;
-
-/**
- * Created by kemalsamikaraca on 12.12.2018.
- */
 
 public class OfferListAdapter extends ArrayAdapter {
 
@@ -77,35 +68,27 @@ public class OfferListAdapter extends ArrayAdapter {
     @Override
     public View getView(int position, View view, ViewGroup viewgroup){
 
-        OfferListViewHolder holder;
-        if(view==null) {
-            view = LayoutInflater.from(getContext()).inflate(R.layout.adapter_item_offer_list, viewgroup, false);
-            holder = new OfferListViewHolder();
+        view = LayoutInflater.from(getContext()).inflate(R.layout.adapter_item_offer_list, viewgroup, false);
+        OfferListViewHolder holder = new OfferListViewHolder();
 
-            holder.offerName = view.findViewById(R.id.offer_name);
-            holder.offerName.setText(offerList.get(position).getName());
+        holder.offerName = view.findViewById(R.id.offer_name);
+        holder.offerName.setText(offerList.get(position).getName());
 
-            holder.offerDate = view.findViewById(R.id.offer_created_at);
-            SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
-            holder.offerDate.setText(df.format(offerList.get(position).getCreated_at()));
+        holder.offerDate = view.findViewById(R.id.offer_created_at);
+        SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+        holder.offerDate.setText(df.format(offerList.get(position).getCreated_at()));
 
-            holder.offerStatus = view.findViewById(R.id.offer_status);
-            holder.offerCount = view.findViewById(R.id.offer_count);
-            if(userType==2){
-                holder.offerStatus.setVisibility(View.GONE);
-                holder.offerCount.setVisibility(View.GONE);
-            }else{
-                holder.offerStatus.setText(offerList.get(position).isActive() ?
-                        context.getResources().getString(R.string.offer_status_active) : context.getResources().getString(R.string.offer_status_inactive));
-                holder.offerCount.setText(""+offerList.get(position).getNumberOfOffers());
-            }
-
-
-            view.setTag(holder);
-
-        } else {
-            holder = (OfferListViewHolder) view.getTag();
+        holder.offerStatus = view.findViewById(R.id.offer_status);
+        holder.offerCount = view.findViewById(R.id.offer_count);
+        if(userType==2){
+            holder.offerStatus.setVisibility(View.GONE);
+            holder.offerCount.setVisibility(View.GONE);
+        }else{
+            holder.offerStatus.setText(offerList.get(position).isActive() ?
+                    context.getResources().getString(R.string.offer_status_active) : context.getResources().getString(R.string.offer_status_inactive));
+            holder.offerCount.setText(""+offerList.get(position).getNumberOfOffers());
         }
+        view.setTag(holder);
 
         return view;
     }

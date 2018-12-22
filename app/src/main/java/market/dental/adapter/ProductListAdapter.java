@@ -198,6 +198,14 @@ public class ProductListAdapter extends ArrayAdapter {
         return view;
     }
 
+    /**
+     * ViewHolder her defasında adapter update yapılmasını engellemek için kullanılmaktadır
+     * Örneğin paging ile scroll yapılıyorsa ve yeni item eklenecekse bu gibi durumlarda kullanılır
+     *      çünkü eski item'lar tutulmalı, yenileri ise listenin sonuna eklenmelidir
+     *
+     * Ancak notifyDataSetChanged ile sürekli ürün eklenip çıkarılıyorsa ViewHolder kullanılmasına
+     *      gerek yoktur.
+     */
     static class ViewHolder {
         TextView itemProductName;
         TextView productBrand;

@@ -62,19 +62,13 @@ public class OfferSearchProductListAdapter extends ArrayAdapter {
 
     @Override
     public View getView(int position, View view, ViewGroup viewgroup){
-
-        ProductListForOfferViewHolder holder;
-        if(view==null) {
-            view = LayoutInflater.from(getContext()).inflate(R.layout.adapter_item_offer_list_search, viewgroup, false);
-            holder = new ProductListForOfferViewHolder();
-            holder.pName = view.findViewById(R.id.offer_add_product_name);
-            holder.pName.setText(productList.get(position).getName());
-            holder.pSubtitle = view.findViewById(R.id.offer_add_product_subtitle);
-            holder.pSubtitle.setText(productList.get(position).getSubtitle());
-            view.setTag(holder);
-        } else {
-            holder = (ProductListForOfferViewHolder) view.getTag();
-        }
+        view = LayoutInflater.from(getContext()).inflate(R.layout.adapter_item_offer_list_search, viewgroup, false);
+        ProductListForOfferViewHolder holder = new ProductListForOfferViewHolder();
+        holder.pName = view.findViewById(R.id.offer_add_product_name);
+        holder.pName.setText(productList.get(position).getName());
+        holder.pSubtitle = view.findViewById(R.id.offer_add_product_subtitle);
+        holder.pSubtitle.setText(productList.get(position).getSubtitle());
+        view.setTag(holder);
         return view;
     }
 
@@ -83,7 +77,7 @@ public class OfferSearchProductListAdapter extends ArrayAdapter {
         return nameFilter;
     }
 
-    Filter nameFilter = new Filter() {
+    private Filter nameFilter = new Filter() {
 
         @Override
         public String convertResultToString(Object resultValue) {

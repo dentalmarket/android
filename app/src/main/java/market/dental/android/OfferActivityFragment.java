@@ -80,7 +80,6 @@ public class OfferActivityFragment extends Fragment {
         switch(requestCode) {
             case (OFFER_REQUEST_UPDATE) : {
                 if (resultCode == Activity.RESULT_OK) {
-
                     try{
                         int position = data.getIntExtra("OFFER_REQUEST_POSITION", -1);
                         Offer updatedOffer = new Offer(data.getStringExtra("OFFER_REQUEST_UPDATE_JSON_STR"));
